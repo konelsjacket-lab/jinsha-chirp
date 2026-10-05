@@ -31,10 +31,10 @@ export const IMAGES = [
   img('enemy_bamboorat', 128), img('enemy_watermonkey', 128), img('enemy_rhino', 160),
   img('enemy_snake', 128), img('enemy_leech', 128), img('enemy_mist', 128), img('enemy_larou', 128), img('enemy_xiaoqing', 160),
 
-  img('bg_park', 960, 540, { pixel: false }), img('bg_north', 960, 540, { pixel: false }),
-  img('bg_west', 960, 540, { pixel: false }), img('bg_east', 960, 540, { pixel: false }),
-  img('bg_south', 960, 540, { pixel: false }), img('bg_boss', 960, 540, { pixel: false }),
-  img('bg_qingcheng', 960, 540, { pixel: false }),
+  img('bg_park', 960, 540, { pixel: true }), img('bg_north', 960, 540, { pixel: true }),
+  img('bg_west', 960, 540, { pixel: true }), img('bg_east', 960, 540, { pixel: true }),
+  img('bg_south', 960, 540, { pixel: true }), img('bg_boss', 960, 540, { pixel: true }),
+  img('bg_qingcheng', 960, 540, { pixel: true }),
   img('title_bg', 960, 540),
 
   // 剧情插图：480×270 的像素图，放大 2 倍全屏显示。没有图就跳过

@@ -23,6 +23,12 @@
     { "src": "cg_rhino_awakes.webp",    "size": "480x270", "colors": 64 },
     { "src": "cg_qingcheng_gate.webp",  "size": "480x270", "colors": 64 },
 
+    { "src": "bg_park.webp",  "size": "480x270", "colors": 64, "note": "战斗背景" },
+    { "src": "bg_north.webp", "size": "480x270", "colors": 64 },
+    { "src": "bg_east.webp",  "size": "480x270", "colors": 64 },
+    { "src": "bg_south.webp", "size": "480x270", "colors": 64 },
+    { "src": "bg_west.webp",  "size": "480x270", "colors": 64 },
+
     { "src": "tile_01.webp", "size": "128", "colors": 32, "note": "草地，平铺大图" },
     { "src": "tile_02.webp", "size": "128", "colors": 32, "note": "高草丛" },
     { "src": "tile_03.webp", "size": "128", "colors": 32, "note": "土路" },
