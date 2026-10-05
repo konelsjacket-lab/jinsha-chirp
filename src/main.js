@@ -18,3 +18,11 @@ window.game = new Phaser.Game({
   input: { activePointers: 3 },
   scene: [Boot, Title, World, UI, Battle],
 });
+
+// 手机转屏、进出全屏、地址栏收起时，浏览器给的尺寸会变；稍等一下再让画面重新铺满
+const refit = () => setTimeout(() => window.game.scale.refresh(), 250);
+window.addEventListener('resize', refit);
+window.addEventListener('orientationchange', refit);
+document.addEventListener('fullscreenchange', refit);
+document.addEventListener('webkitfullscreenchange', refit);
+if (window.visualViewport) window.visualViewport.addEventListener('resize', refit);

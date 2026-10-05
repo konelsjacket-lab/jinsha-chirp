@@ -10,6 +10,8 @@
 
 美术：GPT · 音乐：Gemini · 程序：Claude
 
+**在线玩：https://konelsjacket-lab.github.io/jinsha-chirp/** （手机请横屏，可以点上方「全屏」，或者添加到主屏幕）
+
 ## 运行
 
 纯 HTML5，不需要安装依赖（Phaser 3 已放在 `vendor/`）。在项目根目录起一个静态服务器：

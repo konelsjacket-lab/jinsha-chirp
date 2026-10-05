@@ -4,6 +4,7 @@
 分工：美术 GPT、音乐 Gemini、程序 Claude。用户会把 GPT 画的图直接发到对话里。
 
 ## 运行与测试
+- 线上地址（GitHub Pages，推送 main 后一两分钟自动更新）：https://konelsjacket-lab.github.io/jinsha-chirp/
 - 纯静态 HTML5 + Phaser 3.90（`vendor/phaser.min.js`），没有构建步骤。
 - `npm start`（= `python3 -m http.server 8080`），打开 http://localhost:8080
 - `npm test`：node 自带测试，覆盖战斗公式、地图连通性、Boss 平衡。改数值或地图后必须跑。

@@ -4,15 +4,71 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="金沙啾">
   <meta name="theme-color" content="#101418">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="icon" href="assets/icon-192.png">
   <title>金沙啾 · Jinsha Chirp</title>
   <style>
     html, body { margin: 0; height: 100%; background: #101418; overflow: hidden; }
     #game { width: 100vw; height: 100vh; height: 100dvh; touch-action: none; user-select: none; -webkit-user-select: none; }
+
+    /* 全屏按钮：浏览器只允许在玩家点击时进入全屏，所以放一个真正的按钮 */
+    #fs {
+      position: fixed; top: calc(6px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%);
+      z-index: 10; padding: 4px 12px; border-radius: 14px;
+      border: 1px solid rgba(242, 193, 78, .7); background: rgba(27, 31, 42, .6); color: #f4efe2;
+      font: 13px/1.4 "PingFang SC", "Microsoft YaHei", sans-serif; cursor: pointer; opacity: .75;
+    }
+    #fs:hover, #fs:focus-visible { opacity: 1; outline: 2px solid #f2c14e; }
+
+    /* 手机竖着拿的时候提示横过来 */
+    #rotate {
+      display: none; position: fixed; inset: 0; z-index: 20; background: #101418; color: #f4efe2;
+      flex-direction: column; align-items: center; justify-content: center; gap: 18px; text-align: center;
+      font: 18px/1.6 "PingFang SC", "Microsoft YaHei", sans-serif; padding: 24px;
+    }
+    #rotate .phone {
+      width: 46px; height: 78px; border: 3px solid #f2c14e; border-radius: 9px;
+      animation: turn 2.2s ease-in-out infinite;
+    }
+    #rotate small { color: #a8a290; font-size: 14px; }
+    @keyframes turn { 0%, 30% { transform: rotate(0); } 60%, 100% { transform: rotate(-90deg); } }
+    @media (orientation: portrait) and (pointer: coarse) { #rotate { display: flex; } }
+    @media (prefers-reduced-motion: reduce) { #rotate .phone { animation: none; transform: rotate(-90deg); } }
   </style>
 </head>
 <body>
   <div id="game"></div>
+  <button id="fs" type="button" hidden>⛶ 全屏</button>
+  <div id="rotate">
+    <div class="phone"></div>
+    <div>把手机横过来玩</div>
+    <small>金沙啾是横屏游戏</small>
+  </div>
+  <script>
+    // 全屏按钮：支持全屏的浏览器才显示（iPhone 的 Safari 不支持，可以“添加到主屏幕”）
+    (function () {
+      var btn = document.getElementById('fs');
+      var root = document.documentElement;
+      var req = root.requestFullscreen || root.webkitRequestFullscreen;
+      var standalone = window.matchMedia('(display-mode: fullscreen), (display-mode: standalone)').matches || navigator.standalone;
+      if (!req || standalone) return;
+      var isFs = function () { return document.fullscreenElement || document.webkitFullscreenElement; };
+      var sync = function () { btn.hidden = !!isFs(); };
+      btn.addEventListener('click', function () {
+        var p = req.call(root);
+        var lock = function () { try { screen.orientation && screen.orientation.lock && screen.orientation.lock('landscape').catch(function () {}); } catch (e) {} };
+        if (p && p.then) p.then(lock).catch(function () {}); else lock();
+      });
+      document.addEventListener('fullscreenchange', sync);
+      document.addEventListener('webkitfullscreenchange', sync);
+      sync();
+    })();
+  </script>
   <script src="vendor/phaser.min.js"></script>
   <script type="module" src="src/main.js"></script>
 </body>
