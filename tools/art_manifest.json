@@ -35,6 +35,10 @@
     { "src": "tile_10.webp", "size": "128", "colors": 32, "note": "金沙金砖地" },
     { "src": "tile_11.webp", "size": "128", "colors": 32, "note": "芙蓉花丛" },
     { "src": "tile_12.webp", "size": "128", "colors": 32, "note": "山石" },
-    { "src": "tile_13.webp", "size": "128", "colors": 32, "note": "竹林" }
+    { "src": "tile_13.webp", "size": "128", "colors": 32, "note": "竹林" },
+
+    { "dst": "player.png", "sheet": ["player_down.webp", "player_left.webp", "player_right.webp", "player_up.webp"],
+      "frames": 3, "size": "32", "colors": 24, "note": "白果行走图：每张原图横排 3 帧，拼成 3 列 × 4 行" },
+    { "src": "npc_zaozao.webp", "size": "32", "colors": 24, "fit": true, "transparent": true }
   ]
 }

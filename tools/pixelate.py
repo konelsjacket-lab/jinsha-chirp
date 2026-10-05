@@ -41,18 +41,20 @@ def quantize(img, colors):
     return out
 
 
-def make_transparent(img, tol=40):
-    """把四个角的颜色（背景）变成透明，只清除和边缘连通的部分。"""
+def make_transparent(img, tol=24, white=246):
+    """把背景变成透明：从四条边出发，清掉和边缘连通的“背景色”像素。
+    背景色 = 和左上角颜色接近，或者本身就接近白色（GPT 的白底常常不纯）。"""
     a = np.asarray(img).copy()
     h, w = a.shape[:2]
     seen = np.zeros((h, w), bool)
-    stack = [(0, 0), (0, w - 1), (h - 1, 0), (h - 1, w - 1)]
+    stack = [(y, x) for y in range(h) for x in (0, w - 1)] + [(y, x) for x in range(w) for y in (0, h - 1)]
     bg = a[0, 0, :3].astype(int)
     while stack:
         y, x = stack.pop()
         if y < 0 or x < 0 or y >= h or x >= w or seen[y, x]:
             continue
-        if np.abs(a[y, x, :3].astype(int) - bg).sum() > tol:
+        px = a[y, x, :3].astype(int)
+        if np.abs(px - bg).sum() > tol and px.min() < white:
             continue
         seen[y, x] = True
         a[y, x, 3] = 0
