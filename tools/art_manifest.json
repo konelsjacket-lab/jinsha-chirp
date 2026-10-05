@@ -48,6 +48,10 @@
 
     { "src": "battle_player.webp", "size": "128", "colors": 40, "fit": true, "transparent": true, "note": "战斗中的白果，面朝右" },
     { "src": "enemy_sparrow.webp", "size": "128", "colors": 40, "fit": true, "transparent": true },
-    { "src": "enemy_mosquito.webp", "size": "128", "colors": 40, "fit": true, "transparent": true }
+    { "src": "enemy_mosquito.webp", "size": "128", "colors": 40, "fit": true, "transparent": true },
+    { "src": "enemy_mahjong.webp", "size": "128", "colors": 40, "fit": true, "transparent": true, "note": "牌身是米白色，不能开 holes" },
+    { "src": "enemy_chili.webp", "size": "128", "colors": 40, "fit": true, "transparent": true, "holes": true },
+    { "src": "enemy_watermonkey.webp", "size": "128", "colors": 40, "fit": true, "transparent": true, "holes": true },
+    { "src": "enemy_rhino.webp", "size": "160", "colors": 48, "fit": true, "transparent": true, "holes": true, "clean_edges": true, "note": "石犀战斗形态（地图版是 npc_rhino）" }
   ]
 }
