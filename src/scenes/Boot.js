@@ -62,7 +62,11 @@ export default class Boot extends Phaser.Scene {
             const w = real.width / VARIANT, h = real.height / VARIANT;
             put(real, sx * w, sy * h, w, h, col, sy);
           } else if (real) {
-            put(real, 0, 0, real.width, real.height, col, sy);
+            // 树是透明背景的单个物件：先铺一层草地，再把树盖上去
+            const grass = this.textures.exists('tile_01') ? this.textures.get('tile_01').getSourceImage() : null;
+            if (grass) put(grass, sx * grass.width / VARIANT, sy * grass.height / VARIANT, grass.width / VARIANT, grass.height / VARIANT, col, sy);
+            else put(ph, 0, 0, TILE, TILE, col, sy);
+            ctx.drawImage(real, 0, 0, real.width, real.height, col * (TILE + 2) + 1, sy * (TILE + 2) + 1, TILE, TILE);
           } else {
             put(ph, t * TILE, 0, TILE, TILE, col, sy);
           }
