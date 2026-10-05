@@ -32,7 +32,7 @@ export const IMAGES = [
 
   // 地标：宽 = 占地格数×32，高 = 占地高度×32 再多一截（屋顶伸到上面）
   img('npc_mama', 32), img('npc_myna', 32), img('npc_pigeon', 32), img('npc_xiuyan', 32), img('portrait_mama', 96),
-  img('npc_zhupopo', 32), img('npc_furong', 32),
+  img('npc_zhupopo', 32), img('npc_furong', 32), img('npc_huangli', 32),
   ...['zhupopo', 'furong', 'myna'].map(k => img(`portrait_${k}`, 96, 96, { optional: true })),
   // 装饰小物件（地图里写 deco: true）：没有图就不显示
   img('prop_teatable', 64, 64, { optional: true }), img('prop_mahjong', 64, 64, { optional: true }),

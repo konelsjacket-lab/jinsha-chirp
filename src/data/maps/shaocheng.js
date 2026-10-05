@@ -1,6 +1,7 @@
 // 少城·宽窄巷子：清代满城留下来的老街
 // 地形是字符画（图例见 ../map.js）。exits：走到这片格子就切到另一张图（tx, ty 是对面的落脚点）；props：地标大图。
 import { NPC, TRIGGER } from '../npcs.js';
+import { FUN_NPC, FUN_TRIGGER } from '../fun.js';
 import { at, area, CHENGDU_MOOD } from './helpers.js';
 
 export default {
@@ -53,6 +54,8 @@ export default {
   triggers: [
     area(TRIGGER.c1_lost, 26, 9, 29, 12),
     area(TRIGGER.hotpot, 8, 9, 9, 10),
+    area(FUN_TRIGGER.c1_tanghua, 18, 9, 18, 12),
+    area(FUN_TRIGGER.c1_cat, 20, 3, 20, 4),
   ],
   zones: [
     { id: 'north', bg: 'bg_north', x0: 0, y0: 0, x1: 31, y1: 19, lv: [2, 3], table: [['sparrow', 2], ['mahjong', 2]] },

@@ -156,15 +156,49 @@ export const PROLOGUE_NPCS = {
   myna: {
     id: 'myna', name: '说书八哥', sprite: 'npc_myna',
     when: s => !s.flags.intro_done || s.flags.p_tea,
-    script: s => (s.flags.p_tea
-      ? say('说书八哥', '（醒木一拍）欲知后事如何——', '……明天再说！')
-      : say('说书八哥', '客官先坐，马上开讲！')),
+    // 第一章里，八哥说的书就是白果的事，越说越离谱
+    script: s => {
+      const f = s.flags;
+      if (!f.p_tea) return say('说书八哥', '客官先坐，马上开讲！');
+      if (!f.intro_done) return say('说书八哥', '（醒木一拍）欲知后事如何——', '……明天再说！');
+      if (f.ch2_end) return [
+        ...say('说书八哥', '……听说有只土画眉，要来抢我的位子？'),
+        ...say('说书八哥', '（清了清嗓子）那我得多练练了。'),
+      ];
+      if (f.rhino_beaten) return [
+        ...say('说书八哥', '（醒木一拍）话说那白头鹎，“咚、咚、咚”三下敲醒了石犀，一封书信感动了两千年！'),
+        ...say('说书八哥', '欲知后事如何——下回分解：《青城白蛇》！'),
+        ...say('白果:surprised', '你咋连青城山都晓得了？'),
+        ...say('说书八哥', '……我还没编好。你走快点，我好往下编。'),
+      ];
+      if (f.maoda_rescue) return [
+        ...say('说书八哥', '（醒木一拍）话说那麻老大，单翅入锦江，大战水猴子三百回合，杀得江水倒流！'),
+        ...say('白果:stubborn', '……它就啄了一下鼻子。'),
+        ...say('说书八哥', '客官，说书嘛，要加点料。'),
+      ];
+      if (f.met_sunbird) return [
+        ...say('说书八哥', '（醒木一拍）话说那白头鹎飞到金沙，只见天上一只金凤凰从天而降，开口就喊——“主人”！'),
+        ...say('白果:stubborn', '没有喊主人！它喊的是“小白头”！还说它打偏了！'),
+        ...say('说书八哥', '……“打偏了”不好听。我改一下。'),
+      ];
+      return [
+        ...say('说书八哥', '（醒木一拍）今天不讲张飞，讲新的！话说人民公园有一只白头鹎，一岁就白了头——'),
+        ...say('白果:surprised', '……讲的是我？'),
+        ...say('说书八哥', '客官莫打岔！'),
+      ];
+    },
   },
   pigeon: {
     id: 'pigeon', name: '老鸽子', sprite: 'npc_pigeon',
-    script: s => (s.flags.p_monument
-      ? say('老鸽子', '一百多年了。我太爷爷的太爷爷，那年就在这公园里。')
-      : say('老鸽子', '咕咕。小娃娃，你们也来看碑？')),
+    script: s => {
+      if (!s.flags.p_monument) return say('老鸽子', '咕咕。小娃娃，你们也来看碑？');
+      if (s.flags.ch2_end) return say('老鸽子', '咕咕。太阳底下看这座碑，字都是亮的。', '……我太爷爷的太爷爷要是看得到，该好高兴。');
+      if (s.flags.met_sunbird) return say('老鸽子',
+        '咕咕。公园里都在传，说你要去把太阳找回来。',
+        '一百多年前，那些人修铁路，也是一家一户凑钱，一点一点凑起来的。',
+        '成都人最会的，就是一点点熬。你慢慢来。');
+      return say('老鸽子', '一百多年了。我太爷爷的太爷爷，那年就在这公园里。');
+    },
   },
   maoda_lake: {
     id: 'maoda_lake', name: '麻老大', sprite: 'npc_maoda',
@@ -174,9 +208,22 @@ export const PROLOGUE_NPCS = {
   xiuyan: {
     id: 'xiuyan', name: '小绣眼', sprite: 'npc_xiuyan',
     when: s => s.flags.p_tea,
-    script: s => (s.flags.maoda_p
-      ? say('小绣眼', '谢谢你，白果哥哥（姐姐？）……我以后也要像你一样，头发白白的！')
-      : say('小绣眼', '呜……我的面包……')),
+    script: s => {
+      const f = s.flags;
+      if (!f.maoda_p) return say('小绣眼', '呜……我的面包……');
+      if (!f.intro_done) return say('小绣眼', '谢谢你，白果哥哥（姐姐？）……我以后也要像你一样，头发白白的！');
+      if (f.c1_farewell && !f.c1_xiuyan) return [
+        ...say('小绣眼', '白果哥哥（姐姐？）你要出远门了？'),
+        ...say('小绣眼', '这个……给你。是那天那块面包，我留了半块。'),
+        ...say('', '面包已经硬得像块小石头了。'),
+        ...say('白果:happy', '……谢谢你。我路上吃。'),
+        ...say('小绣眼', '等你回来，我就能飞到公园门口那么远了！我天天在练！'),
+        { give: 'mianbao' },
+        { flag: 'c1_xiuyan' },
+      ];
+      if (f.c1_xiuyan) return say('小绣眼', '我今天飞了五棵树那么远！……摔了两回。');
+      return say('小绣眼', '我在练飞！今天飞了三棵树那么远！', '麻老大这几天都没抢我东西了。它说它“改邪归正”了，但是它说的时候在翻白眼。');
+    },
   },
 };
 

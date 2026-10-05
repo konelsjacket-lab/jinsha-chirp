@@ -1,6 +1,7 @@
 import { say } from './dsl.js';
 import { prologueObjective } from './prologue.js';
 import { hasThree, MAODA_RESCUE } from './npcs.js';
+import { NEW_SONG } from './fun.js';
 
 // ===== 主角设定 =====
 // 白果：一只年轻的白头鹎，住在人民公园的老银杏树上（银杏是成都市树，“白果”就是银杏果）。
@@ -97,6 +98,8 @@ export function chengduOnEnter(s) {
   const f = s.flags;
   // 三样东西凑齐了回到锦江边：水猴子偷袭，麻老大救人
   if (s.map === 'hejiang' && f.met_sunbird && hasThree(s) && !f.maoda_rescue && !f.c1_woke) return MAODA_RESCUE;
+  // 打赢石犀回到公园：麻雀帮的新歌谣
+  if (s.map === 'park' && f.rhino_beaten && !f.c1_song && !f.ch1_end) return NEW_SONG;
   // 带着阿曦回到金沙祭坛：第二章尾声
   return s.map === 'jinsha_altar' && f.axi_found && !f.ch2_end ? EPILOGUE_CH2 : [];
 }

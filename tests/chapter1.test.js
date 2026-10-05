@@ -103,7 +103,9 @@ test('第一章主线能从头走到青城山', () => {
   go(s, 'qc_road'); talk(s, 'gate');
   assert.ok(!s.flags.ch1_end);
   // 回家：龟大爷、喜鹊大妈、妈妈
-  go(s, 'park'); talk(s, 'turtle'); talk(s, 'magpie'); talk(s, 'mama'); talk(s, 'maoda');
+  go(s, 'park');
+  assert.ok(s.flags.c1_song, '回公园没听到麻雀帮的新歌谣');
+  talk(s, 'turtle'); talk(s, 'magpie'); talk(s, 'mama'); talk(s, 'maoda');
   assert.ok(s.flags.c1_turtle && s.flags.c1_magpie && s.flags.c1_farewell); mark();
   // 青城山门：噪噪追上来，第一章完
   go(s, 'qc_road'); talk(s, 'gate');

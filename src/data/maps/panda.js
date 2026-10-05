@@ -1,6 +1,7 @@
 // 大熊猫基地：食铁兽的竹林
 // 地形是字符画（图例见 ../map.js）。exits：走到这片格子就切到另一张图（tx, ty 是对面的落脚点）；props：地标大图。
 import { NPC, TRIGGER } from '../npcs.js';
+import { FUN_NPC, FUN_TRIGGER } from '../fun.js';
 import { at, area, CHENGDU_MOOD } from './helpers.js';
 
 export default {
@@ -45,6 +46,7 @@ export default {
   triggers: [
     area(TRIGGER.panda_butt, 13, 9, 14, 9),
     area(TRIGGER.jinbo2, 22, 10, 24, 12),
+    area(FUN_TRIGGER.c1_gungun, 15, 12, 18, 13),
   ],
   zones: [
     { id: 'east', bg: 'bg_east', x0: 0, y0: 0, x1: 27, y1: 19, lv: [3, 4], table: [['bamboorat', 3], ['chili', 2]] },

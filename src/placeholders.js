@@ -479,6 +479,17 @@ function furongSpirit(c) { // 芙蓉花精：一朵粉红的大木芙蓉，花�
   ell(c, 13.5, 13.6, 1.2, 0.6, '#f08aa8'); ell(c, 18.5, 13.6, 1.2, 0.6, '#f08aa8');
 }
 
+function huangli(c) { // 两只黄鹂：一大一小，并排站在柳枝上
+  rect(c, 2, 24, 28, 2, '#6b7a3a');
+  for (const [dx, k] of [[4, 1], [17, 0.8]]) {
+    c.save(); c.translate(dx, 24 - 14 * k); c.scale(k, k);
+    ell(c, 6, 8, 6, 5, '#f2d04e'); circ(c, 9, 4, 3.5, '#f2d04e');
+    rect(c, 6.5, 2.8, 6, 1.4, '#1b1b1b'); poly(c, [12, 4, 15, 4.6, 12, 5.4], '#e07a8a');
+    ell(c, 3, 9, 3.5, 2, '#2a2a2a'); eye(c, 10, 3.6, 0.8);
+    c.restore();
+  }
+}
+
 // ---------- 地标占位：一座带名字的小建筑。真图到了就替换 ----------
 function landmark(label, { roof = '#3e4852', wall = '#8b6a4a', accent = '#f2c14e', kind = 'house' } = {}) {
   return (c, w, h) => {
@@ -571,6 +582,7 @@ export const PAINTERS = {
   portrait_axi: (c, w) => { rect(c, 0, 0, w, w, '#3b2a10'); unit(c, w, axi); },
   npc_mama: (c, w) => unit(c, w, mama),
   npc_zhupopo: (c, w) => unit(c, w, zhupopo),
+  npc_huangli: (c, w) => unit(c, w, huangli),
   npc_furong: (c, w) => unit(c, w, furongSpirit),
   npc_myna: (c, w) => unit(c, w, myna),
   npc_pigeon: (c, w) => unit(c, w, pigeon),

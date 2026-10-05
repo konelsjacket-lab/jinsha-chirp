@@ -1,6 +1,7 @@
 // 合江亭·锦江：府河、南河在这里汇合
 // 地形是字符画（图例见 ../map.js）。exits：走到这片格子就切到另一张图（tx, ty 是对面的落脚点）；props：地标大图。
 import { NPC, TRIGGER } from '../npcs.js';
+import { FUN_NPC, FUN_TRIGGER } from '../fun.js';
 import { at, area, CHENGDU_MOOD } from './helpers.js';
 
 export default {
@@ -50,6 +51,7 @@ export default {
   ],
   triggers: [
     area(TRIGGER.river_note, 15, 11, 17, 11),
+    area(FUN_TRIGGER.c1_dance, 6, 9, 8, 10),
   ],
   zones: [
     { id: 'south', bg: 'bg_south', x0: 0, y0: 0, x1: 31, y1: 19, lv: [3, 5], table: [['chili', 2], ['watermonkey', 2], ['mahjong', 1]] },

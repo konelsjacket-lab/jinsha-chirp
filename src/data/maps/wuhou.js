@@ -1,6 +1,7 @@
 // 武侯祠：君臣合祀的祠堂
 // 地形是字符画（图例见 ../map.js）。exits：走到这片格子就切到另一张图（tx, ty 是对面的落脚点）；props：地标大图。
 import { NPC, TRIGGER } from '../npcs.js';
+import { FUN_NPC, FUN_TRIGGER } from '../fun.js';
 import { at, area, CHENGDU_MOOD } from './helpers.js';
 
 export default {
@@ -49,6 +50,7 @@ export default {
   ],
   triggers: [
     area(TRIGGER.wuhou_wall, 10, 6, 17, 6),
+    area(FUN_TRIGGER.c1_jinli, 6, 15, 8, 17),
   ],
   zones: [
     { id: 'south', bg: 'bg_north', x0: 0, y0: 0, x1: 27, y1: 19, lv: [3, 4], table: [['chili', 2], ['mahjong', 2]] },

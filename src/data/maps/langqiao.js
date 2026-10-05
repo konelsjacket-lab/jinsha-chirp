@@ -1,6 +1,7 @@
 // 安顺廊桥·望江楼：锦江上的廊桥，江边的竹林
 // 地形是字符画（图例见 ../map.js）。exits：走到这片格子就切到另一张图（tx, ty 是对面的落脚点）；props：地标大图。
 import { NPC, TRIGGER } from '../npcs.js';
+import { FUN_NPC, FUN_TRIGGER, WANGJIANG } from '../fun.js';
 import { at, area, CHENGDU_MOOD } from './helpers.js';
 
 export default {
@@ -36,7 +37,7 @@ export default {
   ],
   props: [
     { key: 'lm_langqiao', x: 8, y: 7, w: 5, h: 6, solid: false, name: '安顺廊桥' },
-    { key: 'lm_wangjiang', x: 23, y: 13, w: 3, h: 2, solid: true, name: '望江楼' },
+    { key: 'lm_wangjiang', x: 23, y: 13, w: 3, h: 2, solid: true, name: '望江楼', script: WANGJIANG },
     { key: 'prop_boat', x: 3, y: 10, w: 2, h: 1, deco: true },
     { key: 'prop_furong', x: 2, y: 5, w: 2, h: 3, deco: true },
     { key: 'prop_lantern', x: 13, y: 7, w: 1, h: 2, deco: true },

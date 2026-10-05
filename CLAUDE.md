@@ -19,6 +19,7 @@
     `npcs`（用 `at(NPC.xxx, x, y)` 摆放）、`triggers`（`area(TRIGGER.xxx, x0, y0, x1, y1)`）、`zones`（遇怪）、`route`（菜单路线图上的位置，0–100）。
     `maps/index.js` 汇总，并负责把旧存档（成都一整张大图）迁移到小地图。
   - `npcs.js`（第一章·成都）、`qingcheng.js`（第二章）：NPC 和奇遇的“是谁、说什么”（`when` 控制是否在场）；放在哪由地图文件决定。第一章主线的剧情标记顺序写在 `npcs.js` 开头；任务目标在 `story.js` 的 `chapter1Objective`。
+  - `fun.js`：不推主线的小奇遇（相亲角告示、糖画、石虎、坝坝舞、三大炮、两只黄鹂、滚滚、望江楼千古绝对、麻雀帮新歌谣）。
   - `prologue.js`：序章「白头」（人民公园）的剧情、NPC、奇遇和目标；`codex.js`：成都见闻录（`{ codex: 'id' }` 解锁）。
   - `story.js`：战败、主线目标、第二章尾声。`quests.js`：菜单里的支线任务。`companion.js`：噪噪同行时的闲聊。
   - 剧情步骤（对话、选项、条件、道具、战斗、换地图、CG……）的写法全在 `dsl.js` 顶部注释里。

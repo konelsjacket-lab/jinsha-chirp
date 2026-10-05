@@ -24,6 +24,18 @@ export const ITEMS = {
     name: '芙蓉花露', use: 'heal', amount: 60,
     desc: '芙蓉花精送的花露，清清甜甜。回复 60 体力。',
   },
+  tanghua: {
+    name: '糖画', use: 'heal', amount: 50,
+    desc: '宽窄巷子的糖画，金黄透亮，舍不得吃。回复 50 体力。',
+  },
+  sandapao: {
+    name: '三大炮', use: 'heal', amount: 35,
+    desc: '锦里的糯米糍粑，裹着黄豆粉和红糖水。粘嘴。回复 35 体力。',
+  },
+  mianbao: {
+    name: '半块面包', use: 'heal', amount: 20,
+    desc: '小绣眼省下来的。已经硬了，但是心意是软的。回复 20 体力。',
+  },
   xueya: {
     name: '青城雪芽', use: 'mp', amount: 20,
     desc: '鹤道长送的山茶，清香提神。回复 20 气。',

@@ -4,6 +4,7 @@
 import { NPC, TRIGGER } from '../npcs.js';
 import { PROLOGUE_NPCS as P, PROLOGUE_TRIGGERS as PT, MONUMENT } from '../prologue.js';
 import { say } from '../dsl.js';
+import { FUN_NPC, FUN_TRIGGER } from '../fun.js';
 import { at, area, CHENGDU_MOOD } from './helpers.js';
 
 // 序章没结束之前，三个出口都出不去
@@ -74,6 +75,7 @@ export default {
     area(PT.p_lake, 14, 13, 19, 15),
     area(PT.p_home, 26, 6, 32, 10),
     area(TRIGGER.koi, 20, 14, 28, 14),
+    area(FUN_TRIGGER.p_ads, 7, 16, 9, 17),
   ],
   zones: [
     { id: 'park', bg: 'bg_park', x0: 0, y0: 0, x1: 33, y1: 23, lv: [1, 2], table: [['sparrow', 3], ['mosquito', 2]] },

@@ -1,6 +1,7 @@
 // 浣花溪·杜甫草堂：杜甫住过快四年的地方
 // 地形是字符画（图例见 ../map.js）。exits：走到这片格子就切到另一张图（tx, ty 是对面的落脚点）；props：地标大图。
 import { NPC, TRIGGER } from '../npcs.js';
+import { FUN_NPC, FUN_TRIGGER } from '../fun.js';
 import { at, area, CHENGDU_MOOD } from './helpers.js';
 
 export default {
@@ -42,6 +43,7 @@ export default {
   ],
   npcs: [
     at(NPC.cuckoo, 16, 8),
+    at(FUN_NPC.huangli, 22, 9),
   ],
   triggers: [
     area(TRIGGER.c1_caotang, 21, 12, 24, 14),
