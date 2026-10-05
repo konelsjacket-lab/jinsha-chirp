@@ -25,7 +25,11 @@ export const IMAGES = [
   img('bg_park', 960, 540, { pixel: false }), img('bg_north', 960, 540, { pixel: false }),
   img('bg_west', 960, 540, { pixel: false }), img('bg_east', 960, 540, { pixel: false }),
   img('bg_south', 960, 540, { pixel: false }), img('bg_boss', 960, 540, { pixel: false }),
-  img('title_bg', 960, 540, { pixel: false }),
+  img('title_bg', 960, 540),
+
+  // 剧情插图：480×270 的像素图，放大 2 倍全屏显示。没有图就跳过
+  ...['cg_intro_park', 'cg_dream', 'cg_sunbird_reveal', 'cg_birth_light', 'cg_rhino_awakes', 'cg_qingcheng_gate']
+    .map(k => img(k, 480, 270, { optional: true })),
 ];
 
 const audio = key => ({ key, files: [`assets/audio/${key}.mp3`, `assets/audio/${key}.ogg`] });

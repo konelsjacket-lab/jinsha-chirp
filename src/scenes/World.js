@@ -251,6 +251,8 @@ export default class World extends Phaser.Scene {
         else if (res === 'lose') await this.exec(st.lose || LOSE);
       } else if ('if' in st) {
         await this.exec(s.flags[st.if] ? (st.then || []) : (st.else || []));
+      } else if ('cg' in st) {
+        await this.ui.showCG(st.cg);
       } else if (st.fx) {
         await this.fx(st);
       } else if (st.music) {

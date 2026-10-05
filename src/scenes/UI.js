@@ -40,6 +40,10 @@ export default class UI extends Phaser.Scene {
       fontSize: '22px', backgroundColor: '#1b1f2acc', padding: { x: 16, y: 8 },
     }).setOrigin(0.5).setAlpha(0).setDepth(2000);
 
+    // 剧情插图（CG）：盖住地图和状态栏，但在对话框下面
+    this.cg = this.add.image(GAME_W / 2, GAME_H / 2, '__DEFAULT').setDepth(900).setVisible(false);
+    this.cgKey = null;
+
     this.dialog = new DialogBox(this);
     this.setupTouch();
     this.refreshHUD();
@@ -84,6 +88,23 @@ export default class UI extends Phaser.Scene {
     await this.dialog.play(lines);
     this.busy = false;
     this.lastClose = this.time.now;
+  }
+
+  // 显示 / 切换 / 收起剧情插图。没有这张图就直接跳过，剧情照常进行。
+  showCG(key) {
+    return new Promise(resolve => {
+      this.tweens.killTweensOf(this.cg);
+      if (!key) {
+        if (!this.cgKey) return resolve();
+        this.cgKey = null;
+        this.tweens.add({ targets: this.cg, alpha: 0, duration: 500, onComplete: () => { this.cg.setVisible(false); resolve(); } });
+        return;
+      }
+      if (!this.textures.exists(key)) return resolve();
+      this.cgKey = key;
+      this.cg.setTexture(key).setDisplaySize(GAME_W, GAME_H).setVisible(true).setAlpha(0);
+      this.tweens.add({ targets: this.cg, alpha: 1, duration: 700, onComplete: resolve });
+    });
   }
 
   // 章节结束的大字卡片

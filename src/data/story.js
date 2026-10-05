@@ -7,14 +7,17 @@ import { START } from './map.js';
 // 成都已经四十九天没出太阳了，白果总梦到一只金色的鸟在叫它去金沙……
 
 export const INTRO = [
+  { cg: 'cg_intro_park' },
   { fx: 'fadeIn' },
   ...say('',
     '成都，人民公园。',
     '这座城市已经连续四十九天没有出过太阳了。',
     '老成都人见怪不怪：“蜀犬吠日嘛，太阳一出来，狗都要叫唤。”',
     '可这一回，连狗都快忘记太阳长啥样了。'),
-  { fx: 'flash', color: 0xf2c14e },
+  { cg: 'cg_dream' },
   ...say('？？？', '……孩子……', '……来金沙……找我……'),
+  { cg: null },
+  { fx: 'flash', color: 0xf2c14e },
   { fx: 'shake' },
   ...say('白果:surprised', '哇！！'),
   ...say('',  '白果一个激灵，从银杏枝上滚了下来。'),
