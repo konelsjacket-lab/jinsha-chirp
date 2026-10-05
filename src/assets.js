@@ -30,6 +30,11 @@ export const IMAGES = [
   img('ui_panel', 48, 48, { optional: true }), img('ui_cursor', 16, 16, { optional: true }),
   img('ui_next', 16, 16, { optional: true }), img('ui_button', 64, 64, { optional: true }),
 
+  // 地标：宽 = 占地格数×32，高 = 占地高度×32 再多一截（屋顶伸到上面）
+  img('lm_heming', 192, 160), img('lm_baolu', 64, 128), img('lm_kuanzhai', 128, 128),
+  img('lm_altar', 192, 192), img('lm_hejiang', 96, 112), img('lm_langqiao', 160, 192),
+  img('lm_wangjiang', 96, 128), img('lm_wuhou', 256, 96), img('lm_caotang', 160, 160), img('lm_panda', 256, 112),
+
   img('battle_player', 128),
   img('enemy_sparrow', 128), img('enemy_mosquito', 128), img('enemy_mahjong', 128), img('enemy_chili', 128),
   img('enemy_bamboorat', 128), img('enemy_watermonkey', 128), img('enemy_rhino', 160),

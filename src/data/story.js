@@ -40,14 +40,10 @@ export function lose(s) {
   const line = s.map === 'qingcheng'
     ? say('噪噪', '你终于醒了！我把你从石阶上一路拖下山的，累死我了……', '下回打不赢就喊我，我帮你吵！')
     : say('噪噪', '你终于醒了！我喊了一群土画眉才把你抬回窝里……', '打不赢就跑嘛，莫硬撑！');
-  return [
-    { fx: 'fadeOut' },
-    { teleport: 'start' },
-    { heal: true },
-    { fx: 'fadeIn' },
-    ...line,
-    { save: true },
-  ];
+  const after = [{ heal: true }, ...line, { save: true }];
+  // 在成都打输了：被抬回人民公园的窝里；在青城山：拖回山脚
+  if (s.map === 'qingcheng') return [{ fx: 'fadeOut' }, { teleport: 'start' }, { fx: 'fadeIn' }, ...after];
+  return [{ warp: { map: 'park', x: 28, y: 9 }, then: after }];
 }
 
 export function objective(s) {
@@ -101,5 +97,6 @@ export const EPILOGUE_CH2 = [
 ];
 
 export function chengduOnEnter(s) {
-  return s.flags.axi_found && !s.flags.ch2_end ? EPILOGUE_CH2 : [];
+  // 带着阿曦回到金沙祭坛：第二章尾声
+  return s.map === 'jinsha_altar' && s.flags.axi_found && !s.flags.ch2_end ? EPILOGUE_CH2 : [];
 }

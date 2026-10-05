@@ -1,6 +1,6 @@
 import { TILE, WORLD_ZOOM, PLAYER_SPEED, ENCOUNTER_RATE, ENCOUNTER_GRACE } from '../config.js';
 import { indexGrid, solidIndices, mapW, mapH, TALL_GRASS, tileIndexAt, placeAt } from '../data/map.js';
-import { MAPS } from '../data/maps/index.js';
+import { MAPS, migrateOldChengdu } from '../data/maps/index.js';
 import { INTRO, lose, objective } from '../data/story.js';
 import { chatter } from '../data/companion.js';
 import { ITEMS } from '../data/items.js';
@@ -20,12 +20,15 @@ export default class World extends Phaser.Scene {
   create() {
     this.state = this.registry.get('state');
     const s = this.state;
-    s.map = s.map || 'chengdu';
+    migrateOldChengdu(s);
+    if (!MAPS[s.map]) { s.map = 'park'; s.pos = { ...MAPS.park.start }; }
     this.map = MAPS[s.map];
+    s.flags[`visit_${s.map}`] = true;
     this.locked = true;
     this.ready = false;
     this.warping = false;
-    this.facing = 'down';
+    this.facing = s.facing || 'down';
+    delete s.facing;
     this.steps = 0;
     this.grassDist = 0;
     this.place = null;
@@ -45,8 +48,24 @@ export default class World extends Phaser.Scene {
     const { x, y } = s.pos;
     this.player = this.physics.add.sprite(x * TILE + 16, y * TILE + 16, 'player', 0);
     this.player.body.setSize(16, 12).setOffset(8, 18);
+    this.player.setFrame(ROW[this.facing] * 3);
     this.player.setCollideWorldBounds(true);
     this.physics.add.collider(this.player, this.layer);
+
+    // 地标大图（鹤鸣茶社、祭坛……）：图片底边对齐占地范围的底边；solid 的占地范围挡路，能被调查
+    this.propBodies = this.physics.add.staticGroup();
+    for (const p of this.map.props || []) {
+      const left = p.x * TILE, bottom = (p.y + p.h) * TILE;
+      const img = this.add.image(left + (p.w * TILE) / 2, bottom, p.key).setOrigin(0.5, 1);
+      img.setDepth(p.solid ? bottom : p.over ? 99990 : 1);
+      if (p.solid) {
+        const zone = this.add.zone(left + (p.w * TILE) / 2, p.y * TILE + (p.h * TILE) / 2, p.w * TILE, p.h * TILE);
+        this.propBodies.add(zone);
+        zone.npc = { name: p.name, script: p.script || (() => [{ say: '', text: `这里是${p.name}。` }]) };
+        zone.sprite = img;
+      }
+    }
+    this.physics.add.collider(this.player, this.propBodies);
 
     // NPC：贴图只负责显示，碰撞用一个 28×28 的隐形方块。随剧情出现/消失，见 refreshNpcs()
     this.npcBodies = this.physics.add.staticGroup();
@@ -102,8 +121,12 @@ export default class World extends Phaser.Scene {
     this.ui.showPlace(placeAt(this.map, this.state.pos.x, this.state.pos.y));
     playMusic(this, this.map.music || 'bgm_world');
     this.cameras.main.fadeIn(500, 0, 0, 0);
-    if (this.map.id === 'chengdu' && !this.state.flags.intro_done) this.runScript(INTRO);
-    else if (this.map.onEnter) {
+    // 换地图前剧情里还没走完的步骤（{ warp, then }）
+    const pending = this.registry.get('pendingScript');
+    this.registry.set('pendingScript', null);
+    if (pending && pending.length) return this.runScript(pending);
+    if (this.map.id === 'park' && !this.state.flags.intro_done) return this.runScript(INTRO);
+    if (this.map.onEnter) {
       const steps = this.map.onEnter(this.state);
       if (steps && steps.length) this.runScript(steps);
     }
@@ -149,7 +172,8 @@ export default class World extends Phaser.Scene {
   update(time, delta) {
     this.bumpPrev = this.bumpNow;
     this.bumpNow = false;
-    if (!this.ready) return;
+    // 换地图淡出的这几帧里不要再记位置，不然会把出口那一格存成新地图的落脚点
+    if (!this.ready || this.warping) return;
 
     const p = this.player;
     const tx = Math.floor(p.x / TILE), ty = Math.floor((p.y + 10) / TILE);
@@ -221,6 +245,16 @@ export default class World extends Phaser.Scene {
 
   checkTriggers(tx, ty) {
     const s = this.state;
+    // 出口：走到地图边上的出口格子，就换到相邻的那张图（沿着出口方向保持偏移）
+    for (const e of this.map.exits || []) {
+      if (tx < e.x0 || tx > e.x1 || ty < e.y0 || ty > e.y1) continue;
+      if (e.when && !e.when(s)) {
+        if (e.blocked) this.runScript(e.blocked(s));
+        continue;
+      }
+      this.goTo(e.to, e.tx + (tx - e.x0), e.ty + (ty - e.y0));
+      return true;
+    }
     for (const t of this.map.triggers || []) {
       if (tx < t.x0 || tx > t.x1 || ty < t.y0 || ty > t.y1) continue;
       const once = t.once !== false;
@@ -247,15 +281,31 @@ export default class World extends Phaser.Scene {
     f.setPosition(target.x, target.y + 16).setDepth(target.y + 15);
   }
 
+  // 面前（NPC 或可调查的地标）。按到碰撞方块边缘的距离算，大地标也能从侧面调查
   npcInFront(range = 34) {
     const [dx, dy] = DIRS[this.facing];
     const px = this.player.x + dx * 20, py = this.player.y + 6 + dy * 20;
     let best = null, bd = range;
-    for (const z of this.npcBodies.getChildren()) {
-      const d = Phaser.Math.Distance.Between(px, py, z.x, z.y);
+    for (const z of [...this.npcBodies.getChildren(), ...this.propBodies.getChildren()]) {
+      const hw = z.width / 2, hh = z.height / 2;
+      const cx = Phaser.Math.Clamp(px, z.x - hw, z.x + hw), cy = Phaser.Math.Clamp(py, z.y - hh, z.y + hh);
+      const d = Phaser.Math.Distance.Between(px, py, cx, cy) + (z.width > 28 ? 4 : 0);
       if (d < bd) { bd = d; best = z; }
     }
     return best;
+  }
+
+  // 走出地图边缘，去相邻的地图
+  goTo(map, x, y) {
+    this.locked = true;
+    this.player.setVelocity(0, 0);
+    this.warping = true;
+    const s = this.state;
+    s.map = map;
+    s.pos = { x, y };
+    s.facing = this.facing;
+    this.cameras.main.fadeOut(250, 0, 0, 0);
+    this.cameras.main.once('camerafadeoutcomplete', () => { saveState(s); this.scene.restart(); });
   }
 
   onAction() {
@@ -382,6 +432,7 @@ export default class World extends Phaser.Scene {
         await this.ui.showCG(null);
         s.map = st.warp.map;
         s.pos = { x: st.warp.x, y: st.warp.y };
+        if (st.then) this.registry.set('pendingScript', st.then);
         saveState(s);
         this.warping = true;
         this.scene.restart();

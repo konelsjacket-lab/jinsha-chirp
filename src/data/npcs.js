@@ -1,9 +1,9 @@
 import { say } from './dsl.js';
 
-// 成都的 NPC 和踩点奇遇。
-// NPC：x, y 是格子坐标；sprite 是贴图 key；size 是贴图边长（默认 32）。
+// 成都的 NPC 和踩点奇遇（只写“是谁、说什么”；放在哪张图的哪一格，写在 maps/*.js 里）。
+// NPC：sprite 是贴图 key；size 是贴图边长（默认 32）。
 //   script(state) 返回一段剧情；when(state) 为假时这个 NPC 不在场；bump: true 撞上去就触发。
-// 奇遇（TRIGGERS）：走进 x0..x1, y0..y1 这片格子时触发一次（once: false 可以反复触发）。
+// 奇遇（TRIGGERS）：走进地图上指定的那片格子时触发一次（once: false 可以反复触发）。
 
 export const NPCS = [
   {
@@ -512,3 +512,7 @@ export const TRIGGERS = [
   },
 ];
 
+
+// 按 id 查：地图文件里用 NPC.turtle、TRIGGER.koi 来摆放
+export const NPC = Object.fromEntries(NPCS.map(n => [n.id, n]));
+export const TRIGGER = Object.fromEntries(TRIGGERS.map(t => [t.id, t]));

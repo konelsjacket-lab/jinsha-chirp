@@ -6,6 +6,7 @@ import { SKILLS } from '../data/skills.js';
 import { ITEMS } from '../data/items.js';
 import { saveState } from '../state.js';
 import { QUESTS } from '../data/quests.js';
+import { MAPS } from '../data/maps/index.js';
 import { useItem, expToNext } from '../systems/battle.js';
 import { sfx } from '../systems/audio.js';
 
@@ -188,11 +189,12 @@ export default class UI extends Phaser.Scene {
     while (true) {
       this.drawStatus();
       const i = await new Menu(this, {
-        x: 560, y: 110, w: 200, items: [{ label: '道具' }, { label: '任务' }, { label: '存档' }, { label: '返回' }],
+        x: 560, y: 110, w: 200, items: [{ label: '道具' }, { label: '任务' }, { label: '地图' }, { label: '存档' }, { label: '返回' }],
       }).open();
       if (i === 0) await this.itemMenu();
       else if (i === 1) await this.questMenu();
-      else if (i === 2) this.toast(saveState(this.state) ? '已存档' : '存档失败（浏览器不让存）');
+      else if (i === 2) await this.routeMap();
+      else if (i === 3) this.toast(saveState(this.state) ? '已存档' : '存档失败（浏览器不让存）');
       else break;
     }
     this.statusRoot && this.statusRoot.destroy();
@@ -219,6 +221,56 @@ export default class UI extends Phaser.Scene {
     r.add(txt(this, 206, 250, lines.join('\n'), {
       fontSize: '18px', lineSpacing: 12, wordWrap: { width: 310, useAdvancedWrap: true },
     }));
+  }
+
+  // 路线图：去过的地方显示名字，没去过的是“？？？”，当前所在的地方闪金光
+  async routeMap() {
+    const s = this.state;
+    const here = MAPS[s.map];
+    const region = here.region === 'qingcheng' ? null : 'chengdu';
+    const areas = Object.values(MAPS).filter(m => !region || m.region === region || m.id === 'qingcheng');
+    const r = this.add.container(0, 0).setDepth(1150);
+    if (this.statusRoot) this.statusRoot.setVisible(false);
+    const X0 = 120, Y0 = 70, W = 720, H = 400;
+    r.add(panel(this, X0, Y0, W, H, { alpha: 1 }));
+    r.add(txt(this, X0 + 24, Y0 + 14, '成都', { fontSize: '24px', color: '#f2c14e' }));
+    const pos = m => ({ x: X0 + 40 + (m.route.x / 100) * (W - 80), y: Y0 + 50 + (m.route.y / 100) * (H - 90) });
+    const g = this.add.graphics();
+    r.add(g);
+    const visited = m => s.flags[`visit_${m.id}`];
+    g.lineStyle(3, 0x8a8578, 0.8);
+    for (const m of areas) for (const e of m.exits || []) {
+      const t = MAPS[e.to];
+      if (!t || !areas.includes(t) || !(visited(m) || visited(t))) continue;
+      const a = pos(m), b = pos(t);
+      g.lineBetween(a.x, a.y, b.x, b.y);
+    }
+    if (s.flags.ch1_end && areas.includes(MAPS.qingcheng)) {
+      const a = pos(MAPS.qc_road), b = pos(MAPS.qingcheng);
+      g.lineBetween(a.x, a.y, b.x, b.y);
+    }
+    for (const m of areas) {
+      const p = pos(m);
+      const seen = visited(m);
+      const dot = this.add.circle(p.x, p.y, m === here ? 9 : 6, seen ? 0xf2c14e : 0x5a5850);
+      r.add(dot);
+      if (m === here) this.tweens.add({ targets: dot, scale: 1.5, duration: 500, yoyo: true, repeat: -1 });
+      r.add(txt(this, p.x, p.y + 12, seen ? m.name : '？？？', { fontSize: '12px', color: seen ? '#f4efe2' : '#77736a' }).setOrigin(0.5, 0));
+    }
+    r.add(txt(this, X0 + W - 20, Y0 + H - 18, '按任意键返回', { fontSize: '12px', color: '#a8a290' }).setOrigin(1, 1));
+    await new Promise(resolve => {
+      const opened = this.time.now;
+      const close = () => {
+        if (this.time.now - opened < 200) return;
+        this.input.keyboard.off('keydown', close);
+        this.input.off('pointerdown', close);
+        resolve();
+      };
+      this.input.keyboard.on('keydown', close);
+      this.input.on('pointerdown', close);
+    });
+    r.destroy();
+    if (this.statusRoot) this.statusRoot.setVisible(true);
   }
 
   async questMenu() {

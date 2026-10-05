@@ -441,6 +441,36 @@ const qingchengBg = (c, w) => {
   for (let i = 0; i < 6; i++) ell(c, (i * 197) % w, 120 + (i * 61) % 180, 220, 40, 'rgba(232,238,240,0.35)');
 };
 
+// ---------- 地标占位：一座带名字的小建筑。真图到了就替换 ----------
+function landmark(label, { roof = '#3e4852', wall = '#8b6a4a', accent = '#f2c14e', kind = 'house' } = {}) {
+  return (c, w, h) => {
+    if (kind === 'stele') {
+      rect(c, w * 0.3, h * 0.15, w * 0.4, h * 0.8, '#7a7a72'); rect(c, w * 0.2, h * 0.88, w * 0.6, h * 0.1, '#5a5a52');
+      poly(c, [w * 0.3, h * 0.15, w * 0.5, 0, w * 0.7, h * 0.15], '#8a8a80');
+    } else if (kind === 'arch') {
+      rect(c, w * 0.08, h * 0.3, w * 0.1, h * 0.7, wall); rect(c, w * 0.82, h * 0.3, w * 0.1, h * 0.7, wall);
+      poly(c, [0, h * 0.32, w * 0.5, h * 0.05, w, h * 0.32], roof); rect(c, w * 0.1, h * 0.3, w * 0.8, h * 0.08, accent);
+    } else if (kind === 'altar') {
+      rect(c, w * 0.05, h * 0.55, w * 0.9, h * 0.45, '#b8862e'); rect(c, w * 0.15, h * 0.35, w * 0.7, h * 0.25, '#d9a53c');
+      c.save(); c.translate(w / 2, h * 0.25); for (let i = 0; i < 12; i++) { c.rotate(Math.PI / 6); poly(c, [0, -6, 4, -h * 0.22, -2, -h * 0.22], accent); } c.restore();
+      circ(c, w / 2, h * 0.25, 8, '#fff3c4');
+    } else if (kind === 'bridge') {
+      rect(c, 0, h * 0.35, w, h * 0.45, '#7a5230'); for (let x = 6; x < w; x += 18) rect(c, x, h * 0.2, 4, h * 0.3, '#5c3b20');
+      poly(c, [0, h * 0.25, w / 2, 0, w, h * 0.25], roof);
+    } else if (kind === 'pavilion') {
+      rect(c, w * 0.2, h * 0.4, w * 0.08, h * 0.6, wall); rect(c, w * 0.72, h * 0.4, w * 0.08, h * 0.6, wall);
+      poly(c, [0, h * 0.45, w / 2, 0, w, h * 0.45], roof); rect(c, w * 0.1, h * 0.85, w * 0.8, h * 0.15, '#9a968a');
+    } else {
+      rect(c, w * 0.06, h * 0.35, w * 0.88, h * 0.65, wall);
+      poly(c, [0, h * 0.4, w * 0.12, h * 0.08, w * 0.88, h * 0.08, w, h * 0.4], roof);
+      rect(c, w * 0.42, h * 0.62, w * 0.16, h * 0.38, '#3a2a1c');
+    }
+    c.fillStyle = '#fff'; c.strokeStyle = '#1b1f2a'; c.lineWidth = 3;
+    c.font = 'bold 13px sans-serif'; c.textAlign = 'center';
+    c.strokeText(label, w / 2, h - 6); c.fillText(label, w / 2, h - 6);
+  };
+}
+
 // ---------- 清单 ----------
 export const PAINTERS = {
   tiles_ph: paintTiles,
@@ -501,6 +531,16 @@ export const PAINTERS = {
   portrait_xiaoqing: (c, w) => { rect(c, 0, 0, w, w, '#1d3329'); unit(c, w, xiaoqing); },
   portrait_baishe: (c, w) => { rect(c, 0, 0, w, w, '#2a3036'); unit(c, w, baishe); },
   portrait_axi: (c, w) => { rect(c, 0, 0, w, w, '#3b2a10'); unit(c, w, axi); },
+  lm_heming: landmark('鹤鸣茶社', { wall: '#9a7b55' }),
+  lm_baolu: landmark('保路纪念碑', { kind: 'stele' }),
+  lm_kuanzhai: landmark('宽窄巷子', { kind: 'arch', wall: '#6b5040' }),
+  lm_altar: landmark('太阳神鸟祭坛', { kind: 'altar' }),
+  lm_hejiang: landmark('合江亭', { kind: 'pavilion', wall: '#8a3a2a' }),
+  lm_langqiao: landmark('安顺廊桥', { kind: 'bridge' }),
+  lm_wangjiang: landmark('望江楼', { wall: '#8a3a2a', roof: '#2f5a4a' }),
+  lm_wuhou: landmark('武侯祠', { kind: 'arch', wall: '#a23a2a' }),
+  lm_caotang: landmark('草堂', { roof: '#b8a060', wall: '#8b7355' }),
+  lm_panda: landmark('熊猫基地', { kind: 'arch', wall: '#3f6f2f', roof: '#2a4a20' }),
   bg_qingcheng: makeBattleBg('#a9b8b4', '#d2dbd6', '#6e8f62', '#4f6f45', qingchengBg),
 
   bg_park: makeBattleBg('#9fb3bf', '#c8d2cf', '#7cae5a', '#5e8f44', ginkgoRow),
