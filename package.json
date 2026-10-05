@@ -1,0 +1,11 @@
+{
+  "name": "jinsha-chirp",
+  "private": true,
+  "version": "0.1.0",
+  "description": "金沙啾 —— 一只白头鹎的巴蜀奇遇",
+  "type": "module",
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "test": "node --test tests/*.test.js"
+  }
+}
