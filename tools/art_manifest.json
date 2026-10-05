@@ -28,12 +28,15 @@
 
     { "src": "title_bg.webp",           "size": "480x270", "colors": 64 },
     { "src": "cg_dream.webp",           "size": "480x270", "colors": 64 },
+    { "src": "cg_baishe.webp",          "size": "480x270", "colors": 64 },
+    { "src": "cg_sunny_chengdu.webp",   "size": "480x270", "colors": 64 },
     { "src": "cg_sunbird_reveal.webp",  "size": "480x270", "colors": 64 },
     { "src": "cg_birth_light.webp",     "size": "480x270", "colors": 64 },
     { "src": "cg_rhino_awakes.webp",    "size": "480x270", "colors": 64 },
     { "src": "cg_qingcheng_gate.webp",  "size": "480x270", "colors": 64 },
 
     { "src": "bg_park.webp",  "size": "480x270", "colors": 64, "note": "战斗背景" },
+    { "src": "bg_qingcheng.webp", "size": "480x270", "colors": 64, "note": "战斗背景：青城山" },
     { "src": "bg_north.webp", "size": "480x270", "colors": 64 },
     { "src": "bg_east.webp",  "size": "480x270", "colors": 64 },
     { "src": "bg_south.webp", "size": "480x270", "colors": 64 },
@@ -90,6 +93,7 @@
     { "src": "enemy_leech.webp", "size": "128", "colors": 40, "fit": true, "transparent": true, "note": "山蚂蟥" },
     { "src": "enemy_mist.webp", "size": "128", "colors": 40, "fit": true, "transparent": true, "pre_alpha": true, "note": "雾精：浅灰白，先抠图再缩小" },
     { "src": "enemy_larou.webp", "size": "128", "colors": 40, "fit": true, "transparent": true, "pre_alpha": true, "note": "腊肉精：带白烟" },
+    { "src": "enemy_xiaoqing.webp", "size": "160", "colors": 48, "fit": true, "transparent": true, "pre_alpha": true, "holes": true, "note": "小青 Boss：带浅色旋风" },
 
     { "src": "lm_nest.webp", "size": "96x160", "colors": 40, "fit": true, "transparent": true, "pad": 1.02 },
     { "src": "lm_heming.webp", "size": "224x160", "colors": 40, "fit": true, "transparent": true, "pad": 1.02 },
