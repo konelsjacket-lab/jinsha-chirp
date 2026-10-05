@@ -65,6 +65,11 @@
     { "src": "npc_owl.webp", "size": "32", "colors": 24, "fit": true, "transparent": true },
     { "src": "npc_kingfisher.webp", "size": "32", "colors": 24, "fit": true, "transparent": true },
     { "src": "npc_monkey.webp", "size": "32", "colors": 24, "fit": true, "transparent": true },
+    { "src": "npc_hongzhong.webp", "size": "32", "colors": 24, "fit": true, "transparent": true },
+    { "src": "npc_crane.webp", "size": "32", "colors": 24, "fit": true, "transparent": true, "pre_alpha": true, "note": "白羽毛：先抠图再缩小" },
+    { "src": "npc_axi.webp", "size": "32", "colors": 24, "fit": true, "transparent": true },
+    { "src": "npc_xiaoqing.webp", "size": "32", "colors": 24, "fit": true, "transparent": true },
+    { "src": "npc_ginkgo.webp", "size": "64", "colors": 32, "fit": true, "transparent": true },
     { "src": "npc_sunbird.webp", "size": "64", "colors": 32, "fit": true, "transparent": true },
     { "src": "npc_rhino.webp", "size": "64", "colors": 32, "fit": true, "transparent": true, "holes": true, "clean_edges": true },
 

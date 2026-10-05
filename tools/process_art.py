@@ -130,8 +130,21 @@ def main():
             img = fit_single(img, it, w / h)
         if it.get('crop'):
             img = img.crop(tuple(int(v) for v in it['crop'].split(',')))
+        bgmask = None
+        if it.get('pre_alpha'):
+            # 身上有大片白色的角色（鹤、白蛇……）：先在原图上找背景（这时轮廓线还是完整的），
+            # 记成一张蒙版跟着缩小；缩小后一格里一半以上是背景，这一格就透明
+            bg = np.asarray(make_transparent(img, tol=12, white=250))[..., 3] == 0
+            arr = np.asarray(img).copy()
+            arr[bg] = (255, 255, 255, 255)
+            img = Image.fromarray(arr, 'RGBA')
+            bgmask = np.asarray(Image.fromarray((bg * 255).astype(np.uint8)).resize((w, h), Image.BOX)) > 127
         out = quantize(block_median(img, w, h), it['colors'])
-        if it.get('transparent'):
+        if bgmask is not None:
+            arr = np.asarray(out.convert('RGBA')).copy()
+            arr[bgmask, 3] = 0
+            out = Image.fromarray(arr, 'RGBA')
+        elif it.get('transparent'):
             out = make_transparent(out)
         if it.get('holes'):
             # 被身体围住的白底（比如腿之间）也清掉。只给身上没有白色的角色用
