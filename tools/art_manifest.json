@@ -1,0 +1,36 @@
+{
+  "_说明": "assets/raw 里每张原图怎么处理成 assets/img 里的游戏图。改完运行 python3 tools/process_art.py",
+  "defaults": { "colors": 48 },
+  "items": [
+    { "src": "portrait_baiguo.webp",           "size": "96" },
+    { "src": "portrait_baiguo_happy.webp",     "size": "96" },
+    { "src": "portrait_baiguo_surprised.webp", "size": "96" },
+    { "src": "portrait_baiguo_stubborn.webp",  "size": "96" },
+    { "src": "portrait_baiguo_sad.webp",       "size": "96" },
+    { "src": "portrait_baiguo_serious.webp",   "size": "96" },
+    { "src": "portrait_zaozao.webp",           "size": "96" },
+    { "src": "portrait_sunbird.webp",          "size": "96" },
+    { "src": "portrait_rhino.webp",            "size": "96" },
+    { "src": "portrait_turtle.webp",           "size": "96" },
+    { "src": "portrait_hoopoe.webp",           "size": "96" },
+    { "src": "portrait_cuckoo.webp",           "size": "96" },
+    { "src": "portrait_panda.webp",            "size": "96" },
+
+    { "src": "title_bg.webp",           "size": "480x270", "colors": 64 },
+    { "src": "cg_dream.webp",           "size": "480x270", "colors": 64 },
+    { "src": "cg_sunbird_reveal.webp",  "size": "480x270", "colors": 64 },
+    { "src": "cg_birth_light.webp",     "size": "480x270", "colors": 64 },
+    { "src": "cg_rhino_awakes.webp",    "size": "480x270", "colors": 64 },
+    { "src": "cg_qingcheng_gate.webp",  "size": "480x270", "colors": 64 },
+
+    { "src": "tile_01.webp", "size": "128", "colors": 32, "note": "草地，平铺大图" },
+    { "src": "tile_02.webp", "size": "128", "colors": 32, "note": "高草丛" },
+    { "src": "tile_03.webp", "size": "128", "colors": 32, "note": "土路" },
+    { "src": "tile_04.webp", "size": "128", "colors": 32, "note": "河水" },
+    { "src": "tile_05.webp", "size": "128", "colors": 32, "crop": "277,250,977,950", "note": "桥：原图上下是栏杆，只截中间的木板部分平铺" },
+    { "src": "tile_06.webp", "size": "128", "colors": 32, "note": "青瓦屋顶" },
+    { "src": "tile_07.webp", "size": "32",  "colors": 24, "note": "绿树：单格物件（原图自带草地底）" },
+    { "src": "tile_08.webp", "size": "32",  "colors": 24, "note": "银杏：单格物件（原图自带草地底）" },
+    { "src": "tile_09.webp", "size": "128", "colors": 32, "note": "石板地" }
+  ]
+}
