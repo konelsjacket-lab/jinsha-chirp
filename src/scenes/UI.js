@@ -29,7 +29,7 @@ export default class UI extends Phaser.Scene {
     // 右上角：当前目标
     this.objBg = this.add.graphics();
     this.objText = txt(this, GAME_W - 24, 22, '', {
-      fontSize: '16px', color: '#f4efe2', align: 'right', wordWrap: { width: 460, useAdvancedWrap: true },
+      fontSize: '24px', color: '#f4efe2', align: 'right', wordWrap: { width: 420, useAdvancedWrap: true },
     }).setOrigin(1, 0);
 
     // 地名横幅
@@ -283,9 +283,14 @@ export default class UI extends Phaser.Scene {
     const base = this.add.circle(120, 420, 60, 0xffffff, 0.1).setStrokeStyle(2, 0xffffff, 0.3);
     const thumb = this.add.circle(120, 420, 26, 0xffffff, 0.35);
     const home = { x: 120, y: 420 };
-    const btnA = this.add.circle(860, 430, 46, 0xf2c14e, 0.3).setStrokeStyle(3, 0xf2c14e, 0.8).setInteractive();
+    const hasBtn = this.textures.exists('ui_button');
+    const btnA = hasBtn
+      ? this.add.image(860, 430, 'ui_button').setDisplaySize(96, 96).setAlpha(0.85).setInteractive()
+      : this.add.circle(860, 430, 46, 0xf2c14e, 0.3).setStrokeStyle(3, 0xf2c14e, 0.8).setInteractive();
     txt(this, 860, 430, '互动', { fontSize: '20px' }).setOrigin(0.5);
-    const btnMenu = this.add.circle(860, 320, 30, 0xffffff, 0.15).setStrokeStyle(2, 0xffffff, 0.5).setInteractive();
+    const btnMenu = hasBtn
+      ? this.add.image(860, 320, 'ui_button').setDisplaySize(64, 64).setAlpha(0.7).setInteractive()
+      : this.add.circle(860, 320, 30, 0xffffff, 0.15).setStrokeStyle(2, 0xffffff, 0.5).setInteractive();
     txt(this, 860, 320, '菜单', { fontSize: '15px' }).setOrigin(0.5);
 
     btnA.on('pointerdown', () => { if (!this.busy) this.game.events.emit('action'); });

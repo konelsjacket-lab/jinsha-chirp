@@ -5,6 +5,12 @@ import World from './scenes/World.js';
 import UI from './scenes/UI.js';
 import Battle from './scenes/Battle.js';
 
+// 先等像素字体加载完，不然第一屏的字会先用系统字体画出来
+const fontReady = document.fonts
+  ? Promise.race([document.fonts.load('12px JinshaPixel', '金沙啾'), new Promise(r => setTimeout(r, 3000))])
+  : Promise.resolve();
+await fontReady;
+
 // 场景顺序 = 绘制顺序：越靠后越在上层
 window.game = new Phaser.Game({
   type: Phaser.AUTO,

@@ -24,6 +24,12 @@
 - 地图图块：每种地形一张 128×128 的无缝平铺图，铺在 4×4 格上（`VARIANT`）；树（`SINGLE_TILES`）是单格 32×32。Boot 启动时拼成带 1px 外扩、2px 间距的图块集，防止 1.5 倍缩放时接缝出细线。
 - 测试：`tests/story.test.js` 会在各个剧情阶段展开所有 NPC/奇遇脚本，检查引用的道具、技能、怪物、地图、说话人都存在；`tests/map.test.js` 检查每张地图的连通性。
 
+## 字体与界面
+- 字体：Fusion Pixel 12px（SIL OFL），`assets/fonts/fusion-pixel-12px-full.woff2` 是完整版，游戏只加载裁剪后的 `jinsha-pixel.woff2`。
+  **加了新台词后运行 `python3 tools/subset_font.py`**，否则 `tests/font.test.js` 会报缺字。
+- `txt()` 会把字号吸附到 12 的倍数（12/24/36/48），像素字体只有这样才清楚；不要用粗体。
+- 界面皮肤：`ui_panel`（九宫格，48×48，四角 16px）、`ui_cursor`、`ui_next`、`ui_button`。有图就用图，没有就用代码画的框和符号。提示词在 `docs/美术提示词_界面.txt`。
+
 ## 美术流程
 1. 提示词在 `docs/美术提示词_像素版.txt`（全部）和 `docs/美术提示词_第二批.txt`（剧情扩充的新角色）（由 scratch 脚本生成，改动时保持“每张图一段完整提示词”的格式，并同步发给用户 txt）。
 2. 用户发来的原图 → 按文件名存进 `assets/raw/`（保留 webp 原件）。

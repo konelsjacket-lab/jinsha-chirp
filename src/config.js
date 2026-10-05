@@ -8,7 +8,7 @@ export const ENCOUNTER_RATE = 0.09;
 // 战斗结束后，这么多格内不会再遇怪
 export const ENCOUNTER_GRACE = 4;
 export const SAVE_KEY = 'jinsha-chirp-save-v1';
-export const FONT = '"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC","Source Han Sans SC","WenQuanYi Micro Hei",sans-serif';
+export const FONT = 'JinshaPixel,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC","Source Han Sans SC","WenQuanYi Micro Hei",sans-serif';
 
 export const COLORS = {
   panel: 0x1b1f2a,

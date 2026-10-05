@@ -17,7 +17,7 @@ export default class Title extends Phaser.Scene {
       fontSize: '22px', color: '#f4efe2', stroke: '#1b1f2a', strokeThickness: 4,
     }).setOrigin(0.5);
     txt(this, GAME_W / 2, GAME_H - 22, '美术 GPT · 音乐 Gemini · 程序 Claude', {
-      fontSize: '14px', color: '#a8a290',
+      fontSize: '12px', color: '#e8e0c8', stroke: '#1b1f2a', strokeThickness: 4,
     }).setOrigin(0.5);
     playMusic(this, 'bgm_title');
     this.mainMenu();

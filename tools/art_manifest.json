@@ -53,6 +53,11 @@
     { "src": "npc_sunbird.webp", "size": "64", "colors": 32, "fit": true, "transparent": true },
     { "src": "npc_rhino.webp", "size": "64", "colors": 32, "fit": true, "transparent": true, "holes": true, "clean_edges": true },
 
+    { "src": "ui_panel.webp",  "size": "48", "colors": 24, "fit": true, "transparent": true, "pad": 1.0, "note": "对话框/菜单九宫格边框，四角各 16px" },
+    { "src": "ui_cursor.webp", "size": "16", "colors": 12, "fit": true, "transparent": true },
+    { "src": "ui_next.webp",   "size": "16", "colors": 12, "fit": true, "transparent": true },
+    { "src": "ui_button.webp", "size": "64", "colors": 24, "fit": true, "transparent": true, "pad": 1.02 },
+
     { "src": "battle_player.webp", "size": "128", "colors": 40, "fit": true, "transparent": true, "note": "战斗中的白果，面朝右" },
     { "src": "enemy_sparrow.webp", "size": "128", "colors": 40, "fit": true, "transparent": true },
     { "src": "enemy_mosquito.webp", "size": "128", "colors": 40, "fit": true, "transparent": true },

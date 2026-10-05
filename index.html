@@ -13,6 +13,12 @@
   <link rel="icon" href="assets/icon-192.png">
   <title>金沙啾 · Jinsha Chirp</title>
   <style>
+    /* 像素中文字体 Fusion Pixel 12px（SIL OFL），已裁成只含游戏用到的字：tools/subset_font.py */
+    @font-face {
+      font-family: 'JinshaPixel';
+      src: url('assets/fonts/jinsha-pixel.woff2') format('woff2');
+      font-display: block;
+    }
     html, body { margin: 0; height: 100%; background: #101418; overflow: hidden; }
     #game { width: 100vw; height: 100vh; height: 100dvh; touch-action: none; user-select: none; -webkit-user-select: none; }
 
@@ -21,7 +27,7 @@
       position: fixed; top: calc(6px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%);
       z-index: 10; padding: 4px 12px; border-radius: 14px;
       border: 1px solid rgba(242, 193, 78, .7); background: rgba(27, 31, 42, .6); color: #f4efe2;
-      font: 13px/1.4 "PingFang SC", "Microsoft YaHei", sans-serif; cursor: pointer; opacity: .75;
+      font: 12px/1.4 JinshaPixel, "PingFang SC", "Microsoft YaHei", sans-serif; cursor: pointer; opacity: .75;
     }
     #fs:hover, #fs:focus-visible { opacity: 1; outline: 2px solid #f2c14e; }
 
@@ -29,7 +35,7 @@
     #rotate {
       display: none; position: fixed; inset: 0; z-index: 20; background: #101418; color: #f4efe2;
       flex-direction: column; align-items: center; justify-content: center; gap: 18px; text-align: center;
-      font: 18px/1.6 "PingFang SC", "Microsoft YaHei", sans-serif; padding: 24px;
+      font: 24px/1.6 JinshaPixel, "PingFang SC", "Microsoft YaHei", sans-serif; padding: 24px;
     }
     #rotate .phone {
       width: 46px; height: 78px; border: 3px solid #f2c14e; border-radius: 9px;

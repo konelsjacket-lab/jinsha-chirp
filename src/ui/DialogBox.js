@@ -1,5 +1,5 @@
 import { CHARACTERS } from '../data/characters.js';
-import { txt, panel, CONFIRM_KEYS } from './widgets.js';
+import { txt, panel, icon, CONFIRM_KEYS } from './widgets.js';
 import { sfx } from '../systems/audio.js';
 
 // 打字机效果的对话框。play(lines) 返回 Promise，所有台词播完后 resolve。
@@ -14,7 +14,7 @@ export class DialogBox {
     this.body = txt(scene, x + 20, y + 42, '', {
       fontSize: '21px', lineSpacing: 6, wordWrap: { width: w - 50, useAdvancedWrap: true },
     });
-    this.arrow = txt(scene, x + w - 34, y + h - 32, '▼', { fontSize: '16px', color: '#f2c14e' }).setVisible(false);
+    this.arrow = icon(scene, x + w - 36, y + h - 34, 'ui_next', '▼').setVisible(false);
     this.root.add([this.portrait, this.name, this.body, this.arrow]);
     scene.tweens.add({ targets: this.arrow, alpha: 0.2, duration: 450, yoyo: true, repeat: -1 });
   }

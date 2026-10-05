@@ -26,6 +26,10 @@ export const IMAGES = [
   img('npc_ginkgo', 64), img('npc_baishe', 64),
   ...['magpie', 'maoda', 'owl', 'kingfisher', 'boar', 'ginkgo', 'crane', 'xiaoqing', 'baishe', 'axi'].map(k => img(`portrait_${k}`, 96)),
 
+  // 界面：对话框/菜单边框（九宫格）、选择光标、“继续”箭头、手机按钮。没有就用代码画的
+  img('ui_panel', 48, 48, { optional: true }), img('ui_cursor', 16, 16, { optional: true }),
+  img('ui_next', 16, 16, { optional: true }), img('ui_button', 64, 64, { optional: true }),
+
   img('battle_player', 128),
   img('enemy_sparrow', 128), img('enemy_mosquito', 128), img('enemy_mahjong', 128), img('enemy_chili', 128),
   img('enemy_bamboorat', 128), img('enemy_watermonkey', 128), img('enemy_rhino', 160),

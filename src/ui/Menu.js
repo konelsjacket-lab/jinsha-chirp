@@ -1,4 +1,4 @@
-import { txt, panel, CONFIRM_KEYS, CANCEL_KEYS } from './widgets.js';
+import { txt, panel, icon, CONFIRM_KEYS, CANCEL_KEYS } from './widgets.js';
 import { sfx } from '../systems/audio.js';
 
 // 竖排选项菜单。open() 返回 Promise<选中序号>，取消返回 -1。
@@ -13,7 +13,7 @@ export class Menu {
     this.root = scene.add.container(0, 0).setDepth(depth);
     this.root.add(panel(scene, x, y, w, h));
     if (title) this.root.add(txt(scene, x + 18, y + pad, title, { fontSize: '17px', color: '#f2c14e' }));
-    this.cursor = txt(scene, x + 12, 0, '▶', { fontSize: '16px', color: '#f2c14e' });
+    this.cursor = icon(scene, x + 12, 0, 'ui_cursor', '▶');
     this.root.add(this.cursor);
     this.labels = items.map((it, i) => {
       const t = txt(scene, x + 36, y + pad + titleH + i * itemH + 4, it.label, {
@@ -57,7 +57,7 @@ export class Menu {
   select(i) {
     this.index = i;
     const l = this.labels[i];
-    this.cursor.setPosition(l.x - 24, l.y + 2);
+    this.cursor.setPosition(l.x - 24, l.y + (l.height - this.cursor.height) / 2);
     this.onHover && this.onHover(i);
   }
 
