@@ -348,7 +348,7 @@ const sunMotif = (c, w, h, alpha = 0.35) => {
 
 // ---------- 清单 ----------
 export const PAINTERS = {
-  tiles: paintTiles,
+  tiles_ph: paintTiles,
   player: paintPlayerFrame,
 
   npc_zaozao: (c, w) => unit(c, w, zaozao),

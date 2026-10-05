@@ -1,5 +1,6 @@
 import { IMAGES, AUDIO, makePlaceholder } from '../assets.js';
-import { GAME_W, GAME_H } from '../config.js';
+import { GAME_W, GAME_H, TILE } from '../config.js';
+import { TILE_COUNT, VARIANT, SINGLE_TILES } from '../data/map.js';
 import { txt } from '../ui/widgets.js';
 
 export default class Boot extends Phaser.Scene {
@@ -31,6 +32,44 @@ export default class Boot extends Phaser.Scene {
     const optional = new Set(IMAGES.filter(a => a.optional).map(a => a.key));
     this.missing = this.missing.filter(k => !optional.has(k));
     if (this.missing.length) console.info(`[金沙啾] ${this.missing.length} 个资源未找到，已使用占位图/静音：`, this.missing.join(', '));
+    this.composeTiles();
     this.scene.start('Title');
+  }
+
+  // 把 13 种地形拼成一张图块集：每种地形占 4×4 格。有真图用真图，没有就用占位图重复填满。
+  // 每格之间留 2px 空隙并把边缘像素向外扩 1px（TILE_PAD），否则镜头缩放 1.5 倍时
+  // 格子边上会采样到隔壁地形的像素，出现细线。
+  composeTiles() {
+    const P = TILE + 2;
+    const cols = TILE_COUNT * VARIANT;
+    const tex = this.textures.createCanvas('tiles', cols * P, VARIANT * P);
+    const ctx = tex.getContext();
+    ctx.imageSmoothingEnabled = false;
+    const ph = this.textures.get('tiles_ph').getSourceImage();
+    const put = (img, sx, sy, sw, sh, col, row) => {
+      const x = col * P + 1, y = row * P + 1;
+      for (const [ox, oy] of [[-1, 0], [1, 0], [0, -1], [0, 1], [-1, -1], [1, -1], [-1, 1], [1, 1], [0, 0]]) {
+        ctx.drawImage(img, sx, sy, sw, sh, x + ox, y + oy, TILE, TILE);
+      }
+    };
+    for (let t = 0; t < TILE_COUNT; t++) {
+      const key = `tile_${String(t + 1).padStart(2, '0')}`;
+      const real = this.textures.exists(key) ? this.textures.get(key).getSourceImage() : null;
+      for (let sy = 0; sy < VARIANT; sy++) {
+        for (let sx = 0; sx < VARIANT; sx++) {
+          const col = t * VARIANT + sx;
+          if (real && !SINGLE_TILES.includes(t)) {
+            const w = real.width / VARIANT, h = real.height / VARIANT;
+            put(real, sx * w, sy * h, w, h, col, sy);
+          } else if (real) {
+            put(real, 0, 0, real.width, real.height, col, sy);
+          } else {
+            put(ph, t * TILE, 0, TILE, TILE, col, sy);
+          }
+        }
+      }
+    }
+    tex.refresh();
+    tex.setFilter(Phaser.Textures.FilterMode.NEAREST);
   }
 }

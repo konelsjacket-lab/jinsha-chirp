@@ -1,5 +1,5 @@
 import { TILE, WORLD_ZOOM, PLAYER_SPEED, ENCOUNTER_RATE, ENCOUNTER_GRACE } from '../config.js';
-import { indexGrid, MAP_W, MAP_H, SOLID, TALL_GRASS, tileIndexAt, placeAt } from '../data/map.js';
+import { indexGrid, solidIndices, MAP_W, MAP_H, TALL_GRASS, tileIndexAt, placeAt } from '../data/map.js';
 import { NPCS } from '../data/npcs.js';
 import { INTRO, LOSE, objective } from '../data/story.js';
 import { ITEMS } from '../data/items.js';
@@ -25,9 +25,9 @@ export default class World extends Phaser.Scene {
 
     // 地图
     const map = this.make.tilemap({ data: indexGrid(), tileWidth: TILE, tileHeight: TILE });
-    const tiles = map.addTilesetImage('tiles', 'tiles', TILE, TILE, 0, 0);
+    const tiles = map.addTilesetImage('tiles', 'tiles', TILE, TILE, 1, 2);
     this.layer = map.createLayer(0, tiles, 0, 0);
-    this.layer.setCollision(SOLID);
+    this.layer.setCollision(solidIndices());
     const W = MAP_W * TILE, H = MAP_H * TILE;
     this.physics.world.setBounds(0, 0, W, H);
 
@@ -252,7 +252,7 @@ export default class World extends Phaser.Scene {
       } else if ('if' in st) {
         await this.exec(s.flags[st.if] ? (st.then || []) : (st.else || []));
       } else if ('cg' in st) {
-        await this.ui.showCG(st.cg);
+        await this.ui.showCG(st.cg, st.box);
       } else if (st.fx) {
         await this.fx(st);
       } else if (st.music) {

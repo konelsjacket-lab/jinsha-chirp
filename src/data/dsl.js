@@ -12,6 +12,7 @@
 //   { if: 'flag', then: [...], else: [...] }
 //   { fx: 'flash' | 'shake' | 'fadeOut' | 'fadeIn', color }
 //   { cg: 'cg_dream' }   { cg: null }       全屏显示 / 收起剧情插图（没有图就自动跳过）
+//   { cg: 'cg_xxx', box: 'top' }            对话框挪到上方，别挡住画面下方的角色
 //   { music: 'bgm_world' }   { teleport: { x, y } }   { wait: 500 }
 //   { end: true }                           第一章完
 

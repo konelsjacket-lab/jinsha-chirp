@@ -68,6 +68,12 @@ export const LEGEND = {
 export const TILE_COUNT = 13;
 export const TALL_GRASS = 1;
 export const SOLID = [3, 5, 6, 7, 11, 12];
+// 树、银杏是“一格一个”的物件；其他地形是能无缝平铺的大图
+export const SINGLE_TILES = [6, 7];
+
+// 每种地形在图块集里占 4×4 格（一张 128×128 的大图），相邻格子取大图的不同部分，
+// 这样地面不会一格一格地重复。图块集一共 13×4 列、4 行。
+export const VARIANT = 4;
 
 export const MAP_W = MAP_ROWS[0].length;
 export const MAP_H = MAP_ROWS.length;
@@ -98,8 +104,20 @@ export function isSolid(x, y) {
   return i === -1 || SOLID.includes(i);
 }
 
+export function variantIndex(t, x, y) {
+  return (y % VARIANT) * TILE_COUNT * VARIANT + t * VARIANT + (x % VARIANT);
+}
+
 export function indexGrid() {
-  return MAP_ROWS.map(row => [...row].map(ch => LEGEND[ch]));
+  return MAP_ROWS.map((row, y) => [...row].map((ch, x) => variantIndex(LEGEND[ch], x, y)));
+}
+
+export function solidIndices() {
+  const out = [];
+  for (const t of SOLID)
+    for (let sy = 0; sy < VARIANT; sy++)
+      for (let sx = 0; sx < VARIANT; sx++) out.push(variantIndex(t, sx, sy));
+  return out;
 }
 
 export function placeAt(x, y) {

@@ -7,7 +7,10 @@ import { PAINTERS } from './placeholders.js';
 const img = (key, w, h = w, extra = {}) => ({ key, file: `assets/img/${key}.png`, w, h, pixel: true, ...extra });
 
 export const IMAGES = [
-  img('tiles', 13 * 32, 32),
+  // 地图图块：tiles_ph 是占位（13 格 × 32px 一行）；tile_01..tile_13 是真图（128×128 平铺大图，树是 32×32），
+  // 启动时由 Boot 拼成最终的 'tiles' 图块集
+  img('tiles_ph', 13 * 32, 32),
+  ...Array.from({ length: 13 }, (_, i) => img(`tile_${String(i + 1).padStart(2, '0')}`, 128, 128, { optional: true })),
   { key: 'player', file: 'assets/img/player.png', type: 'sheet', frameW: 32, frameH: 32, cols: 3, rows: 4, pixel: true },
 
   img('npc_zaozao', 32), img('npc_turtle', 32), img('npc_hoopoe', 32), img('npc_cuckoo', 32),

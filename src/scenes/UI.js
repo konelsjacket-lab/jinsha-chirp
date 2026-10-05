@@ -91,7 +91,9 @@ export default class UI extends Phaser.Scene {
   }
 
   // 显示 / 切换 / 收起剧情插图。没有这张图就直接跳过，剧情照常进行。
-  showCG(key) {
+  // box: 'top' 时对话框挪到屏幕上方，免得挡住画面下方的角色
+  showCG(key, box) {
+    this.dialog.root.y = key && box === 'top' ? -(this.dialog.y - 14) : 0;
     return new Promise(resolve => {
       this.tweens.killTweensOf(this.cg);
       if (!key) {

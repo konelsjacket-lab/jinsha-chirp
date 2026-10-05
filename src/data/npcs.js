@@ -104,7 +104,7 @@ export const NPCS = [
         ...say('石犀',
           '……嗯？你头上有金沙的光。',
           '我是李冰放在这里镇水的石犀，守了这座城两千两百多年。'),
-        { cg: 'cg_rhino_awakes' },
+        { cg: 'cg_rhino_awakes', box: 'top' },
         { fx: 'shake' },
         ...say('石犀', '想打听神鸟？先让我看看，你有没有本事走出成都。'),
         { cg: null },
@@ -156,7 +156,7 @@ export const NPCS = [
     id: 'gate', name: '青城山门', x: 1, y: 5, sprite: 'npc_gate', bump: true,
     script: s => s.flags.rhino_beaten
       ? [
-        { cg: 'cg_qingcheng_gate' },
+        { cg: 'cg_qingcheng_gate', box: 'top' },
         ...say('', '浓雾散开了一条小路，石阶一直通向山里。', '远远地，好像有什么白色的东西在林间游动……'),
         { end: true },
         { cg: null },
