@@ -20,6 +20,11 @@
     { "src": "portrait_owl.webp", "size": "96" },
     { "src": "portrait_kingfisher.webp", "size": "96" },
     { "src": "portrait_boar.webp", "size": "96" },
+    { "src": "portrait_ginkgo.webp", "size": "96" },
+    { "src": "portrait_crane.webp", "size": "96" },
+    { "src": "portrait_xiaoqing.webp", "size": "96" },
+    { "src": "portrait_baishe.webp", "size": "96" },
+    { "src": "portrait_axi.webp", "size": "96" },
 
     { "src": "title_bg.webp",           "size": "480x270", "colors": 64 },
     { "src": "cg_dream.webp",           "size": "480x270", "colors": 64 },
