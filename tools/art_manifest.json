@@ -28,6 +28,7 @@
     { "src": "bg_east.webp",  "size": "480x270", "colors": 64 },
     { "src": "bg_south.webp", "size": "480x270", "colors": 64 },
     { "src": "bg_west.webp",  "size": "480x270", "colors": 64 },
+    { "src": "bg_boss.webp",  "size": "480x270", "colors": 64, "note": "石犀 Boss 战" },
 
     { "src": "tile_01.webp", "size": "128", "colors": 32, "note": "草地，平铺大图" },
     { "src": "tile_02.webp", "size": "128", "colors": 32, "note": "高草丛" },
