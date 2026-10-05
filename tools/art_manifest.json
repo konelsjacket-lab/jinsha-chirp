@@ -42,6 +42,12 @@
     { "src": "npc_zaozao.webp", "size": "32", "colors": 24, "fit": true, "transparent": true },
     { "src": "npc_turtle.webp", "size": "32", "colors": 24, "fit": true, "transparent": true },
     { "src": "npc_hoopoe.webp", "size": "32", "colors": 24, "fit": true, "transparent": true },
-    { "src": "npc_cuckoo.webp", "size": "32", "colors": 24, "fit": true, "transparent": true }
+    { "src": "npc_cuckoo.webp", "size": "32", "colors": 24, "fit": true, "transparent": true },
+    { "src": "npc_sunbird.webp", "size": "64", "colors": 32, "fit": true, "transparent": true },
+    { "src": "npc_rhino.webp", "size": "64", "colors": 32, "fit": true, "transparent": true, "holes": true, "clean_edges": true },
+
+    { "src": "battle_player.webp", "size": "128", "colors": 40, "fit": true, "transparent": true, "note": "战斗中的白果，面朝右" },
+    { "src": "enemy_sparrow.webp", "size": "128", "colors": 40, "fit": true, "transparent": true },
+    { "src": "enemy_mosquito.webp", "size": "128", "colors": 40, "fit": true, "transparent": true }
   ]
 }

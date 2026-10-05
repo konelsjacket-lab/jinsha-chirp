@@ -14,7 +14,7 @@ import numpy as np
 from PIL import Image
 
 sys.path.insert(0, os.path.dirname(__file__))
-from pixelate import block_median, quantize, make_transparent  # noqa: E402
+from pixelate import block_median, quantize, make_transparent, clean_edges  # noqa: E402
 
 ROOT = os.path.join(os.path.dirname(__file__), '..')
 RAW = os.path.join(ROOT, 'assets', 'raw')
@@ -67,7 +67,8 @@ def make_sheet(it):
             cx = (b[0] + b[2]) / 2
             box = (int(cx - side / 2), int(ground - side * 0.97), int(cx + side / 2), int(ground + side * 0.03))
             frame = Image.new('RGBA', (box[2] - box[0], box[3] - box[1]), (255, 255, 255, 255))
-            frame.paste(col.crop(box), (0, 0))
+            part = col.crop(box)
+            frame.paste(part, (0, 0), part)
             px = make_transparent(quantize(block_median(frame, size, size), it['colors']))
             sheet.paste(px, (c * size, r * size))
     return sheet
@@ -80,7 +81,8 @@ def fit_single(img, it):
     cx = (b[0] + b[2]) / 2
     box = (int(cx - side / 2), int(b[3] - side * 0.97), int(cx + side / 2), int(b[3] + side * 0.03))
     frame = Image.new('RGBA', (box[2] - box[0], box[3] - box[1]), (255, 255, 255, 255))
-    frame.paste(img.crop(box), (0, 0))
+    part = img.crop(box)
+    frame.paste(part, (0, 0), part)  # 用 alpha 当蒙版：裁到原图外面的部分保持白色，不会变成黑边
     return frame
 
 
@@ -124,6 +126,13 @@ def main():
         out = quantize(block_median(img, w, h), it['colors'])
         if it.get('transparent'):
             out = make_transparent(out)
+        if it.get('holes'):
+            # 被身体围住的白底（比如腿之间）也清掉。只给身上没有白色的角色用
+            arr = np.asarray(out).copy()
+            arr[arr[..., :3].min(2) > 246, 3] = 0
+            out = Image.fromarray(arr, 'RGBA')
+        if it.get('clean_edges'):
+            out = clean_edges(out)
         out.save(dst)
         if preview:
             os.makedirs(os.path.join(RAW, '_preview'), exist_ok=True)

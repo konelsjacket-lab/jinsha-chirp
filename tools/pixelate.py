@@ -88,3 +88,15 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+def clean_edges(img, white=228, passes=2):
+    """去掉贴着透明区域的浅色杂边（白底抠完剩下的一圈亮像素）。"""
+    a = np.asarray(img).copy()
+    for _ in range(passes):
+        alpha = a[..., 3] > 0
+        pad = np.pad(~alpha, 1, constant_values=True)
+        touch = pad[:-2, 1:-1] | pad[2:, 1:-1] | pad[1:-1, :-2] | pad[1:-1, 2:]
+        light = a[..., :3].min(2) > white
+        a[alpha & touch & light, 3] = 0
+    return Image.fromarray(a, 'RGBA')

@@ -44,10 +44,10 @@ export default class Battle extends Phaser.Scene {
     panel(this, 24, 22, 330, 78);
     this.eName = txt(this, 40, 32, '', { fontSize: '20px', fontStyle: 'bold' });
     this.eHpText = txt(this, 300, 64, '', { fontSize: '14px', color: '#cfe8c9' }).setOrigin(1, 0);
-    panel(this, 600, 312, 336, 86);
-    this.pName = txt(this, 616, 320, '', { fontSize: '20px', fontStyle: 'bold' });
-    this.pHpText = txt(this, 920, 348, '', { fontSize: '14px', color: '#cfe8c9' }).setOrigin(1, 0);
-    this.pMpText = txt(this, 920, 370, '', { fontSize: '14px', color: '#c4def3' }).setOrigin(1, 0);
+    panel(this, 600, 286, 336, 86);
+    this.pName = txt(this, 616, 294, '', { fontSize: '20px', fontStyle: 'bold' });
+    this.pHpText = txt(this, 920, 322, '', { fontSize: '14px', color: '#cfe8c9' }).setOrigin(1, 0);
+    this.pMpText = txt(this, 920, 344, '', { fontSize: '14px', color: '#c4def3' }).setOrigin(1, 0);
     this.bars = this.add.graphics();
 
     this.log = new DialogBox(this, { x: 20, y: 412, w: 600, h: 116, portraits: false, persist: true });
@@ -67,8 +67,8 @@ export default class Battle extends Phaser.Scene {
     this.pMpText.setText(`气 ${p.mp}/${p.maxMp}`);
     this.bars.clear();
     bar(this.bars, 40, 66, 200, 12, e.hp / e.maxHp, e.hp / e.maxHp < 0.3 ? 0xe0594a : COLORS.hp);
-    bar(this.bars, 616, 352, 200, 12, p.hp / p.maxHp, p.hp / p.maxHp < 0.3 ? 0xe0594a : COLORS.hp);
-    bar(this.bars, 616, 374, 200, 9, p.mp / p.maxMp, COLORS.mp);
+    bar(this.bars, 616, 326, 200, 12, p.hp / p.maxHp, p.hp / p.maxHp < 0.3 ? 0xe0594a : COLORS.hp);
+    bar(this.bars, 616, 348, 200, 9, p.mp / p.maxMp, COLORS.mp);
   }
 
   say(...texts) {
