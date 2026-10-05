@@ -39,6 +39,9 @@
 
     { "dst": "player.png", "sheet": ["player_down.webp", "player_left.webp", "player_right.webp", "player_up.webp"],
       "frames": 3, "size": "32", "colors": 24, "note": "白果行走图：每张原图横排 3 帧，拼成 3 列 × 4 行" },
-    { "src": "npc_zaozao.webp", "size": "32", "colors": 24, "fit": true, "transparent": true }
+    { "src": "npc_zaozao.webp", "size": "32", "colors": 24, "fit": true, "transparent": true },
+    { "src": "npc_turtle.webp", "size": "32", "colors": 24, "fit": true, "transparent": true },
+    { "src": "npc_hoopoe.webp", "size": "32", "colors": 24, "fit": true, "transparent": true },
+    { "src": "npc_cuckoo.webp", "size": "32", "colors": 24, "fit": true, "transparent": true }
   ]
 }
