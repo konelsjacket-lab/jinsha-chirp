@@ -70,6 +70,7 @@
     { "src": "npc_axi.webp", "size": "32", "colors": 24, "fit": true, "transparent": true },
     { "src": "npc_xiaoqing.webp", "size": "32", "colors": 24, "fit": true, "transparent": true },
     { "src": "npc_ginkgo.webp", "size": "64", "colors": 32, "fit": true, "transparent": true },
+    { "src": "npc_baishe.webp", "size": "64", "colors": 32, "fit": true, "transparent": true, "pre_alpha": true },
     { "src": "npc_sunbird.webp", "size": "64", "colors": 32, "fit": true, "transparent": true },
     { "src": "npc_rhino.webp", "size": "64", "colors": 32, "fit": true, "transparent": true, "holes": true, "clean_edges": true },
 
@@ -85,6 +86,10 @@
     { "src": "enemy_chili.webp", "size": "128", "colors": 40, "fit": true, "transparent": true, "holes": true },
     { "src": "enemy_watermonkey.webp", "size": "128", "colors": 40, "fit": true, "transparent": true, "holes": true },
     { "src": "enemy_rhino.webp", "size": "160", "colors": 48, "fit": true, "transparent": true, "holes": true, "clean_edges": true, "note": "石犀战斗形态（地图版是 npc_rhino）" },
+    { "src": "enemy_snake.webp", "size": "128", "colors": 40, "fit": true, "transparent": true, "holes": true, "note": "竹叶青" },
+    { "src": "enemy_leech.webp", "size": "128", "colors": 40, "fit": true, "transparent": true, "note": "山蚂蟥" },
+    { "src": "enemy_mist.webp", "size": "128", "colors": 40, "fit": true, "transparent": true, "pre_alpha": true, "note": "雾精：浅灰白，先抠图再缩小" },
+    { "src": "enemy_larou.webp", "size": "128", "colors": 40, "fit": true, "transparent": true, "pre_alpha": true, "note": "腊肉精：带白烟" },
 
     { "src": "lm_nest.webp", "size": "96x160", "colors": 40, "fit": true, "transparent": true, "pad": 1.02 },
     { "src": "lm_heming.webp", "size": "224x160", "colors": 40, "fit": true, "transparent": true, "pad": 1.02 },
