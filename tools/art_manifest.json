@@ -60,6 +60,11 @@
     { "src": "npc_turtle.webp", "size": "32", "colors": 24, "fit": true, "transparent": true },
     { "src": "npc_hoopoe.webp", "size": "32", "colors": 24, "fit": true, "transparent": true },
     { "src": "npc_cuckoo.webp", "size": "32", "colors": 24, "fit": true, "transparent": true },
+    { "src": "npc_magpie.webp", "size": "32", "colors": 24, "fit": true, "transparent": true },
+    { "src": "npc_maoda.webp", "size": "32", "colors": 24, "fit": true, "transparent": true },
+    { "src": "npc_owl.webp", "size": "32", "colors": 24, "fit": true, "transparent": true },
+    { "src": "npc_kingfisher.webp", "size": "32", "colors": 24, "fit": true, "transparent": true },
+    { "src": "npc_monkey.webp", "size": "32", "colors": 24, "fit": true, "transparent": true },
     { "src": "npc_sunbird.webp", "size": "64", "colors": 32, "fit": true, "transparent": true },
     { "src": "npc_rhino.webp", "size": "64", "colors": 32, "fit": true, "transparent": true, "holes": true, "clean_edges": true },
 
