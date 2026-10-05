@@ -37,7 +37,10 @@ export default {
     { x0: 14, y0: 0, x1: 15, y1: 0, to: 'shaocheng', tx: 14, ty: 18 },
     { x0: 0, y0: 10, x1: 0, y1: 11, to: 'jinsha_altar', tx: 18, ty: 7 },
   ],
-  props: [],
+  props: [
+    { key: 'prop_stonelamp', x: 12, y: 5, w: 1, h: 2, deco: true },
+    { key: 'prop_stonelamp', x: 17, y: 5, w: 1, h: 2, deco: true },
+  ],
   npcs: [],
   triggers: [
     area(TRIGGER.c1_jinsha, 13, 1, 16, 3),

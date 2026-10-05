@@ -54,11 +54,13 @@ export default class World extends Phaser.Scene {
     this.physics.add.collider(this.player, this.layer);
 
     // 地标大图（鹤鸣茶社、祭坛……）：图片底边对齐占地范围的底边；solid 的占地范围挡路，能被调查
+    // deco：装饰小物件（茶桌、灯笼……），不挡路，没有图就不显示
     this.propBodies = this.physics.add.staticGroup();
     for (const p of this.map.props || []) {
+      if (p.deco && !this.textures.exists(p.key)) continue;
       const left = p.x * TILE, bottom = (p.y + p.h) * TILE;
       const img = this.add.image(left + (p.w * TILE) / 2, bottom, p.key).setOrigin(0.5, 1);
-      img.setDepth(p.solid ? bottom : p.over ? 99990 : 1);
+      img.setDepth(p.solid || p.deco ? bottom : p.over ? 99990 : 1);
       if (p.solid) {
         const zone = this.add.zone(left + (p.w * TILE) / 2, p.y * TILE + (p.h * TILE) / 2, p.w * TILE, p.h * TILE);
         this.propBodies.add(zone);

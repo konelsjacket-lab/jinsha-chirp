@@ -38,6 +38,7 @@ export default {
   ],
   props: [
     { key: 'lm_caotang', x: 13, y: 3, w: 5, h: 4, solid: true, name: '草堂茅屋' },
+    { key: 'prop_teatable', x: 10, y: 7, w: 2, h: 2, deco: true },
   ],
   npcs: [
     at(NPC.cuckoo, 16, 8),

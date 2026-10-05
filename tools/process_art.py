@@ -74,12 +74,19 @@ def make_sheet(it):
     return sheet
 
 
-def fit_single(img, it):
-    """单个角色：裁到内容包围盒（正方形、脚底贴底），再缩小、去白底。"""
+def fit_single(img, it, aspect=1.0):
+    """单个角色 / 地标：裁到内容包围盒（按目标宽高比、底边贴底），再缩小、去白底。aspect = 目标宽 / 高。"""
     ((_, b),) = content_boxes(img, 1)
-    side = max(b[2] - b[0], b[3] - b[1]) * it.get('pad', 1.1)
+    cw, ch = b[2] - b[0], b[3] - b[1]
+    pad = it.get('pad', 1.1)
+    if cw / ch > aspect:
+        bw = cw * pad
+        bh = bw / aspect
+    else:
+        bh = ch * pad
+        bw = bh * aspect
     cx = (b[0] + b[2]) / 2
-    box = (int(cx - side / 2), int(b[3] - side * 0.97), int(cx + side / 2), int(b[3] + side * 0.03))
+    box = (int(cx - bw / 2), int(b[3] - bh * 0.97), int(cx + bw / 2), int(b[3] + bh * 0.03))
     frame = Image.new('RGBA', (box[2] - box[0], box[3] - box[1]), (255, 255, 255, 255))
     part = img.crop(box)
     frame.paste(part, (0, 0), part)  # 用 alpha 当蒙版：裁到原图外面的部分保持白色，不会变成黑边
@@ -117,12 +124,12 @@ def main():
             print(f'  跳过（没有原图）：{it["src"]}')
             continue
         img = Image.open(src).convert('RGBA')
-        if it.get('fit'):
-            img = fit_single(img, it)
-        if it.get('crop'):
-            img = img.crop(tuple(int(v) for v in it['crop'].split(',')))
         size = str(it['size'])
         w, h = (int(v) for v in (size.split('x') if 'x' in size else (size, size)))
+        if it.get('fit'):
+            img = fit_single(img, it, w / h)
+        if it.get('crop'):
+            img = img.crop(tuple(int(v) for v in it['crop'].split(',')))
         out = quantize(block_median(img, w, h), it['colors'])
         if it.get('transparent'):
             out = make_transparent(out)

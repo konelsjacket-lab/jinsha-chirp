@@ -53,6 +53,8 @@ export default {
     { key: 'lm_heming', x: 3, y: 3, w: 7, h: 4, solid: true, name: '鹤鸣茶社' },
     { key: 'lm_baolu', x: 15, y: 3, w: 2, h: 3, solid: true, name: '保路纪念碑', script: MONUMENT },
     { key: 'lm_nest', x: 29, y: 3, w: 3, h: 3, solid: true, name: '老银杏', script: () => say('', '公园里最老的一棵银杏。白果的窝就在上面。') },
+    { key: 'prop_mahjong', x: 2, y: 8, w: 2, h: 2, deco: true },
+    { key: 'prop_teatable', x: 10, y: 8, w: 2, h: 2, deco: true },
   ],
   npcs: [
     at(P.mama, 30, 7),

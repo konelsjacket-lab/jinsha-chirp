@@ -34,6 +34,8 @@ export default {
   ],
   props: [
     { key: 'lm_altar', x: 7, y: 3, w: 6, h: 5, solid: true, name: '太阳神鸟祭坛' },
+    { key: 'prop_stonelamp', x: 5, y: 6, w: 1, h: 2, deco: true },
+    { key: 'prop_stonelamp', x: 14, y: 6, w: 1, h: 2, deco: true },
   ],
   npcs: [
     at(NPC.sunbird, 10, 10),

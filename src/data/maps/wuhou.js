@@ -39,6 +39,9 @@ export default {
   ],
   props: [
     { key: 'lm_wuhou', x: 10, y: 3, w: 8, h: 2, solid: false, name: '武侯祠大门' },
+    { key: 'prop_stonelamp', x: 10, y: 7, w: 1, h: 2, deco: true },
+    { key: 'prop_stonelamp', x: 17, y: 7, w: 1, h: 2, deco: true },
+    { key: 'prop_furong', x: 4, y: 14, w: 2, h: 3, deco: true },
   ],
   npcs: [
     at(NPC.owl, 13, 10),

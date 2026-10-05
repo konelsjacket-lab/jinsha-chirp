@@ -40,6 +40,10 @@ export default {
   ],
   props: [
     { key: 'lm_kuanzhai', x: 26, y: 13, w: 4, h: 3, solid: true, name: '宽窄巷子门楼' },
+    { key: 'prop_lantern', x: 6, y: 11, w: 1, h: 2, deco: true },
+    { key: 'prop_lantern', x: 22, y: 11, w: 1, h: 2, deco: true },
+    { key: 'prop_teatable', x: 27, y: 16, w: 2, h: 2, deco: true },
+    { key: 'prop_furong', x: 18, y: 14, w: 2, h: 3, deco: true },
   ],
   npcs: [
     at(NPC.hoopoe, 12, 9),

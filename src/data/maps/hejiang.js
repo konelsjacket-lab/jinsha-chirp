@@ -40,6 +40,8 @@ export default {
   ],
   props: [
     { key: 'lm_hejiang', x: 18, y: 8, w: 3, h: 2, solid: true, name: '合江亭' },
+    { key: 'prop_boat', x: 5, y: 13, w: 2, h: 1, deco: true },
+    { key: 'prop_boat', x: 24, y: 13, w: 2, h: 1, deco: true },
   ],
   npcs: [
     at(NPC.rhino, 19, 11),

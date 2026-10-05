@@ -15,7 +15,7 @@
 - 剧情设定（角色、章节、伏笔）在 `docs/STORY.md`，写台词前先看。语气：离谱但真诚，四川话味道。
 - `src/data/` 是内容：
   - `maps/*.js`：一张小地图一个文件（成都拆成 park、shaocheng、jinsha_out、jinsha_altar、hejiang、langqiao、wuhou、caotang、panda、qc_road；第二章 qingcheng）。
-    每个文件：字符画地形、`exits`（走到这片格子就切图，`tx/ty` 是对面落脚点，按偏移对齐）、`props`（地标大图，`solid` 挡路且可调查，否则只是装饰）、
+    每个文件：字符画地形、`exits`（走到这片格子就切图，`tx/ty` 是对面落脚点，按偏移对齐）、`props`（地标大图，`solid` 挡路且可调查，否则只是装饰；`deco: true` 是茶桌、灯笼这类小物件，不挡路、按底边排前后，没有图就不显示）、
     `npcs`（用 `at(NPC.xxx, x, y)` 摆放）、`triggers`（`area(TRIGGER.xxx, x0, y0, x1, y1)`）、`zones`（遇怪）、`route`（菜单路线图上的位置，0–100）。
     `maps/index.js` 汇总，并负责把旧存档（成都一整张大图）迁移到小地图。
   - `npcs.js`（第一章·成都）、`qingcheng.js`（第二章）：NPC 和奇遇的“是谁、说什么”（`when` 控制是否在场）；放在哪由地图文件决定。第一章主线的剧情标记顺序写在 `npcs.js` 开头；任务目标在 `story.js` 的 `chapter1Objective`。
@@ -36,9 +36,9 @@
 - 界面皮肤：`ui_panel`（九宫格，48×48，四角 16px）、`ui_cursor`、`ui_next`、`ui_button`。有图就用图，没有就用代码画的框和符号。提示词在 `docs/美术提示词_界面.txt`。
 
 ## 美术流程
-1. 提示词在 `docs/美术提示词_像素版.txt`（全部）和 `docs/美术提示词_第二批.txt`（剧情扩充的新角色）（由 scratch 脚本生成，改动时保持“每张图一段完整提示词”的格式，并同步发给用户 txt）。
+1. 提示词在 `docs/美术提示词_像素版.txt`（全部）、`docs/美术提示词_第二批.txt`（剧情扩充的新角色）和 `docs/美术提示词_第三批.txt`（第 5 步：地标、小物件、序章/第一章新角色和插图，编号 91–121）（由 scratch 脚本生成，改动时保持“每张图一段完整提示词”的格式，并同步发给用户 txt）。
 2. 用户发来的原图 → 按文件名存进 `assets/raw/`（保留 webp 原件）。
-3. 在 `tools/art_manifest.json` 加一条处理参数，运行 `python3 tools/process_art.py <名字>`。
+3. 在 `tools/art_manifest.json` 加一条处理参数，运行 `python3 tools/process_art.py <名字>`。第三批的条目已经预先写好（`.webp`，原图是 png 就改扩展名）；`fit` 会按目标尺寸的宽高比裁，地标这种非正方形的图也不会被拉伸。
    - 头像 96×96 / 48 色；CG 和标题 480×270 / 64 色（游戏里放大 2 倍）；平铺图块 128 / 32 色；单格物件 32。
    - 量化用 MAXCOVERAGE，能保住嘴里那点红之类的小面积颜色。
    - 行走图：`"sheet": [下, 左, 右, 上]` + `"frames": 3`，每张原图横排 3 帧，按空白间隔切帧、统一缩放、脚底对齐，拼成 `player.png`（3 列 × 4 行，每帧 32）。

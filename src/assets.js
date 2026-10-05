@@ -33,6 +33,11 @@ export const IMAGES = [
   // 地标：宽 = 占地格数×32，高 = 占地高度×32 再多一截（屋顶伸到上面）
   img('npc_mama', 32), img('npc_myna', 32), img('npc_pigeon', 32), img('npc_xiuyan', 32), img('portrait_mama', 96),
   img('npc_zhupopo', 32), img('npc_furong', 32),
+  ...['zhupopo', 'furong', 'myna'].map(k => img(`portrait_${k}`, 96, 96, { optional: true })),
+  // 装饰小物件（地图里写 deco: true）：没有图就不显示
+  img('prop_teatable', 64, 64, { optional: true }), img('prop_mahjong', 64, 64, { optional: true }),
+  img('prop_lantern', 32, 64, { optional: true }), img('prop_stonelamp', 32, 64, { optional: true }),
+  img('prop_furong', 64, 96, { optional: true }), img('prop_boat', 64, 32, { optional: true }),
   img('lm_nest', 96, 160),
   img('lm_heming', 224, 160), img('lm_baolu', 64, 128), img('lm_kuanzhai', 128, 128),
   img('lm_altar', 192, 192), img('lm_hejiang', 96, 112), img('lm_langqiao', 160, 192),
@@ -51,7 +56,7 @@ export const IMAGES = [
 
   // 剧情插图：480×270 的像素图，放大 2 倍全屏显示。没有图就跳过
   ...['cg_intro_park', 'cg_dream', 'cg_sunbird_reveal', 'cg_birth_light', 'cg_rhino_awakes', 'cg_qingcheng_gate',
-    'cg_baishe', 'cg_sunny_chengdu']
+    'cg_baishe', 'cg_sunny_chengdu', 'cg_caotang_wind', 'cg_maoda_rescue', 'cg_guicheng', 'cg_mama_farewell']
     .map(k => img(k, 480, 270, { optional: true })),
 ];
 
