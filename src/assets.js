@@ -14,6 +14,8 @@ export const IMAGES = [
   img('npc_panda', 32), img('npc_gate', 32), img('npc_sunbird', 64), img('npc_rhino', 64),
 
   img('portrait_baiguo', 96), img('portrait_zaozao', 96), img('portrait_sunbird', 96), img('portrait_rhino', 96),
+  // 表情头像：没有图就不加载占位，对话里自动退回默认头像
+  ...['happy', 'surprised', 'stubborn', 'sad', 'serious'].map(e => img(`portrait_baiguo_${e}`, 96, 96, { optional: true })),
   img('portrait_turtle', 96), img('portrait_hoopoe', 96), img('portrait_cuckoo', 96), img('portrait_panda', 96),
 
   img('battle_player', 128),
@@ -51,7 +53,7 @@ export function makePlaceholder(scene, a) {
         tex.add(i++, 0, col * a.frameW, r * a.frameH, a.frameW, a.frameH);
       }
     }
-  } else if (paint) {
+  } else {
     paint(ctx, w, h);
   }
   tex.refresh();

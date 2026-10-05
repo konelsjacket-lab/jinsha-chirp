@@ -46,14 +46,17 @@ export class DialogBox {
   next() {
     const line = this.queue.shift();
     if (!line) return this.close();
-    const ch = CHARACTERS[line.who];
-    const pkey = this.portraits && ch && ch.portrait;
+    // who 可以带表情：'白果:happy'
+    const [who, expr] = (line.who || '').split(':');
+    const ch = CHARACTERS[who];
+    let pkey = this.portraits && ch && ch.portrait;
+    if (pkey && expr && this.scene.textures.exists(`${pkey}_${expr}`)) pkey = `${pkey}_${expr}`;
     const hasPortrait = pkey && this.scene.textures.exists(pkey);
     const left = this.x + (hasPortrait ? 130 : 20);
     this.portrait.setVisible(!!hasPortrait);
     if (hasPortrait) this.portrait.setTexture(pkey).setDisplaySize(96, 96);
-    this.name.setPosition(left, this.y + 12).setText(line.who || '').setColor(ch ? ch.color : '#f4efe2');
-    const narration = !line.who;
+    this.name.setPosition(left, this.y + 12).setText(who).setColor(ch ? ch.color : '#f4efe2');
+    const narration = !who;
     this.body.setPosition(left, this.y + (narration ? 24 : 44))
       .setColor(narration ? '#d8d0bc' : '#f4efe2')
       .setWordWrapWidth(this.x + this.w - left - 40, true)

@@ -1,6 +1,8 @@
 // 剧情脚本的小工具。一段剧情就是一个步骤数组，由 WorldScene.exec() 按顺序执行。
 //
 //   say('噪噪', '第一句', '第二句')         对话（who 为空字符串 = 旁白）
+//   say('白果:happy', '……')                  冒号后面是表情，对应头像 portrait_baiguo_happy
+//                                           （表情：happy surprised stubborn sad serious；没有这张图就用默认头像）
 //   { flag: 'xxx' }                         设置剧情标记
 //   { give: 'tangyou', n: 2 }               获得道具
 //   { learn: 'shine' }                      学会技能

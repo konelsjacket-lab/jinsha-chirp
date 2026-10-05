@@ -22,9 +22,14 @@ export default class Boot extends Phaser.Scene {
 
   create() {
     for (const a of IMAGES) {
-      if (!this.textures.exists(a.key)) makePlaceholder(this, a);
+      if (!this.textures.exists(a.key)) {
+        if (a.optional) continue;
+        makePlaceholder(this, a);
+      }
       if (a.pixel) this.textures.get(a.key).setFilter(Phaser.Textures.FilterMode.NEAREST);
     }
+    const optional = new Set(IMAGES.filter(a => a.optional).map(a => a.key));
+    this.missing = this.missing.filter(k => !optional.has(k));
     if (this.missing.length) console.info(`[金沙啾] ${this.missing.length} 个资源未找到，已使用占位图/静音：`, this.missing.join(', '));
     this.scene.start('Title');
   }
