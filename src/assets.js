@@ -21,17 +21,25 @@ export const IMAGES = [
   ...['happy', 'surprised', 'stubborn', 'sad', 'serious'].map(e => img(`portrait_baiguo_${e}`, 96, 96, { optional: true })),
   img('portrait_turtle', 96), img('portrait_hoopoe', 96), img('portrait_cuckoo', 96), img('portrait_panda', 96),
 
+  // 第一章支线、第二章的新角色
+  ...['magpie', 'maoda', 'owl', 'kingfisher', 'monkey', 'hongzhong', 'boar', 'crane', 'xiaoqing', 'axi'].map(k => img(`npc_${k}`, 32)),
+  img('npc_ginkgo', 64), img('npc_baishe', 64),
+  ...['magpie', 'maoda', 'owl', 'kingfisher', 'boar', 'ginkgo', 'crane', 'xiaoqing', 'baishe', 'axi'].map(k => img(`portrait_${k}`, 96)),
+
   img('battle_player', 128),
   img('enemy_sparrow', 128), img('enemy_mosquito', 128), img('enemy_mahjong', 128), img('enemy_chili', 128),
   img('enemy_bamboorat', 128), img('enemy_watermonkey', 128), img('enemy_rhino', 160),
+  img('enemy_snake', 128), img('enemy_leech', 128), img('enemy_mist', 128), img('enemy_larou', 128), img('enemy_xiaoqing', 160),
 
   img('bg_park', 960, 540, { pixel: false }), img('bg_north', 960, 540, { pixel: false }),
   img('bg_west', 960, 540, { pixel: false }), img('bg_east', 960, 540, { pixel: false }),
   img('bg_south', 960, 540, { pixel: false }), img('bg_boss', 960, 540, { pixel: false }),
+  img('bg_qingcheng', 960, 540, { pixel: false }),
   img('title_bg', 960, 540),
 
   // 剧情插图：480×270 的像素图，放大 2 倍全屏显示。没有图就跳过
-  ...['cg_intro_park', 'cg_dream', 'cg_sunbird_reveal', 'cg_birth_light', 'cg_rhino_awakes', 'cg_qingcheng_gate']
+  ...['cg_intro_park', 'cg_dream', 'cg_sunbird_reveal', 'cg_birth_light', 'cg_rhino_awakes', 'cg_qingcheng_gate',
+    'cg_baishe', 'cg_sunny_chengdu']
     .map(k => img(k, 480, 270, { optional: true })),
 ];
 
@@ -39,6 +47,7 @@ const audio = key => ({ key, files: [`assets/audio/${key}.mp3`, `assets/audio/${
 
 export const AUDIO = [
   audio('bgm_title'), audio('bgm_world'), audio('bgm_battle'), audio('bgm_boss'), audio('bgm_sunbird'),
+  audio('bgm_qingcheng'), audio('bgm_baishe'),
   audio('sfx_select'), audio('sfx_confirm'), audio('sfx_hit'), audio('sfx_heal'),
   audio('sfx_encounter'), audio('sfx_levelup'),
 ];

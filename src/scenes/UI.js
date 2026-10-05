@@ -5,6 +5,7 @@ import { Menu } from '../ui/Menu.js';
 import { SKILLS } from '../data/skills.js';
 import { ITEMS } from '../data/items.js';
 import { saveState } from '../state.js';
+import { QUESTS } from '../data/quests.js';
 import { useItem, expToNext } from '../systems/battle.js';
 import { sfx } from '../systems/audio.js';
 
@@ -41,6 +42,17 @@ export default class UI extends Phaser.Scene {
     }).setOrigin(0.5).setAlpha(0).setDepth(2000);
 
     // 剧情插图（CG）：盖住地图和状态栏，但在对话框下面
+    // 天色（成都的阴天 / 出太阳后的暖光）和青城山的雾，盖在地图上、界面下面
+    this.moodRect = this.add.rectangle(0, 0, GAME_W, GAME_H, 0x000000, 0).setOrigin(0).setDepth(-10);
+    this.fogs = Array.from({ length: 7 }, (_, i) => {
+      const f = this.add.ellipse(0, 0, 420 + i * 40, 120 + (i % 3) * 30, 0xe8eef0, 0).setDepth(-9);
+      f.baseX = (i * 173) % GAME_W;
+      f.y = 60 + (i * 79) % (GAME_H - 80);
+      f.speed = 6 + (i % 4) * 3;
+      return f;
+    });
+    this.fogLevel = 0;
+
     this.cg = this.add.image(GAME_W / 2, GAME_H / 2, '__DEFAULT').setDepth(900).setVisible(false);
     this.cgKey = null;
 
@@ -81,6 +93,40 @@ export default class UI extends Phaser.Scene {
     this.tweens.killTweensOf(this.toastText);
     this.toastText.setAlpha(1);
     this.tweens.add({ targets: this.toastText, alpha: 0, delay: 900, duration: 500 });
+  }
+
+  setAtmosphere({ mood, fog }) {
+    if (mood) this.moodRect.setFillStyle(mood.color, mood.alpha);
+    else this.moodRect.setFillStyle(0x000000, 0);
+    this.fogLevel = fog || 0;
+    for (const f of this.fogs) f.setFillStyle(0xe8eef0, this.fogLevel * 0.22);
+  }
+
+  update(time) {
+    if (!this.fogLevel) return;
+    for (const f of this.fogs) f.x = ((f.baseX + time * f.speed / 1000) % (GAME_W + 500)) - 250;
+  }
+
+  // 选项：问题写在对话框里，选项菜单在右边。返回选中的序号
+  async choose(question, labels, who = '') {
+    this.busy = true;
+    const d = this.dialog;
+    d.setText(question);
+    if (who) {
+      d.name.setPosition(d.x + 20, d.y + 12).setText(who.split(':')[0]);
+      d.body.setY(d.y + 44);
+    }
+    const w = Math.max(220, Math.min(440, Math.max(...labels.map(l => l.length)) * 21 + 70));
+    const boxTop = d.y + d.root.y;
+    const place = d.root.y !== 0 ? { y: boxTop + d.h + 8 } : { bottom: boxTop - 8 };
+    const i = await new Menu(this, {
+      x: GAME_W - w - 24, w, cancelable: false, ...place,
+      items: labels.map(label => ({ label })),
+    }).open();
+    this.dialog.root.setVisible(false);
+    this.busy = false;
+    this.lastClose = this.time.now;
+    return i;
   }
 
   async dialogue(lines) {
@@ -142,10 +188,11 @@ export default class UI extends Phaser.Scene {
     while (true) {
       this.drawStatus();
       const i = await new Menu(this, {
-        x: 560, y: 110, w: 200, items: [{ label: '道具' }, { label: '存档' }, { label: '返回' }],
+        x: 560, y: 110, w: 200, items: [{ label: '道具' }, { label: '任务' }, { label: '存档' }, { label: '返回' }],
       }).open();
       if (i === 0) await this.itemMenu();
-      else if (i === 1) this.toast(saveState(this.state) ? '已存档' : '存档失败（浏览器不让存）');
+      else if (i === 1) await this.questMenu();
+      else if (i === 2) this.toast(saveState(this.state) ? '已存档' : '存档失败（浏览器不让存）');
       else break;
     }
     this.statusRoot && this.statusRoot.destroy();
@@ -174,6 +221,35 @@ export default class UI extends Phaser.Scene {
     }));
   }
 
+  async questMenu() {
+    const s = this.state;
+    const list = QUESTS.map(q => ({ q, st: q.status(s) })).filter(x => x.st);
+    const r = this.add.container(0, 0).setDepth(1150);
+    if (this.statusRoot) this.statusRoot.setVisible(false);
+    r.add(panel(this, 180, 70, 600, 400, { alpha: 1 }));
+    r.add(txt(this, 204, 86, '任务', { fontSize: '22px', color: '#f2c14e', fontStyle: 'bold' }));
+    const body = list.length ? list.map(({ q, st }) =>
+      `${st === 'done' ? '✔' : '◆'} ${q.name}${st === 'done' ? '（完成）' : ''}\n   ${st === 'done' ? q.doneText || '' : q.hint(s)}`).join('\n\n')
+      : '还没有接到任务。到处找人聊聊天吧。';
+    r.add(txt(this, 204, 126, body, {
+      fontSize: '16px', lineSpacing: 6, wordWrap: { width: 550, useAdvancedWrap: true },
+    }));
+    r.add(txt(this, 756, 446, '按任意键返回', { fontSize: '13px', color: '#a8a290' }).setOrigin(1, 1));
+    await new Promise(resolve => {
+      const opened = this.time.now;
+      const close = () => {
+        if (this.time.now - opened < 200) return;
+        this.input.keyboard.off('keydown', close);
+        this.input.off('pointerdown', close);
+        resolve();
+      };
+      this.input.keyboard.on('keydown', close);
+      this.input.on('pointerdown', close);
+    });
+    r.destroy();
+    if (this.statusRoot) this.statusRoot.setVisible(true);
+  }
+
   async itemMenu() {
     while (true) {
       const ids = Object.keys(this.state.items).filter(id => this.state.items[id] > 0);
@@ -184,7 +260,7 @@ export default class UI extends Phaser.Scene {
       }).setDepth(1200);
       const i = await new Menu(this, {
         x: 560, y: 110, w: 260, title: '道具',
-        items: ids.map(id => ({ label: `${ITEMS[id].name} ×${this.state.items[id]}`, disabled: ITEMS[id].battleOnly })),
+        items: ids.map(id => ({ label: `${ITEMS[id].name} ×${this.state.items[id]}`, disabled: ITEMS[id].battleOnly || ITEMS[id].key })),
         onHover: k => hint.setText(ITEMS[ids[k]].desc),
       }).open();
       hint.destroy();

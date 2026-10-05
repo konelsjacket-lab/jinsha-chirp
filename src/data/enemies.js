@@ -58,6 +58,91 @@ export const ENEMIES = {
       { name: '拖下水', type: 'damage', power: 1.4, weight: 2 },
     ],
   },
+  // ---- 第一章支线 ----
+  maoda: {
+    name: '麻老大', lv: 3, hp: 58, atk: 11, def: 5, spd: 9, exp: 20,
+    sprite: 'enemy_sparrow', tint: 0xd8a070, scale: 1.25,
+    intro: '麻老大把胸脯一挺：“小老头，今天让你晓得哪个是老大！”',
+    moves: [
+      { name: '猛啄', type: 'damage', power: 1.1, weight: 3 },
+      { name: '“小老头！”', type: 'debuff', stat: 'atk', mult: 0.75, turns: 2, weight: 1,
+        text: '白果被喊得心头冒火，反而发挥失常，攻击下降了！' },
+      { name: '喊小弟', type: 'debuff', stat: 'def', mult: 0.75, turns: 2, weight: 1,
+        text: '一群麻雀围上来叽叽喳喳，白果的防御下降了！' },
+    ],
+  },
+  hongzhong: {
+    name: '红中', lv: 4, hp: 72, atk: 12, def: 7, spd: 6, exp: 24,
+    sprite: 'enemy_mahjong', scale: 1.15,
+    intro: '“我不回去！龟老头天天杠上开花，我都被他摸秃噜皮了！”',
+    moves: [
+      { name: '碰！', type: 'damage', power: 1.0, weight: 3 },
+      { name: '杠上开花', type: 'damage', power: 1.8, weight: 1 },
+      { name: '自摸', type: 'heal', ratio: 0.2, weight: 1 },
+    ],
+  },
+  monkey_boss: {
+    name: '水猴子头头', lv: 5, hp: 95, atk: 14, def: 7, spd: 9, exp: 32,
+    sprite: 'enemy_watermonkey', tint: 0x9fc9b8, scale: 1.2,
+    intro: '“鱼竿？啥子鱼竿？……好嘛是我拿的，有本事来抢！”',
+    moves: [
+      { name: '泼水', type: 'damage', power: 1.0, weight: 3 },
+      { name: '拖下水', type: 'damage', power: 1.5, weight: 2 },
+      { name: '水里打滚', type: 'debuff', stat: 'spd', mult: 0.6, turns: 2, weight: 1,
+        text: '白果的羽毛被溅湿了，速度下降了！' },
+    ],
+  },
+
+  // ---- 第二章：青城山 ----
+  zhuyeqing: {
+    name: '竹叶青', lv: 5, hp: 34, atk: 13, def: 5, spd: 11, exp: 15,
+    sprite: 'enemy_snake', drop: ['xueya', 0.1],
+    intro: '竹叶里窜出一条碧绿的竹叶青！',
+    moves: [
+      { name: '咬', type: 'damage', power: 1.1, weight: 3 },
+      { name: '毒牙', type: 'damage', power: 1.4, weight: 1 },
+      { name: '盘起来', type: 'buff', stat: 'def', mult: 1.5, turns: 2, weight: 1, text: '竹叶青盘成一团，防御提升了！' },
+    ],
+  },
+  mahuang: {
+    name: '山蚂蟥', lv: 5, hp: 42, atk: 10, def: 7, spd: 4, exp: 15,
+    sprite: 'enemy_leech',
+    intro: '一条山蚂蟥扭着身子爬了过来……爬山的人都怕它。',
+    moves: [
+      { name: '吸', type: 'damage', power: 1.0, weight: 3 },
+      { name: '吸饱了', type: 'heal', ratio: 0.25, weight: 1 },
+    ],
+  },
+  wujing: {
+    name: '雾精', lv: 6, hp: 38, atk: 12, def: 4, spd: 10, exp: 17,
+    sprite: 'enemy_mist',
+    intro: '一团雾长出了眼睛，慢慢飘了过来。',
+    moves: [
+      { name: '雾刃', type: 'damage', power: 1.3, weight: 3 },
+      { name: '迷雾', type: 'debuff', stat: 'atk', mult: 0.7, turns: 2, weight: 1, text: '四周白茫茫一片，白果看不清方向，攻击下降了！' },
+    ],
+  },
+  larou_jing: {
+    name: '腊肉精', lv: 6, hp: 52, atk: 12, def: 8, spd: 3, exp: 20,
+    sprite: 'enemy_larou', drop: ['larou', 0.35],
+    intro: '一块挂了三年的老腊肉成精了，烟熏味冲得白果直流眼泪！',
+    moves: [
+      { name: '油滴', type: 'damage', power: 1.2, weight: 3 },
+      { name: '烟熏', type: 'debuff', stat: 'spd', mult: 0.6, turns: 2, weight: 1, text: '白果被熏得睁不开眼，速度下降了！' },
+    ],
+  },
+  xiaoqing: {
+    name: '小青', lv: 8, hp: 200, atk: 19, def: 11, spd: 12, exp: 90,
+    sprite: 'enemy_xiaoqing', boss: true,
+    intro: '小青甩开辫子，蛇尾在石阶上一扫：“想见我姐姐？先过我这关！”',
+    moves: [
+      { name: '青蛇缠', type: 'damage', power: 1.0, weight: 3 },
+      { name: '蛇尾扫', type: 'damage', power: 1.5, weight: 2 },
+      { name: '吐信', type: 'debuff', stat: 'def', mult: 0.7, turns: 2, weight: 1, text: '小青嘶嘶吐信，白果吓得羽毛都炸了，防御下降了！' },
+      { name: '蜕皮', type: 'heal', ratio: 0.15, weight: 1 },
+    ],
+  },
+
   rhino: {
     name: '石犀', lv: 5, hp: 120, atk: 14, def: 8, spd: 3, exp: 40,
     sprite: 'enemy_rhino', boss: true,

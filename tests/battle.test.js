@@ -73,7 +73,7 @@ test('满血的敌人不会选回血招', () => {
 test('每个怪物和技能的数据都完整', () => {
   for (const [id, e] of Object.entries(ENEMIES)) {
     assert.ok(e.name && e.hp > 0 && e.moves.length, id);
-    for (const m of e.moves) assert.ok(['damage', 'heal', 'debuff'].includes(m.type) && m.weight > 0, `${id}.${m.name}`);
+    for (const m of e.moves) assert.ok(['damage', 'heal', 'debuff', 'buff'].includes(m.type) && m.weight > 0, `${id}.${m.name}`);
   }
   for (const [id, s] of Object.entries(SKILLS)) assert.ok(s.name && s.mp >= 0, id);
 });
@@ -102,4 +102,30 @@ test('石犀 Boss 平衡：Lv4 白果胜率在合理范围', () => {
   }
   const rate = wins / N;
   assert.ok(rate > 0.6 && rate < 1.0001, `胜率 ${rate}`);
+});
+
+test('小青 Boss 平衡：Lv7 带几块腊肉、有噪噪帮腔，大多能赢', async () => {
+  const { companionAssist } = await import('../src/systems/battle.js');
+  let wins = 0;
+  const N = 300;
+  for (let n = 0; n < N; n++) {
+    const s = newState();
+    const p = s.player;
+    gainExp(p, [1, 2, 3, 4, 5, 6].reduce((a, l) => a + expToNext(l), 0));
+    p.skills.push('shine');
+    p.status = {};
+    s.items = { larou: 3, xueya: 2 };
+    const e = makeEnemy(ENEMIES.xiaoqing, 8);
+    for (let t = 0; t < 80 && p.hp > 0 && e.hp > 0; t++) {
+      if (p.hp < p.maxHp * 0.35 && s.items.larou) useItem(s, p, e, 'larou');
+      else if (p.mp < 8 && s.items.xueya) useItem(s, p, e, 'xueya');
+      else performMove(p, e, p.mp >= 8 ? SKILLS.shine : SKILLS.peck);
+      if (e.hp <= 0) break;
+      performMove(e, p, chooseEnemyMove(e));
+      if (p.hp > 0) companionAssist(p, e);
+      tickStatus(p); tickStatus(e);
+    }
+    if (e.hp <= 0 && p.hp > 0) wins++;
+  }
+  assert.ok(wins / N > 0.8, `胜率 ${wins / N}`);
 });

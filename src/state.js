@@ -1,5 +1,4 @@
 import { SAVE_KEY } from './config.js';
-import { START } from './data/map.js';
 
 export function newState() {
   return {
@@ -14,7 +13,8 @@ export function newState() {
     },
     items: { tangyou: 2 },
     flags: {},
-    pos: { ...START },
+    map: 'chengdu',
+    pos: { x: 45, y: 21 }, // 人民公园，白果的窝
   };
 }
 

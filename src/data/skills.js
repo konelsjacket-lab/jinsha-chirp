@@ -16,6 +16,19 @@ export const SKILLS = {
     name: '神光', type: 'damage', power: 2.4, mp: 8,
     desc: '头顶白羽里藏着的金沙之光。',
   },
+  dive: {
+    name: '俯冲', type: 'damage', power: 1.8, mp: 5,
+    desc: '跟鱼郎学的，从高处一头扎下去。',
+  },
+  ginkgo: {
+    name: '银杏护体', type: 'buff', stat: 'def', mult: 1.7, turns: 3, mp: 4,
+    text: '金黄的银杏叶绕着白果打转，防御大幅提升！',
+    desc: '银杏爷爷教的。三回合内防御大幅提升。',
+  },
+  shine2: {
+    name: '双神光', type: 'damage', power: 3.2, mp: 11,
+    desc: '阿曦回来以后，头上的光亮了一倍。',
+  },
 };
 
 // 升到某级时自动学会的技能

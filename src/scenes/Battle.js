@@ -3,7 +3,7 @@ import { ENEMIES } from '../data/enemies.js';
 import { SKILLS } from '../data/skills.js';
 import { ITEMS } from '../data/items.js';
 import {
-  makeEnemy, performMove, useItem, chooseEnemyMove, playerFirst, fleeChance, tickStatus, gainExp,
+  makeEnemy, performMove, useItem, chooseEnemyMove, playerFirst, fleeChance, tickStatus, gainExp, companionAssist,
 } from '../systems/battle.js';
 import { addItem } from '../state.js';
 import { txt, panel, bar } from '../ui/widgets.js';
@@ -25,10 +25,17 @@ export default class Battle extends Phaser.Scene {
     this.p.defending = false;
     const base = ENEMIES[this.opts.enemy];
     this.e = makeEnemy(base, this.opts.lv ?? base.lv);
-    this.boss = !!base.boss;
+    this.boss = !!base.boss || !!this.opts.noFlee;
+    this.party = !!this.state.flags.zaozao_party;
 
     this.add.image(GAME_W / 2, GAME_H / 2, this.opts.bg || 'bg_park').setDisplaySize(GAME_W, GAME_H);
-    this.eSprite = this.add.image(700, 305, this.e.sprite).setOrigin(0.5, 1).setScale(this.boss ? 1.5 : 1.3);
+    this.eSprite = this.add.image(700, 305, this.e.sprite).setOrigin(0.5, 1).setScale((base.scale || 1) * (this.boss ? 1.5 : 1.3));
+    if (base.tint) this.eSprite.setTint(base.tint);
+    this.baseTint = base.tint;
+    if (this.party && this.textures.exists('npc_zaozao')) {
+      this.ally = this.add.image(120, 430, 'npc_zaozao').setOrigin(0.5, 1).setScale(2.2);
+      this.tweens.add({ targets: this.ally, y: 424, duration: 500, yoyo: true, repeat: -1 });
+    }
     this.pSprite = this.add.image(250, 425, 'battle_player').setOrigin(0.5, 1).setScale(1.4);
     this.tweens.add({ targets: this.eSprite, y: this.eSprite.y - 6, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
     this.tweens.add({ targets: this.pSprite, y: this.pSprite.y - 4, duration: 700, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
@@ -108,6 +115,18 @@ export default class Battle extends Phaser.Scene {
       }
       if (over) return;
 
+      if (this.party) {
+        const res = companionAssist(this.p, this.e);
+        if (res) {
+          if (this.ally) this.tweens.add({ targets: this.ally, x: this.ally.x + 30, duration: 120, yoyo: true });
+          if (res.type === 'damage') this.popup(this.eSprite, `-${res.amount}`, '#ffffff');
+          if (res.type === 'heal') this.popup(this.pSprite, `+${res.amount}`, '#8fff8f');
+          this.refresh();
+          await this.say(...res.lines);
+          if (await this.checkEnd()) return;
+        }
+      }
+
       const ticks = [...tickStatus(this.p), ...tickStatus(this.e)];
       if (ticks.length) await this.say(...ticks);
     }
@@ -116,7 +135,8 @@ export default class Battle extends Phaser.Scene {
   async chooseAction() {
     while (true) {
       this.log.setText(`${this.p.name}要怎么做？`);
-      const hasItems = Object.keys(this.state.items).length > 0;
+      const usable = Object.keys(this.state.items).filter(id => !ITEMS[id].key);
+      const hasItems = usable.length > 0;
       const i = await new Menu(this, {
         x: 636, w: 300, bottom: 528, cancelable: false, itemH: 30,
         items: [{ label: '技能' }, { label: '道具', disabled: !hasItems }, { label: '收羽防御' }, { label: '逃跑' }],
@@ -133,7 +153,7 @@ export default class Battle extends Phaser.Scene {
         }).open();
         if (j >= 0) return { type: 'skill', id: ids[j] };
       } else if (i === 1) {
-        const ids = Object.keys(this.state.items);
+        const ids = usable;
         const j = await new Menu(this, {
           x: 636, w: 300, bottom: 528, itemH: 30,
           items: ids.map(id => ({ label: `${ITEMS[id].name} ×${this.state.items[id]}` })),
@@ -178,7 +198,7 @@ export default class Battle extends Phaser.Scene {
     this.refresh();
     await this.say(...lines);
     if (!this.boss) {
-      for (const [id, chance] of DROPS) {
+      for (const [id, chance] of this.e.drop ? [this.e.drop, ...DROPS] : DROPS) {
         if (Math.random() < chance) {
           addItem(this.state, id);
           await this.say(`${this.e.name}掉下了「${ITEMS[id].name}」！`);
@@ -222,18 +242,24 @@ export default class Battle extends Phaser.Scene {
       if (!isPlayer || res.crit) this.cameras.main.shake(res.crit ? 220 : 140, res.crit ? 0.012 : 0.006);
       this.popup(tS, `-${res.amount}`, res.crit ? '#ffd23f' : '#ffffff');
       await this.wait(260);
-      tS.clearTint();
+      tS === this.eSprite && this.baseTint ? tS.setTint(this.baseTint) : tS.clearTint();
     } else if (res.type === 'heal' || res.type === 'mp') {
       sfx(this, 'sfx_heal');
       uS.setTint(0x99ff99);
       this.popup(uS, `+${res.amount}`, res.type === 'mp' ? '#8fd0ff' : '#8fff8f');
       await this.wait(300);
-      uS.clearTint();
+      uS === this.eSprite && this.baseTint ? uS.setTint(this.baseTint) : uS.clearTint();
+    } else if (res.type === 'buff') {
+      sfx(this, 'sfx_heal');
+      uS.setTint(0xffe08a);
+      this.popup(uS, '↑', '#ffe08a');
+      await this.wait(300);
+      uS === this.eSprite && this.baseTint ? uS.setTint(this.baseTint) : uS.clearTint();
     } else if (res.type === 'debuff') {
       tS.setTint(0xb48cff);
       this.popup(tS, '↓', '#c9a6ff');
       await this.wait(300);
-      tS.clearTint();
+      tS === this.eSprite && this.baseTint ? tS.setTint(this.baseTint) : tS.clearTint();
     }
     this.refresh();
   }

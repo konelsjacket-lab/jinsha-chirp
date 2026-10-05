@@ -346,6 +346,101 @@ const sunMotif = (c, w, h, alpha = 0.35) => {
   c.restore();
 };
 
+
+// ---------- 第一章支线 / 第二章新角色（占位） ----------
+function simpleBird(c, { body, belly, head, wing, beak = '#333', tail, crest, longBeak = false }) {
+  poly(c, [10, 19, 1, 15, 2, 24], tail || wing);
+  ell(c, 15, 19, 9, 7, body);
+  ell(c, 17, 22, 7, 4.5, belly);
+  ell(c, 13, 18, 6, 3.5, wing, -0.3);
+  circ(c, 22, 12, 6, head);
+  if (crest) crest(c);
+  eye(c, 24, 11);
+  if (longBeak) poly(c, [27, 11.5, 32, 13, 27, 14], beak);
+  else poly(c, [27, 11.5, 30.5, 12.6, 27, 13.8], beak);
+  rect(c, 14, 25, 1, 4, '#444'); rect(c, 18, 25, 1, 4, '#444');
+}
+const magpie = c => { simpleBird(c, { body: '#1e2230', belly: '#f2f2f2', head: '#14161e', wing: '#3d5a8a', tail: '#2c3f66' }); ell(c, 13, 18, 3, 2, '#f2f2f2'); };
+const kingfisher = c => simpleBird(c, { body: '#2f8fc4', belly: '#e58a3a', head: '#2a7fb0', wing: '#3aa0d8', tail: '#2577a8', beak: '#1d1d1d', longBeak: true });
+const axi = c => {
+  circ(c, 16, 17, 13, 'rgba(242,193,78,0.25)');
+  simpleBird(c, { body: '#ffcf3f', belly: '#fff0b0', head: '#ffd86b', wing: '#ffe17a', tail: '#f2b632', beak: '#c98a1a' });
+};
+function owl(c) {
+  ell(c, 16, 19, 10, 11, '#8a6a48');
+  ell(c, 16, 22, 7, 7, '#c9a982');
+  circ(c, 12, 12, 4.5, '#f2e6c8'); circ(c, 20, 12, 4.5, '#f2e6c8');
+  circ(c, 12, 12, 2.4, '#f2c14e'); circ(c, 20, 12, 2.4, '#f2c14e');
+  circ(c, 12, 12, 1.2, '#111'); circ(c, 20, 12, 1.2, '#111');
+  poly(c, [15, 14, 17, 14, 16, 17], '#4a3a28');
+  poly(c, [8, 6, 10, 10, 12, 8], '#8a6a48'); poly(c, [24, 6, 22, 10, 20, 8], '#8a6a48');
+  for (let i = 0; i < 5; i++) { c.save(); c.translate(27, 22); c.rotate(-0.9 + i * 0.25); ell(c, 0, -5, 1.6, 5, '#f4f1ea'); c.restore(); }
+}
+function boar(c) {
+  ell(c, 15, 20, 12, 8, '#6b4a33');
+  ell(c, 25, 17, 6, 5, '#7d5a40');
+  ell(c, 29, 18, 2.5, 2, '#d9a38a');
+  poly(c, [26, 20, 29, 23, 27, 20], '#f4f1ea');
+  eye(c, 25, 15, 1.1);
+  poly(c, [20, 12, 22, 8, 23, 13], '#5a3d2a');
+  for (let i = 0; i < 6; i++) rect(c, 6 + i * 3, 12, 1, 3, '#4a3020');
+  rect(c, 7, 26, 3, 4, '#4a3020'); rect(c, 21, 26, 3, 4, '#4a3020');
+}
+function crane(c) {
+  ell(c, 14, 17, 8, 6, '#f4f4f0');
+  poly(c, [6, 16, 1, 20, 7, 19], '#1d1d1d');
+  rect(c, 19, 6, 2, 11, '#f4f4f0');
+  circ(c, 21, 6, 3.2, '#f4f4f0'); circ(c, 21, 3.6, 1.5, '#d23a2a');
+  rect(c, 20, 7, 2, 4, '#1d1d1d');
+  eye(c, 22, 5.5, 0.9);
+  poly(c, [23.5, 5.5, 29, 6.5, 23.5, 7.2], '#c9b27a');
+  rect(c, 14, 22, 1, 9, '#2b2b2b');
+}
+function snake(c, color = '#3fa24a', light = '#9bdc6a') {
+  ell(c, 16, 25, 12, 4.5, color);
+  ell(c, 16, 21, 9, 3.5, light);
+  ell(c, 16, 18, 7, 3, color);
+  rect(c, 19, 8, 5, 11, color);
+  ell(c, 22, 8, 5, 3.6, color);
+  eye(c, 23.5, 7, 1.1);
+  poly(c, [27, 9, 30, 8, 30, 10], '#d23a2a');
+}
+const xiaoqing = c => { snake(c, '#2f9e6a', '#8be0a8'); circ(c, 19, 4.5, 2, '#1d5c3f'); circ(c, 25, 4.5, 2, '#1d5c3f'); };
+const baishe = c => { snake(c, '#eef0f2', '#ffffff'); rect(c, 21, 2, 1, 4, '#5fb8a0'); circ(c, 21, 2, 1.2, '#7fd6be'); c.strokeStyle = '#c8ccd2'; c.lineWidth = 0.6; c.beginPath(); c.ellipse(16, 25, 12, 4.5, 0, 0, TAU); c.stroke(); };
+function ginkgoSpirit(c) {
+  rect(c, 13, 16, 6, 15, '#6b4a2b');
+  circ(c, 16, 11, 11, '#e2b93b'); circ(c, 9, 13, 6, '#f2d061'); circ(c, 23, 13, 6, '#d9a92e'); circ(c, 16, 5, 6, '#f2d061');
+  rect(c, 14, 20, 1.4, 1.4, '#2b1d10'); rect(c, 17, 20, 1.4, 1.4, '#2b1d10');
+  c.strokeStyle = '#2b1d10'; c.lineWidth = 0.7; c.beginPath(); c.arc(16, 23, 1.6, 0.2, Math.PI - 0.2); c.stroke();
+  rect(c, 12, 18, 2.5, 0.6, '#efe6d0'); rect(c, 17.5, 18, 2.5, 0.6, '#efe6d0');
+}
+function leech(c) {
+  ell(c, 16, 21, 12, 6, '#4a3626');
+  for (let i = 0; i < 5; i++) rect(c, 7 + i * 4, 16, 1, 10, '#3a2a1c');
+  circ(c, 27, 18, 4, '#5a4230'); eye(c, 27, 17, 1.3);
+  ell(c, 29.5, 20, 1.6, 1.1, '#b04040');
+}
+function mist(c) {
+  for (const [x, y, r] of [[10, 18, 7], [17, 14, 8], [23, 18, 7], [16, 21, 8]]) circ(c, x, y, r, 'rgba(232,238,240,0.92)');
+  eye(c, 14, 16, 1.6); eye(c, 20, 16, 1.6);
+  c.strokeStyle = '#7a8a94'; c.lineWidth = 0.8; c.beginPath(); c.arc(17, 20, 2, 0.2, Math.PI - 0.2); c.stroke();
+}
+function larou(c) {
+  rect(c, 15, 1, 1.2, 7, '#7a5a3a');
+  c.save(); c.translate(16, 18); c.rotate(-0.1);
+  rect(c, -9, -10, 18, 20, '#7a2e1a');
+  for (let i = 0; i < 4; i++) rect(c, -9, -8 + i * 5, 18, 1.6, '#f0dcc0');
+  rect(c, -9, -10, 18, 3, '#3a1a10');
+  c.restore();
+  eye(c, 13, 14, 1.4); eye(c, 19, 14, 1.4);
+  poly(c, [11, 11, 15, 12.5, 11.5, 12.5], '#1d1d1d'); poly(c, [21, 12.5, 17, 12.5, 20.5, 11], '#1d1d1d');
+}
+const qingchengBg = (c, w) => {
+  for (let x = -60; x < w; x += 220) poly(c, [x, 335, x + 110, 120, x + 240, 335], '#4f6f5c');
+  for (let x = 20; x < w; x += 46) { rect(c, x, 140, 7, 200, '#5f9a48'); for (let y = 160; y < 330; y += 36) rect(c, x, y, 7, 2, '#3f6f2f'); }
+  for (let i = 0; i < 6; i++) ell(c, (i * 197) % w, 120 + (i * 61) % 180, 220, 40, 'rgba(232,238,240,0.35)');
+};
+
 // ---------- 清单 ----------
 export const PAINTERS = {
   tiles_ph: paintTiles,
@@ -377,6 +472,36 @@ export const PAINTERS = {
   enemy_bamboorat: (c, w) => unit(c, w, mirrored(eBambooRat)),
   enemy_watermonkey: (c, w) => unit(c, w, eWaterMonkey),
   enemy_rhino: (c, w) => unit(c, w, mirrored(rhino)),
+  enemy_snake: (c, w) => unit(c, w, mirrored(c2 => snake(c2))),
+  enemy_leech: (c, w) => unit(c, w, mirrored(leech)),
+  enemy_mist: (c, w) => unit(c, w, mist),
+  enemy_larou: (c, w) => unit(c, w, larou),
+  enemy_xiaoqing: (c, w) => unit(c, w, mirrored(xiaoqing)),
+
+  npc_magpie: (c, w) => unit(c, w, magpie),
+  npc_maoda: (c, w) => unit(c, w, eSparrow),
+  npc_owl: (c, w) => unit(c, w, owl),
+  npc_kingfisher: (c, w) => unit(c, w, kingfisher),
+  npc_monkey: (c, w) => unit(c, w, eWaterMonkey),
+  npc_hongzhong: (c, w) => unit(c, w, eMahjong),
+  npc_boar: (c, w) => unit(c, w, boar),
+  npc_ginkgo: (c, w) => unit(c, w, ginkgoSpirit),
+  npc_crane: (c, w) => unit(c, w, crane),
+  npc_xiaoqing: (c, w) => unit(c, w, xiaoqing),
+  npc_baishe: (c, w) => unit(c, w, baishe),
+  npc_axi: (c, w) => unit(c, w, axi),
+
+  portrait_magpie: (c, w) => { rect(c, 0, 0, w, w, '#262c3a'); unit(c, w, magpie); },
+  portrait_maoda: (c, w) => { rect(c, 0, 0, w, w, '#3a2e24'); unit(c, w, eSparrow); },
+  portrait_owl: (c, w) => { rect(c, 0, 0, w, w, '#3a1f1f'); unit(c, w, owl); },
+  portrait_kingfisher: (c, w) => { rect(c, 0, 0, w, w, '#1f3340'); unit(c, w, kingfisher); },
+  portrait_boar: (c, w) => { rect(c, 0, 0, w, w, '#33281f'); unit(c, w, boar); },
+  portrait_ginkgo: (c, w) => { rect(c, 0, 0, w, w, '#2e2a1a'); unit(c, w, ginkgoSpirit); },
+  portrait_crane: (c, w) => { rect(c, 0, 0, w, w, '#26303a'); unit(c, w, crane); },
+  portrait_xiaoqing: (c, w) => { rect(c, 0, 0, w, w, '#1d3329'); unit(c, w, xiaoqing); },
+  portrait_baishe: (c, w) => { rect(c, 0, 0, w, w, '#2a3036'); unit(c, w, baishe); },
+  portrait_axi: (c, w) => { rect(c, 0, 0, w, w, '#3b2a10'); unit(c, w, axi); },
+  bg_qingcheng: makeBattleBg('#a9b8b4', '#d2dbd6', '#6e8f62', '#4f6f45', qingchengBg),
 
   bg_park: makeBattleBg('#9fb3bf', '#c8d2cf', '#7cae5a', '#5e8f44', ginkgoRow),
   bg_north: makeBattleBg('#a3adb8', '#cfd2cf', '#b8a27a', '#9a845e', roofs),

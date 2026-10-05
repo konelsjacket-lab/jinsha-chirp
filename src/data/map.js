@@ -1,66 +1,12 @@
-// 成都地图（字符画，一个字符 = 一格 32px）。直接改这里的字符就能改地图。
+// 地图通用的东西：图例、图块序号、碰撞。每张地图本身在 ./maps/ 里。
 //
 // 图例：
 //   .  草地        ,  高草丛（会遇怪）   =  路        ~  水（锦江/湖）
 //   H  桥          #  川西青瓦屋顶       T  树        Y  银杏
 //   S  石板地      J  金沙金砖地         f  芙蓉花丛  M  山石
 //   b  竹林
-//
-// 区域（大致）：西=金沙遗址  北=宽窄巷子  中=人民公园  东北=大熊猫基地
-//              南岸西=杜甫草堂  南岸中=武侯祠  西北=青城山山道
 
-export const MAP_ROWS = [
-  "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT~~~TTTTTTTTTTTTTTT",
-  "TMMMMMMMMMMMMMMMMMMMM.................................~~~..............T",
-  "TMMMMMMMMMMMMMMMMMMM...............................T..~~~.bbbb..bbbbbbbT",
-  "TMMMMMMMMMMMMMMMMM......................T.............~~~.bbbb..bbbbbbbT",
-  "TMMMMMMMMMMMMMMMM.............................T,,,,,,,~~~.bb...T.....bbT",
-  "M===========================...................,,,,,,,~~~.bb.........bbT",
-  "M===========================..#################,,,,,,,~~~.bb..==.....bbT",
-  "TMMMMMMMMMMMM.............==..#################,,,,,,,~~~.bb..==.....bbT",
-  "TMMMMMMMMMM..T............=====================,,,,,,,~~~.bb..==.....bbT",
-  "TMMMMMMMMM..,,,,,,,,,,,...==..########=########,,,,,,,~~~.bbT.==.....bbT",
-  "TMMMMMMM....,,,,,,,,,,,...==..########=########,,,,,,,~~~.bb..==.bbb.bbT",
-  "TMMMMMM.....,,,,,,,,,,,...=====================,,,,,,,~~~.bb..==.bbb.bbT",
-  "TMMMMM......,,,,,,,,,,,...==..#################,,,,,,,~~~.bb..==.bbb.bbT",
-  "T...........,,,,,,,,,,,...==..#################,,,,,,,~~~Tbb..==.....bbT",
-  "T.........................==...................,,,,,,,~~~.bbT.==.....bbT",
-  "T.........................==..........................~~~Tbb,,==.....bbT",
-  "T..===================================================~~~.bb,,==..,,,,,T",
-  "T..===================================================~~~.bb,,==..,,,,,T",
-  "T.........................==..........................~~~.bb,,==..,,,,,T",
-  "TT.....###########........==.YY..Y..Y..Y..Y.....Y..Y..~~~.bb,,==..,,,,,T",
-  "T.TT...###########..,,,,,,==..T.######.ffff...Y.......~~~.bb,,==..,,,,,T",
-  "T....fJJJJJJJJJJJJJf,,,,,,==....######.ffff...........~~~.bb,,==..,,,,,T",
-  "T....fJJJJJJJJJJJJJf,,,,,,==.Y........................~~~.....==.......T",
-  "T....fJJJJJJJJJJJJJf,,,,,,====SSSSSSSSSSSSSSSSSSSSSS==HHH=======.......T",
-  "TTT..fJJJJJJJJJJJJJf,,,,,,====SSSSSSSSSSSSSSSSSSSSSS==HHH=======..T....T",
-  "T....fJJJJJJJJJJJJJf,,,,,,==.Y........................~~~............T.T",
-  "T....fJJJJJJJJJJJJJf,,,,,,==..T.........~~~~~~~.......~~~..............T",
-  "T....fJJJJJJJJJJJJJf,,,,,,==...,,,,,,..T~~~~~~~,,,,,..~~~...T..........T",
-  "T....fJJJJJJJJJJJJJf,,,,,,==.Y.,,,,,,.T.~~~~~~~,,,,,..~~~.,,,,,,,,,,,,TT",
-  "T....fJJJJJJJJJJJJJf,,,,,,==...,,,,,,...~~~~~~~,,,,,..~~~.,,,,,,,,,,,,TT",
-  "T.....fffffffffffff.,,,,,,==...,,,,,,..........,,,,,..~~~.,,,,,,,,,,,,.T",
-  "T.,,,,,,,,,,,.....T.......==.Y......==................~~~.,,,,,,,,,,,,.T",
-  "T.,,,,,,,,,,,.............==........==.............T..~~~.,,,,,,,,,,,,.T",
-  "T.,,,,,,,,,,,.========================................~~~.,,,,,,,,,,,,.T",
-  "T.,,,,,,,,,,,.========================...T.......T....~~~.,,,,,,,,,,,,.T",
-  "T.........................==..........................~~~T.............T",
-  "~~~~~~~~~~~~~~HH~~~~~~~~~~~~~~~~~~~~HH~~~~~~~~~~~~~~~~~~~..............T",
-  "~~~~~~~~~~~~~~HH~~~~~~~~~~~~~~~~~~~~HH~~~~~~~~~~~~~~~~~~~..............T",
-  "~~~~~~~~~~~~~~HH~~~~~~~~~~~~~~~~~~~~HH~~~~~~~~~~~~~~~~~~~..............T",
-  "T..bbbbbbbbbbb==bbbbbbbbbb..........==.....................TT........TTT",
-  "T..b.,,,,.....==.........b..T.SSSSSSSSSSSSSSS..,,,,,,,......,,,,,,,,,..T",
-  "T..b.,,,,.T...==.........b....SSSSSSSSSSSSSSS..,,,,,,,......,,,,,,,,,..T",
-  "T..b.,,,,.....==......T..b....SSSSSSSSSSSSSSS..,,,,,,,......,,,,,,,,,..T",
-  "T..b.....###########....Tb.....#############...,,,,,,,......,,,,,,,,,..T",
-  "T..b.....###########.....b.....#############...,,,,,,,T.....,,,,,,,,,..T",
-  "T..bT....................b.....#############...,,,,,,,......,,,,,,,,,..T",
-  "T..b....T................b.....................................T.......T",
-  "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
-];
-
-// 字符 -> 图块序号（对应 tiles.png 从左到右的顺序）
+// 字符 -> 图块序号（对应 tile_01..tile_13）
 export const LEGEND = {
   '.': 0, ',': 1, '=': 2, '~': 3, 'H': 4, '#': 5, 'T': 6,
   'Y': 7, 'S': 8, 'J': 9, 'f': 10, 'M': 11, 'b': 12,
@@ -75,41 +21,8 @@ export const SINGLE_TILES = [6, 7];
 // 这样地面不会一格一格地重复。图块集一共 13×4 列、4 行。
 export const VARIANT = 4;
 
-export const MAP_W = MAP_ROWS[0].length;
-export const MAP_H = MAP_ROWS.length;
-
-// 白果的窝：人民公园里那棵老银杏下面
-export const START = { x: 45, y: 21 };
-
-// 进入区域时弹出地名。先匹配到的优先。
-export const PLACES = [
-  { name: '金沙遗址', x0: 3, y0: 18, x1: 20, y1: 31 },
-  { name: '宽窄巷子', x0: 28, y0: 5, x1: 46, y1: 14 },
-  { name: '人民公园', x0: 28, y0: 18, x1: 53, y1: 32 },
-  { name: '大熊猫基地', x0: 57, y0: 1, x1: 70, y1: 22 },
-  { name: '杜甫草堂', x0: 2, y0: 39, x1: 25, y1: 46 },
-  { name: '武侯祠', x0: 27, y0: 39, x1: 46, y1: 46 },
-  { name: '青城山道', x0: 0, y0: 0, x1: 24, y1: 13 },
-  { name: '锦江边', x0: 0, y0: 33, x1: 53, y1: 35 },
-  { name: '东郊', x0: 57, y0: 23, x1: 70, y1: 46 },
-];
-
-export function tileIndexAt(x, y) {
-  if (y < 0 || y >= MAP_H || x < 0 || x >= MAP_W) return -1;
-  return LEGEND[MAP_ROWS[y][x]];
-}
-
-export function isSolid(x, y) {
-  const i = tileIndexAt(x, y);
-  return i === -1 || SOLID.includes(i);
-}
-
 export function variantIndex(t, x, y) {
   return (y % VARIANT) * TILE_COUNT * VARIANT + t * VARIANT + (x % VARIANT);
-}
-
-export function indexGrid() {
-  return MAP_ROWS.map((row, y) => [...row].map((ch, x) => variantIndex(LEGEND[ch], x, y)));
 }
 
 export function solidIndices() {
@@ -120,7 +33,24 @@ export function solidIndices() {
   return out;
 }
 
-export function placeAt(x, y) {
-  const p = PLACES.find(p => x >= p.x0 && x <= p.x1 && y >= p.y0 && y <= p.y1);
-  return p ? p.name : '成都';
+export const mapW = m => m.rows[0].length;
+export const mapH = m => m.rows.length;
+
+export function tileIndexAt(m, x, y) {
+  if (y < 0 || y >= mapH(m) || x < 0 || x >= mapW(m)) return -1;
+  return LEGEND[m.rows[y][x]];
+}
+
+export function isSolid(m, x, y) {
+  const i = tileIndexAt(m, x, y);
+  return i === -1 || SOLID.includes(i);
+}
+
+export function indexGrid(m) {
+  return m.rows.map((row, y) => [...row].map((ch, x) => variantIndex(LEGEND[ch], x, y)));
+}
+
+export function placeAt(m, x, y) {
+  const p = m.places.find(p => x >= p.x0 && x <= p.x1 && y >= p.y0 && y <= p.y1);
+  return p ? p.name : m.name;
 }

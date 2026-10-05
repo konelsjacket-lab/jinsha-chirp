@@ -47,6 +47,10 @@ export function performMove(user, target, move, rng = Math.random) {
     user.hp += amt;
     lines.push(`${user.name}回复了 ${amt} 点体力。`);
     res.amount = amt;
+  } else if (move.type === 'buff') {
+    user.status = user.status || {};
+    user.status[move.stat] = { mult: move.mult, turns: move.turns };
+    lines.push(move.text || `${user.name}的${STAT_NAMES[move.stat]}提升了！`);
   } else if (move.type === 'debuff') {
     target.status = target.status || {};
     target.status[move.stat] = { mult: move.mult, turns: move.turns };
@@ -107,7 +111,7 @@ export function tickStatus(unit) {
   for (const [k, s] of Object.entries(unit.status || {})) {
     if (--s.turns <= 0) {
       delete unit.status[k];
-      lines.push(`${unit.name}的${STAT_NAMES[k]}恢复了。`);
+      lines.push(`${unit.name}的${STAT_NAMES[k]}恢复正常了。`);
     }
   }
   return lines;
@@ -136,4 +140,23 @@ export function gainExp(player, exp) {
     }
   }
   return { lines, leveled };
+}
+
+// 同行的噪噪在战斗里帮腔：每回合有一定概率出手
+export function companionAssist(player, enemy, rng = Math.random) {
+  if (rng() > 0.4) return null;
+  const r = rng();
+  if (r < 0.35 && player.hp < player.maxHp) {
+    const amt = Math.min(player.maxHp - player.hp, Math.max(3, Math.round(player.maxHp * 0.1)));
+    player.hp += amt;
+    return { type: 'heal', amount: amt, lines: ['噪噪：“白老头，雄起！”', `${player.name}回复了 ${amt} 点体力。`] };
+  }
+  if (r < 0.7) {
+    enemy.status = enemy.status || {};
+    enemy.status.def = { mult: 0.75, turns: 2 };
+    return { type: 'debuff', amount: 0, lines: ['噪噪在旁边叭叭叭叭说个不停……', `${enemy.name}被吵得心烦意乱，防御下降了！`] };
+  }
+  const dmg = Math.max(2, Math.round(enemy.maxHp * 0.06));
+  enemy.hp = Math.max(0, enemy.hp - dmg);
+  return { type: 'damage', amount: dmg, lines: ['噪噪冲上去啄了一口！', `${enemy.name}受到了 ${dmg} 点伤害。`] };
 }

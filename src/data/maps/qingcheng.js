@@ -1,0 +1,90 @@
+// 青城山（字符画，图例见 ../map.js）。从下往上爬：
+//   山脚（野猪老板、白果炖鸡）→ 石阶（过小溪）→ 天师洞（银杏爷爷）→ 上清宫（鹤道长）
+//   → 一人宽的山道（小青拦路）→ 老君阁（白蛇）
+
+const ROWS = [
+  "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM",
+  "MTTTTTTTTTT.SSSS#########SSSS.TTTTTTTTTM",
+  "MTTTTTTTTTT.SSSS#########SSSS.TTTTTTTTTM",
+  "MTTTTTTTTTT.SSSSSSSSSSSSSSSSS.TTTTTTTTTM",
+  "MTTTTTTTTTT.SSSSSSSSSSSSSSSSS.TTTTTTTTTM",
+  "MTTTTTTTTTT.SSSSSSSSSSSSSSSSS.TTTTTTTTTM",
+  "MTTTTTTTTTT.SSSSSSSSSSSSSSSSS.TTTTTTTTTM",
+  "MTTTTTTTTTT.........S.........TTTTTTTTTM",
+  "MbbbbbbbbbTTTTTTTMMMSMMMTTTTTTbbbbbbbbbM",
+  "MbbbbbbbbbTTTTTTTMMMSMMMTTTTTTbbbbbbbbbM",
+  "MbbbbbbbbbTTTTTTTMMMSMMMTTTTTTbbbbbbbbbM",
+  "MbbbbbbbbbTTTTTTTMMMSMMMTTTTTTbbbbbbbbbM",
+  "MTTTTTT..#########..S..#########..TTTTTM",
+  "MTTTTTT.S#########SSSSS#########S.TTTTTM",
+  "MTTT,,,,SSSSSSSSSSSSSSSSSSSSSSSSS.,,,,TM",
+  "MTTT,,,,SSSSSSSSSSSSSSSSSSSSSSSSS.,,,,TM",
+  "MTTT,,,,SSSSSSSSSSSSSSSSSSSSSSSSS.,,,,TM",
+  "MTTT,,,,SSSSSSSSSSSSSSSSSSSSSSSSS.,,,,TM",
+  "MTTT,,,,SSSSSSSSSSSSSSSSSSSSSSSSS.,,,,TM",
+  "MTTTTTT...........................TTTTTM",
+  "MTTTTTTTTTTTTTTTTT..SS..TTTTTTTTTTTTTTTM",
+  "MTTTTTTTTTTTT..#####SS####..T,,,,,,TTTTM",
+  "MTTTTT,,,,,,T.S#####SS####S.T,,,,,,TTTTM",
+  "MTTTTT,,,,,,T.SSSSSSSSSSSSS.T,,,,,,TTTTM",
+  "MTTTTT,,,,,,T.SSSSSSSSSSSSS.T,,,,,,TTTTM",
+  "MTTTTT,,,,,,..YSSSSSSSSSSSY..,,,,,,TTTTM",
+  "MTTTTT,,,,,,T.SSSSSSSSSSSSS..,,,,,,TTTTM",
+  "MTTTTT,,,,,,T.SSSSSSSSSSSSSSSS..TTTTTTTM",
+  "MTTTTT,,,,,,T.SSSSSSSSSSSSSSSS..TTTTTTTM",
+  "MTTTTTTTTTTTT...............SS,,,,,TTTTM",
+  "MTTTTTTTTTTTTTTTTT..........SS,,,,,TTTTM",
+  "MTTTTTTTTTTTTT,,,,,,,,,TTT..SS,,,,,TTTTM",
+  "MTTTTTTT......,,,,,,,,,.....SS,,,,,TTTTM",
+  "MTTTTTTT......,,,,,,,,,.....SS,,,,,TTTTM",
+  "MTTTTTTT..SSSSSSSSSSSSSSSSSSSS,,,,,TTTTM",
+  "MTTT,,,,,.SSSSSSSSSSSSSSSSSSSS..TTTTTTTM",
+  "MTTT,,,,,.SS....................TTTTTTTM",
+  "MTTT,,,,,.SS....................TTTTTTTM",
+  "M~~~~~~~~~HH~~~~~~~~~~~~~~~~~~~~~~~~~~~M",
+  "MTTT,,,,,.SS..TTTTTTTTTTTTTTTTTTTTTTTTTM",
+  "MTTT,,,,,.SS.,,,,,TTTTTTTTTTTTbbbbbbbbbM",
+  "MTTT,,,,,.SS.,,,,,.....TTTTTTTbbbbbbbbbM",
+  "MTTT,,,,,.SS.,,,,,.....TTTTTTTbbbbbbbbbM",
+  "MTTTTTTT..SSSSSSSSSSS..TTTTTTTbbbbbbbbbM",
+  "MbbbbbbT..SSSSSSSSSSS..TTTTTTTbbbbbbbbbM",
+  "Mbbbbbb............SS.........bbbbbbbbbM",
+  "Mbbbbbb..######....SS....#####bbbbbbbbbM",
+  "Mbbbbbb..######....SS....#######.TTTTTTM",
+  "Mbbbbbb..######....SS....#######.TTTTTTM",
+  "Mbbbbbb............SS............bbbbbbM",
+  "Mbbbbbb............SS............bbbbbbM",
+  "Mbbbbbb...,,,,.....SS......,,,,,.bbbbbbM",
+  "Mbbbbbb...,,,,.....SS......,,,,,.bbbbbbM",
+  "Mbbbbbb...,,,,.....SS......,,,,,.bbbbbbM",
+  "Mbbbbbb............==............bbbbbbM",
+  "MMMMMMMMMMMMMMMMMMM==MMMMMMMMMMMMMMMMMMM"
+];
+
+const PLACES = [
+  { name: '老君阁', x0: 0, y0: 0, x1: 39, y1: 11 },
+  { name: '上清宫', x0: 0, y0: 12, x1: 39, y1: 19 },
+  { name: '天师洞', x0: 0, y0: 20, x1: 39, y1: 28 },
+  { name: '石阶', x0: 0, y0: 29, x1: 39, y1: 43 },
+  { name: '山脚', x0: 0, y0: 44, x1: 39, y1: 55 },
+];
+
+const ZONES = [
+  { id: 'qc_low', bg: 'bg_qingcheng', x0: 0, y0: 29, x1: 39, y1: 55, lv: [5, 6],
+    table: [['zhuyeqing', 3], ['mahuang', 2]] },
+  { id: 'qc_high', bg: 'bg_qingcheng', x0: 0, y0: 0, x1: 39, y1: 28, lv: [6, 7],
+    table: [['wujing', 3], ['zhuyeqing', 2], ['larou_jing', 2]] },
+];
+
+export default {
+  id: 'qingcheng',
+  name: '青城山',
+  rows: ROWS,
+  start: { x: 19, y: 53 },
+  places: PLACES,
+  zones: ZONES,
+  music: 'bgm_qingcheng',
+  // 青城天下幽：白蛇的雾。阿曦回去以后雾就薄了
+  fog: s => (s.flags.axi_found ? 0.35 : 1),
+  mood: s => ({ color: 0xc8d4d8, alpha: s.flags.axi_found ? 0.05 : 0.12 }),
+};

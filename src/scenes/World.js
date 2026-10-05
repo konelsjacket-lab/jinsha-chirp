@@ -1,7 +1,8 @@
 import { TILE, WORLD_ZOOM, PLAYER_SPEED, ENCOUNTER_RATE, ENCOUNTER_GRACE } from '../config.js';
-import { indexGrid, solidIndices, MAP_W, MAP_H, TALL_GRASS, tileIndexAt, placeAt } from '../data/map.js';
-import { NPCS } from '../data/npcs.js';
-import { INTRO, LOSE, objective } from '../data/story.js';
+import { indexGrid, solidIndices, mapW, mapH, TALL_GRASS, tileIndexAt, placeAt } from '../data/map.js';
+import { MAPS } from '../data/maps/index.js';
+import { INTRO, lose, objective } from '../data/story.js';
+import { chatter } from '../data/companion.js';
 import { ITEMS } from '../data/items.js';
 import { SKILLS } from '../data/skills.js';
 import { zoneAt, rollEncounter } from '../data/encounters.js';
@@ -11,53 +12,54 @@ import { txt } from '../ui/widgets.js';
 
 const DIRS = { down: [0, 1], left: [-1, 0], right: [1, 0], up: [0, -1] };
 const ROW = { down: 0, left: 1, right: 2, up: 3 };
+const STOP = 'stop'; // 剧情里切换地图后，后面的步骤不再执行
 
 export default class World extends Phaser.Scene {
   constructor() { super('World'); }
 
   create() {
     this.state = this.registry.get('state');
+    const s = this.state;
+    s.map = s.map || 'chengdu';
+    this.map = MAPS[s.map];
     this.locked = true;
+    this.ready = false;
+    this.warping = false;
     this.facing = 'down';
     this.steps = 0;
     this.grassDist = 0;
     this.place = null;
+    this.lastTile = '';
+    this.trail = [];
 
     // 地图
-    const map = this.make.tilemap({ data: indexGrid(), tileWidth: TILE, tileHeight: TILE });
-    const tiles = map.addTilesetImage('tiles', 'tiles', TILE, TILE, 1, 2);
-    this.layer = map.createLayer(0, tiles, 0, 0);
+    const tm = this.make.tilemap({ data: indexGrid(this.map), tileWidth: TILE, tileHeight: TILE });
+    const tiles = tm.addTilesetImage('tiles', 'tiles', TILE, TILE, 1, 2);
+    this.layer = tm.createLayer(0, tiles, 0, 0);
     this.layer.setCollision(solidIndices());
-    const W = MAP_W * TILE, H = MAP_H * TILE;
+    const W = mapW(this.map) * TILE, H = mapH(this.map) * TILE;
     this.physics.world.setBounds(0, 0, W, H);
 
     // 白果
     this.makeAnims();
-    const { x, y } = this.state.pos;
+    const { x, y } = s.pos;
     this.player = this.physics.add.sprite(x * TILE + 16, y * TILE + 16, 'player', 0);
     this.player.body.setSize(16, 12).setOffset(8, 18);
     this.player.setCollideWorldBounds(true);
     this.physics.add.collider(this.player, this.layer);
 
-    // NPC：贴图只负责显示，碰撞用一个 28×28 的隐形方块
+    // NPC：贴图只负责显示，碰撞用一个 28×28 的隐形方块。随剧情出现/消失，见 refreshNpcs()
     this.npcBodies = this.physics.add.staticGroup();
-    for (const n of NPCS) {
-      const cx = n.x * TILE + 16, cy = n.y * TILE + 16;
-      const spr = this.add.image(cx, cy + 16, n.sprite).setOrigin(0.5, 1).setDepth(cy + 16);
-      if ((n.size || 32) > 32) {
-        this.tweens.add({ targets: spr, y: spr.y - 3, duration: 1400, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
-      }
-      const zone = this.add.zone(cx, cy, 28, 28);
-      this.npcBodies.add(zone);
-      zone.npc = n;
-      zone.sprite = spr;
-    }
     this.bumpNow = false;
     this.bumpPrev = false;
     this.physics.add.collider(this.player, this.npcBodies, (_, zone) => {
       this.bumpNow = true;
       if (zone.npc.bump && !this.bumpPrev && !this.locked) this.runScript(zone.npc.script(this.state));
     });
+    this.refreshNpcs();
+
+    // 同行的噪噪：跟在白果身后
+    this.follower = this.add.image(this.player.x, this.player.y + 16, 'npc_zaozao').setOrigin(0.5, 1).setVisible(false);
 
     this.bubble = txt(this, 0, 0, '…', {
       fontSize: '14px', color: '#1b1f2a', backgroundColor: '#f4efe2', padding: { x: 4, y: 0 },
@@ -82,17 +84,29 @@ export default class World extends Phaser.Scene {
       this.game.events.off('menu', onMenu);
     });
 
-    this.scene.launch('UI');
+    // 界面场景只启动一次；换地图时 World 重启，界面留着
     this.ui = this.scene.get('UI');
-    this.ui.events.once('create', () => this.begin());
+    if (this.scene.isActive('UI') || this.scene.isSleeping('UI')) {
+      this.time.delayedCall(10, () => this.begin());
+    } else {
+      this.scene.launch('UI');
+      this.ui.events.once('create', () => this.begin());
+    }
   }
 
   begin() {
     this.ready = true;
     this.locked = false;
+    this.refreshAtmosphere();
     this.ui.setObjective(objective(this.state));
-    playMusic(this, 'bgm_world');
-    if (!this.state.flags.intro_done) this.runScript(INTRO);
+    this.ui.showPlace(placeAt(this.map, this.state.pos.x, this.state.pos.y));
+    playMusic(this, this.map.music || 'bgm_world');
+    this.cameras.main.fadeIn(500, 0, 0, 0);
+    if (this.map.id === 'chengdu' && !this.state.flags.intro_done) this.runScript(INTRO);
+    else if (this.map.onEnter) {
+      const steps = this.map.onEnter(this.state);
+      if (steps && steps.length) this.runScript(steps);
+    }
   }
 
   makeAnims() {
@@ -105,6 +119,33 @@ export default class World extends Phaser.Scene {
     }
   }
 
+  // 按剧情标记决定哪些 NPC 在场（npc.when(state)），每段剧情结束后重算一次
+  refreshNpcs() {
+    for (const z of this.npcBodies.getChildren()) z.sprite.destroy();
+    this.npcBodies.clear(true, true);
+    for (const n of this.map.npcs || []) {
+      if (n.when && !n.when(this.state)) continue;
+      const cx = n.x * TILE + 16, cy = n.y * TILE + 16;
+      const spr = this.add.image(cx, cy + 16, n.sprite).setOrigin(0.5, 1).setDepth(cy + 16);
+      if (n.flip) spr.setFlipX(true);
+      if ((n.size || 32) > 32) {
+        this.tweens.add({ targets: spr, y: spr.y - 3, duration: 1400, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+      }
+      const zone = this.add.zone(cx, cy, 28, 28);
+      this.npcBodies.add(zone);
+      zone.npc = n;
+      zone.sprite = spr;
+    }
+  }
+
+  refreshAtmosphere() {
+    const m = this.map;
+    this.ui.setAtmosphere({
+      mood: m.mood ? m.mood(this.state) : null,
+      fog: m.fog ? m.fog(this.state) : 0,
+    });
+  }
+
   update(time, delta) {
     this.bumpPrev = this.bumpNow;
     this.bumpNow = false;
@@ -114,6 +155,7 @@ export default class World extends Phaser.Scene {
     const tx = Math.floor(p.x / TILE), ty = Math.floor((p.y + 10) / TILE);
     this.state.pos = { x: tx, y: ty };
     p.setDepth(p.y + 16);
+    this.updateFollower();
 
     // 每帧都读一次，免得对话期间按下的键在对话结束后“补触发”
     const act = this.actionKeys.map(k => Phaser.Input.Keyboard.JustDown(k)).some(Boolean);
@@ -134,8 +176,7 @@ export default class World extends Phaser.Scene {
     let vx = (c.right.isDown || w.D.isDown ? 1 : 0) - (c.left.isDown || w.A.isDown ? 1 : 0) + joy.x;
     let vy = (c.down.isDown || w.S.isDown ? 1 : 0) - (c.up.isDown || w.W.isDown ? 1 : 0) + joy.y;
     const len = Math.hypot(vx, vy);
-    const moving = len > 0.2;
-    if (moving) {
+    if (len > 0.2) {
       if (len > 1) { vx /= len; vy /= len; }
       p.setVelocity(vx * PLAYER_SPEED, vy * PLAYER_SPEED);
       this.facing = Math.abs(vx) > Math.abs(vy) ? (vx < 0 ? 'left' : 'right') : (vy < 0 ? 'up' : 'down');
@@ -146,22 +187,26 @@ export default class World extends Phaser.Scene {
       p.setFrame(ROW[this.facing] * 3);
     }
 
-    // 地名
-    const place = placeAt(tx, ty);
-    if (place !== this.place) {
-      if (this.place !== null) this.ui.showPlace(place);
-      this.place = place;
+    // 走进新的一格：地名、踩点奇遇
+    const key = `${tx},${ty}`;
+    if (key !== this.lastTile) {
+      this.lastTile = key;
+      const place = placeAt(this.map, tx, ty);
+      if (place !== this.place) {
+        if (this.place !== null) this.ui.showPlace(place);
+        this.place = place;
+      }
+      if (this.checkTriggers(tx, ty)) return;
     }
 
     // 高草丛遇怪
-    const actuallyMoving = p.body.speed > 10;
-    if (actuallyMoving && tileIndexAt(tx, ty) === TALL_GRASS && this.state.flags.intro_done) {
+    if (p.body.speed > 10 && tileIndexAt(this.map, tx, ty) === TALL_GRASS && this.state.flags.intro_done) {
       this.grassDist += (p.body.speed * delta) / 1000;
       if (this.grassDist >= TILE) {
         this.grassDist -= TILE;
         this.steps += 1;
         if (this.steps > ENCOUNTER_GRACE && Math.random() < ENCOUNTER_RATE) {
-          const enc = rollEncounter(zoneAt(tx, ty));
+          const enc = rollEncounter(zoneAt(this.map, tx, ty));
           this.runScript([{ battle: enc.enemy, lv: enc.lv, bg: enc.bg }]);
           return;
         }
@@ -172,6 +217,34 @@ export default class World extends Phaser.Scene {
     const near = this.npcInFront(48);
     this.bubble.setVisible(!!near);
     if (near) this.bubble.setPosition(near.sprite.x, near.sprite.y - near.sprite.displayHeight - 2);
+  }
+
+  checkTriggers(tx, ty) {
+    const s = this.state;
+    for (const t of this.map.triggers || []) {
+      if (tx < t.x0 || tx > t.x1 || ty < t.y0 || ty > t.y1) continue;
+      const once = t.once !== false;
+      if (once && s.flags[`trig_${t.id}`]) continue;
+      if (t.when && !t.when(s)) continue;
+      if (once) s.flags[`trig_${t.id}`] = true;
+      this.runScript(t.script(s));
+      return true;
+    }
+    return false;
+  }
+
+  updateFollower() {
+    const on = !!this.state.flags.zaozao_party;
+    this.follower.setVisible(on);
+    if (!on) return;
+    const p = this.player;
+    const last = this.trail[this.trail.length - 1];
+    if (!last || Math.hypot(last.x - p.x, last.y - p.y) > 2) this.trail.push({ x: p.x, y: p.y });
+    if (this.trail.length > 40) this.trail.shift();
+    const target = this.trail.length > 12 ? this.trail[this.trail.length - 12] : { x: p.x - 18, y: p.y };
+    const f = this.follower;
+    if (Math.abs(target.x - f.x) > 0.5) f.setFlipX(target.x < f.x);
+    f.setPosition(target.x, target.y + 16).setDepth(target.y + 15);
   }
 
   npcInFront(range = 34) {
@@ -188,7 +261,12 @@ export default class World extends Phaser.Scene {
   onAction() {
     if (!this.ready || this.locked || this.ui.busy || this.time.now - this.ui.lastClose < 200) return;
     const z = this.npcInFront();
-    if (z) this.runScript(z.npc.script(this.state));
+    if (z) return this.runScript(z.npc.script(this.state));
+    // 前面没人，就跟同行的噪噪聊两句
+    if (this.state.flags.zaozao_party) {
+      const place = placeAt(this.map, this.state.pos.x, this.state.pos.y);
+      this.runScript(chatter(this.state, place));
+    }
   }
 
   async onMenu() {
@@ -198,7 +276,7 @@ export default class World extends Phaser.Scene {
     this.locked = false;
   }
 
-  // ---------- 剧情脚本 ----------
+  // ---------- 剧情脚本（步骤说明见 src/data/dsl.js） ----------
   async runScript(steps) {
     if (this.locked) return;
     this.locked = true;
@@ -208,17 +286,29 @@ export default class World extends Phaser.Scene {
     } catch (e) {
       console.error('[剧情脚本出错]', e);
     } finally {
-      this.locked = false;
-      this.ui.lastClose = this.time.now;
-      this.ui.refreshHUD();
-      this.ui.setObjective(objective(this.state));
+      if (!this.warping) {
+        this.locked = false;
+        this.ui.lastClose = this.time.now;
+        this.ui.refreshHUD();
+        this.ui.setObjective(objective(this.state));
+        this.refreshNpcs();
+        this.refreshAtmosphere();
+      }
     }
+  }
+
+  check(cond) {
+    const s = this.state;
+    if (typeof cond === 'function') return !!cond(s);
+    if (typeof cond === 'string') return cond.startsWith('!') ? !s.flags[cond.slice(1)] : !!s.flags[cond];
+    return !!cond;
   }
 
   async exec(steps) {
     const s = this.state;
     for (let i = 0; i < steps.length; i++) {
       const st = steps[i];
+      let r;
       if ('say' in st) {
         // 连续的台词合并成一次对话
         const lines = [];
@@ -230,15 +320,34 @@ export default class World extends Phaser.Scene {
         await this.ui.dialogue(lines);
       } else if (st.flag) {
         s.flags[st.flag] = true;
+      } else if (st.inc) {
+        s.flags[st.inc] = (s.flags[st.inc] || 0) + (st.n || 1);
+      } else if (st.unflag) {
+        delete s.flags[st.unflag];
       } else if (st.give) {
         const n = st.n || 1;
         addItem(s, st.give, n);
         sfx(this, 'sfx_heal');
         await this.ui.dialogue([{ who: '', text: `获得了「${ITEMS[st.give].name}」×${n}！` }]);
+      } else if (st.take) {
+        addItem(s, st.take, -(st.n || 1));
+        await this.ui.dialogue([{ who: '', text: `交出了「${ITEMS[st.take].name}」。` }]);
       } else if (st.learn) {
         if (!s.player.skills.includes(st.learn)) s.player.skills.push(st.learn);
         sfx(this, 'sfx_levelup');
         await this.ui.dialogue([{ who: '', text: `白果学会了「${SKILLS[st.learn].name}」！` }]);
+      } else if (st.stat) {
+        const p = s.player;
+        const names = { maxHp: '体力上限', maxMp: '气上限', atk: '攻击', def: '防御', spd: '速度' };
+        const lines = [];
+        for (const [k, v] of Object.entries(st.stat)) {
+          p[k] += v;
+          if (k === 'maxHp') p.hp += v;
+          if (k === 'maxMp') p.mp += v;
+          lines.push({ who: '', text: `${names[k]}提升了 ${v}！` });
+        }
+        sfx(this, 'sfx_levelup');
+        await this.ui.dialogue(lines);
       } else if (st.heal) {
         s.player.hp = s.player.maxHp;
         s.player.mp = s.player.maxMp;
@@ -247,10 +356,15 @@ export default class World extends Phaser.Scene {
         saveState(s);
       } else if (st.battle) {
         const res = await this.startBattle(st);
-        if (res === 'win') await this.exec(st.win || []);
-        else if (res === 'lose') await this.exec(st.lose || LOSE);
+        if (res === 'win') r = await this.exec(st.win || []);
+        else if (res === 'lose') r = await this.exec(st.lose || lose(s));
+        else r = await this.exec(st.flee || []);
       } else if ('if' in st) {
-        await this.exec(s.flags[st.if] ? (st.then || []) : (st.else || []));
+        r = await this.exec(this.check(st.if) ? (st.then || []) : (st.else || []));
+      } else if (st.choice) {
+        const opts = st.options.filter(o => !o.when || this.check(o.when));
+        const k = await this.ui.choose(st.choice, opts.map(o => o.label), st.who);
+        r = await this.exec(opts[k].then || []);
       } else if ('cg' in st) {
         await this.ui.showCG(st.cg, st.box);
       } else if (st.fx) {
@@ -258,16 +372,29 @@ export default class World extends Phaser.Scene {
       } else if (st.music) {
         playMusic(this, st.music);
       } else if (st.teleport) {
-        this.player.setPosition(st.teleport.x * TILE + 16, st.teleport.y * TILE + 16);
+        const t = st.teleport === 'start' ? this.map.start : st.teleport;
+        this.player.setPosition(t.x * TILE + 16, t.y * TILE + 16);
+        this.trail = [];
         this.facing = 'down';
         this.player.setFrame(0);
+      } else if (st.warp) {
+        await this.fx({ fx: 'fadeOut' });
+        await this.ui.showCG(null);
+        s.map = st.warp.map;
+        s.pos = { x: st.warp.x, y: st.warp.y };
+        saveState(s);
+        this.warping = true;
+        this.scene.restart();
+        return STOP;
       } else if (st.wait) {
         await this.wait(st.wait);
-      } else if (st.end) {
-        s.flags.ch1_end = true;
-        saveState(s);
-        await this.ui.showCard('第一章 · 金沙之光　完', '第二章「青城白蛇」制作中……\n\n（可以继续在成都到处逛逛）');
+      } else if (st.card) {
+        await this.ui.showCard(st.card.title, st.card.sub || '');
+      } else if (st.refresh) {
+        this.refreshNpcs();
+        this.refreshAtmosphere();
       }
+      if (r === STOP) return STOP;
     }
   }
 
@@ -285,7 +412,7 @@ export default class World extends Phaser.Scene {
     return Promise.resolve();
   }
 
-  startBattle({ battle, lv, bg }) {
+  startBattle({ battle, lv, bg, noFlee }) {
     return new Promise(resolve => {
       sfx(this, 'sfx_encounter');
       this.cameras.main.flash(300, 255, 255, 255);
@@ -293,12 +420,12 @@ export default class World extends Phaser.Scene {
         this.player.setVelocity(0, 0);
         this.scene.sleep('UI');
         this.scene.launch('Battle', {
-          enemy: battle, lv, bg,
+          enemy: battle, lv, bg, noFlee,
           onEnd: res => {
             this.scene.stop('Battle');
             this.scene.wake('UI');
             this.scene.resume();
-            playMusic(this, 'bgm_world');
+            playMusic(this, this.map.music || 'bgm_world');
             this.steps = 0;
             resolve(res);
           },

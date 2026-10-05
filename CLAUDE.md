@@ -12,15 +12,20 @@
   `window.game` 可以拿到场景：`game.scene.getScene('World')`。注意 `runScript()` 返回的 Promise 要等整段剧情结束，在 `page.evaluate` 里调用时不要 return 它。
 
 ## 代码结构
-- `src/data/` 是内容：`map.js`（字符画地图）、`npcs.js` / `story.js`（剧情脚本）、`enemies.js` 等。剧情步骤的写法见 `src/data/dsl.js`。
-- 对话说话人可带表情：`say('白果:happy', ...)` → 头像 `portrait_baiguo_happy`，没有就退回默认头像。
-- 剧情插图：`{ cg: 'cg_xxx' }` / `{ cg: null }`，`box: 'top'` 把对话框挪到上方。
-- `src/systems/battle.js` 是纯逻辑（不依赖 Phaser），测试直接 import。
+- 剧情设定（角色、章节、伏笔）在 `docs/STORY.md`，写台词前先看。语气：离谱但真诚，四川话味道。
+- `src/data/` 是内容：
+  - `maps/chengdu.js`、`maps/qingcheng.js`：字符画地图 + 地名 + 遇怪区；`maps/index.js` 把地形、NPC、奇遇、进图剧情拼起来。
+  - `npcs.js`（成都）、`qingcheng.js`（第二章）：NPC（`when` 控制是否在场）和踩点奇遇（`TRIGGERS`，默认只触发一次）。
+  - `story.js`：开场、战败、主线目标、第二章尾声。`quests.js`：菜单里的支线任务。`companion.js`：噪噪同行时的闲聊。
+  - 剧情步骤（对话、选项、条件、道具、战斗、换地图、CG……）的写法全在 `dsl.js` 顶部注释里。
+- 对话说话人可带表情：`say('白果:happy', ...)` → 头像 `portrait_baiguo_happy`，没有就退回默认头像。新说话人要在 `characters.js` 登记（测试会查）。
+- `src/systems/battle.js` 是纯逻辑（不依赖 Phaser），测试直接 import。噪噪帮腔是 `companionAssist`。
 - `src/assets.js` 是资源清单。图片缺失时用 `src/placeholders.js` 现画的占位图；`optional: true` 的缺失就跳过。
 - 地图图块：每种地形一张 128×128 的无缝平铺图，铺在 4×4 格上（`VARIANT`）；树（`SINGLE_TILES`）是单格 32×32。Boot 启动时拼成带 1px 外扩、2px 间距的图块集，防止 1.5 倍缩放时接缝出细线。
+- 测试：`tests/story.test.js` 会在各个剧情阶段展开所有 NPC/奇遇脚本，检查引用的道具、技能、怪物、地图、说话人都存在；`tests/map.test.js` 检查每张地图的连通性。
 
 ## 美术流程
-1. 提示词在 `docs/美术提示词_像素版.txt`（由 scratch 脚本生成，改动时保持“每张图一段完整提示词”的格式，并同步发给用户 txt）。
+1. 提示词在 `docs/美术提示词_像素版.txt`（全部）和 `docs/美术提示词_第二批.txt`（剧情扩充的新角色）（由 scratch 脚本生成，改动时保持“每张图一段完整提示词”的格式，并同步发给用户 txt）。
 2. 用户发来的原图 → 按文件名存进 `assets/raw/`（保留 webp 原件）。
 3. 在 `tools/art_manifest.json` 加一条处理参数，运行 `python3 tools/process_art.py <名字>`。
    - 头像 96×96 / 48 色；CG 和标题 480×270 / 64 色（游戏里放大 2 倍）；平铺图块 128 / 32 色；单格物件 32。

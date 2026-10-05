@@ -12,4 +12,34 @@ export const ITEMS = {
     name: '钵钵鸡', use: 'throw', amount: 30, battleOnly: true,
     desc: '白果坚决不吃。可以扔出去辣敌人一脸，造成 30 点伤害。',
   },
+  gaiwan: {
+    name: '盖碗茶', use: 'heal', amount: 999,
+    desc: '龟大爷亲手泡的盖碗茶。喝一口，体力全满。',
+  },
+  larou: {
+    name: '青城老腊肉', use: 'heal', amount: 80,
+    desc: '野猪老板的招牌，烟熏了一整个冬天。回复 80 体力。',
+  },
+  xueya: {
+    name: '青城雪芽', use: 'mp', amount: 20,
+    desc: '鹤道长送的山茶，清香提神。回复 20 气。',
+  },
+
+  // ---- 宝物：不能用，放在包里推动剧情 ----
+  jinnang: {
+    name: '锦囊', key: true,
+    desc: '诸葛先生给的。“遇到过不去的坎，再拆。”',
+  },
+  hongzhong: {
+    name: '红中', key: true,
+    desc: '一张跑路被抓回来的麻将牌，还在不服气地抖。要还给龟大爷。',
+  },
+  yugan: {
+    name: '鱼竿', key: true,
+    desc: '鱼郎的竹鱼竿，上面还挂着水猴子的毛。',
+  },
+  jinbo: {
+    name: '金箔碎片', key: true,
+    desc: '金沙太阳神鸟金箔掉下来的碎片，微微发烫。交给太阳神鸟。',
+  },
 };
