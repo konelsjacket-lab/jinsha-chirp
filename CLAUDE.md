@@ -18,7 +18,7 @@
     每个文件：字符画地形、`exits`（走到这片格子就切图，`tx/ty` 是对面落脚点，按偏移对齐）、`props`（地标大图，`solid` 挡路且可调查，否则只是装饰）、
     `npcs`（用 `at(NPC.xxx, x, y)` 摆放）、`triggers`（`area(TRIGGER.xxx, x0, y0, x1, y1)`）、`zones`（遇怪）、`route`（菜单路线图上的位置，0–100）。
     `maps/index.js` 汇总，并负责把旧存档（成都一整张大图）迁移到小地图。
-  - `npcs.js`（成都）、`qingcheng.js`（第二章）：NPC 和奇遇的“是谁、说什么”（`when` 控制是否在场）；放在哪由地图文件决定。
+  - `npcs.js`（第一章·成都）、`qingcheng.js`（第二章）：NPC 和奇遇的“是谁、说什么”（`when` 控制是否在场）；放在哪由地图文件决定。第一章主线的剧情标记顺序写在 `npcs.js` 开头；任务目标在 `story.js` 的 `chapter1Objective`。
   - `prologue.js`：序章「白头」（人民公园）的剧情、NPC、奇遇和目标；`codex.js`：成都见闻录（`{ codex: 'id' }` 解锁）。
   - `story.js`：战败、主线目标、第二章尾声。`quests.js`：菜单里的支线任务。`companion.js`：噪噪同行时的闲聊。
   - 剧情步骤（对话、选项、条件、道具、战斗、换地图、CG……）的写法全在 `dsl.js` 顶部注释里。
@@ -27,7 +27,7 @@
 - `src/assets.js` 是资源清单。图片缺失时用 `src/placeholders.js` 现画的占位图；`optional: true` 的缺失就跳过。
 - 地图图块：每种地形一张 128×128 的无缝平铺图，铺在 4×4 格上（`VARIANT`）；树（`SINGLE_TILES`）是单格 32×32。Boot 启动时拼成带 1px 外扩、2px 间距的图块集，防止 1.5 倍缩放时接缝出细线。
 - 剧情里 `{ warp: {...}, then: [...] }` 换图后接着执行 then（存在 registry 的 pendingScript 里）。
-- 测试：`tests/story.test.js` 会在各个剧情阶段展开所有 NPC/奇遇脚本，检查引用的道具、技能、怪物、地图、说话人都存在；`tests/map.test.js` 检查每张地图的连通性、出口两头对得上、落脚点能站、从人民公园能走到所有成都小地图。
+- 测试：`tests/story.test.js` 会在各个剧情阶段展开所有 NPC/奇遇脚本，检查引用的道具、技能、怪物、地图、说话人都存在；`tests/map.test.js` 检查每张地图的连通性、出口两头对得上、落脚点能站、从人民公园能走到所有成都小地图；`tests/chapter1.test.js` 不开浏览器把第一章主线按顺序走一遍（改了主线剧情标记一定要跑）。
 
 ## 字体与界面
 - 字体：Fusion Pixel 12px（SIL OFL），`assets/fonts/fusion-pixel-12px-full.woff2` 是完整版，游戏只加载裁剪后的 `jinsha-pixel.woff2`。

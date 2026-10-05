@@ -456,6 +456,29 @@ const nestTree = (c, w, h) => {
   ell(c, w * 0.5, h * 0.5, w * 0.14, h * 0.06, '#7a5a3a'); ell(c, w * 0.5, h * 0.48, w * 0.1, h * 0.04, '#a07a50');
 };
 
+// ---------- 第一章新角色（占位） ----------
+function zhupopo(c) { // 竹婆婆：一丛老竹子，竹节上有一张慈祥的脸
+  for (const [x, h, col] of [[8, 26, '#5f8f3a'], [14, 30, '#6fa246'], [20, 27, '#5a8636'], [25, 22, '#6fa246']]) {
+    rect(c, x, 31 - h, 3.5, h, col);
+    for (let y = 31 - h + 5; y < 31; y += 6) rect(c, x - 0.5, y, 4.5, 1, '#3f6a28');
+    ell(c, x + 4, 31 - h + 2, 4, 1.6, '#8cc05a', -0.5);
+  }
+  ell(c, 15.8, 17, 4.5, 4, '#cfe0a8');
+  eye(c, 14.2, 16.4, 0.9); eye(c, 17.6, 16.4, 0.9);
+  rect(c, 14.8, 19, 2.2, 0.8, '#7a5a3a');
+  rect(c, 12, 11, 8, 1.2, '#e8e8e0');
+}
+function furongSpirit(c) { // 芙蓉花精：一朵粉红的大木芙蓉，花心有一张小脸
+  rect(c, 15, 18, 2, 13, '#4f7a32'); ell(c, 11, 25, 4, 2, '#5f9a3e', 0.5); ell(c, 21, 24, 4, 2, '#5f9a3e', -0.5);
+  for (let i = 0; i < 5; i++) {
+    const a = i / 5 * Math.PI * 2 - Math.PI / 2;
+    circ(c, 16 + Math.cos(a) * 6, 12 + Math.sin(a) * 6, 5.2, i % 2 ? '#f4a8c0' : '#f7bfd0');
+  }
+  circ(c, 16, 12, 4, '#f6e27a');
+  eye(c, 14.5, 11.6, 0.8); eye(c, 17.5, 11.6, 0.8);
+  ell(c, 13.5, 13.6, 1.2, 0.6, '#f08aa8'); ell(c, 18.5, 13.6, 1.2, 0.6, '#f08aa8');
+}
+
 // ---------- 地标占位：一座带名字的小建筑。真图到了就替换 ----------
 function landmark(label, { roof = '#3e4852', wall = '#8b6a4a', accent = '#f2c14e', kind = 'house' } = {}) {
   return (c, w, h) => {
@@ -547,6 +570,8 @@ export const PAINTERS = {
   portrait_baishe: (c, w) => { rect(c, 0, 0, w, w, '#2a3036'); unit(c, w, baishe); },
   portrait_axi: (c, w) => { rect(c, 0, 0, w, w, '#3b2a10'); unit(c, w, axi); },
   npc_mama: (c, w) => unit(c, w, mama),
+  npc_zhupopo: (c, w) => unit(c, w, zhupopo),
+  npc_furong: (c, w) => unit(c, w, furongSpirit),
   npc_myna: (c, w) => unit(c, w, myna),
   npc_pigeon: (c, w) => unit(c, w, pigeon),
   npc_xiuyan: (c, w) => unit(c, w, xiuyan),

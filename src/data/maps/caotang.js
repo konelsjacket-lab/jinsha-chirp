@@ -42,7 +42,13 @@ export default {
   npcs: [
     at(NPC.cuckoo, 16, 8),
   ],
-  triggers: [],
+  triggers: [
+    area(TRIGGER.c1_caotang, 21, 12, 24, 14),
+    area(TRIGGER.maocao1, 4, 4, 5, 5),
+    area(TRIGGER.maocao2, 23, 4, 24, 5),
+    area(TRIGGER.maocao3, 22, 15, 24, 16),
+    area(TRIGGER.jinbo3, 19, 7, 20, 8),
+  ],
   zones: [
     { id: 'caotang', bg: 'bg_east', x0: 0, y0: 0, x1: 27, y1: 19, lv: [3, 4], table: [['bamboorat', 2], ['chili', 2]] },
   ],

@@ -19,12 +19,22 @@ const STAGES = [
   { p_wake: 1, zaozao_party: 1, p_tea: 1, p_magpie: 1, p_monument: 1, maoda_p: 1 },
   { intro_done: 1 },
   { intro_done: 1, met_sunbird: 1, mj_quest: 1, fish_quest: 1, maoda_met: 1 },
+  { intro_done: 1, zaozao_party: 1, c1_hoopoe: 1, furong_a: 1 },
+  { intro_done: 1, met_sunbird: 1, c1_quest: 1, c1_caotang: 1, c1_letter: 1, letter_2: 1, furong_a: 1, furong_b: 1 },
+  { intro_done: 1, met_sunbird: 1, c1_quest: 1, c1_caotang: 1, c1_roof: 1, got_jinnang: 1, c1_letter: 1, letter_3: 1, maoda_rescue: 1 },
+  { intro_done: 1, met_sunbird: 1, c1_quest: 1, c1_woke: 1, maoda_rescue: 1, letter_1: 1 },
+  { intro_done: 1, met_sunbird: 1, rhino_beaten: 1, c1_woke: 1, maoda_rescue: 1, c1_turtle: 1 },
+  { intro_done: 1, met_sunbird: 1, rhino_beaten: 1, c1_farewell: 1, c1_magpie: 1, furong_done: 1, fish_done: 1 },
   { intro_done: 1, met_sunbird: 1, rhino_beaten: 1, mj_got: 1, ad_posted: 1, hoopoe_gift: 1, got_jinnang: 1 },
   { intro_done: 1, met_sunbird: 1, rhino_beaten: 1, ch1_end: 1, zaozao_party: 1, ch2_start: 1, met_ginkgo: 1 },
   { intro_done: 1, met_sunbird: 1, rhino_beaten: 1, ch1_end: 1, zaozao_party: 1, met_crane: 1, xiaoqing_beaten: 1, axi_found: 1 },
   { intro_done: 1, met_sunbird: 1, rhino_beaten: 1, ch1_end: 1, zaozao_party: 1, axi_found: 1, ch2_end: 1, ad_posted: 1, maoda_beaten: 1, mj_done: 1 },
 ];
-const ITEM_SETS = [{}, { jinbo: 2, hongzhong: 1, yugan: 1, jinnang: 1 }];
+const ITEM_SETS = [
+  {},
+  { jinbo: 2, hongzhong: 1, yugan: 1, jinnang: 1 },
+  { maocao: 3, juanyu: 1, jinnang: 1, xuetao_jian: 1 },
+];
 
 function walk(steps, visit, where) {
   for (const st of steps) {

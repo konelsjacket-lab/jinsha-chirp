@@ -17,7 +17,7 @@ export const QUESTS = [
   {
     id: 'maoda', name: '麻老大',
     status: s => (s.flags.maoda_beaten ? 'done' : s.flags.maoda_met ? 'active' : null),
-    hint: () => '人民公园东边的麻老大天天喊你小老头。去会会它。',
+    hint: () => '人民公园湖边的麻老大天天喊你小老头。去会会它。',
     doneText: '不打不相识。',
   },
   {
@@ -25,6 +25,12 @@ export const QUESTS = [
     status: s => (jinbo(s) >= 3 && !s.items.jinbo ? 'done' : jinbo(s) > 0 ? 'active' : null),
     hint: s => `找到了 ${jinbo(s)} / 3 片。${s.items.jinbo ? '拿去金沙交给太阳神鸟。' : '剩下的可能藏在草丛深处。'}`,
     doneText: '太阳神鸟的金箔补齐了一点点。',
+  },
+  {
+    id: 'furong', name: '芙蓉花精',
+    status: s => (s.flags.furong_done ? 'done' : (s.flags.furong_a || s.flags.furong_b || s.flags.furong_c) ? 'active' : null),
+    hint: s => `城里藏着三棵会说话的芙蓉树，找到了 ${['furong_a', 'furong_b', 'furong_c'].filter(k => s.flags[k]).length} / 3 棵。宽窄巷子、廊桥边、武侯祠……`,
+    doneText: '成都为啥子叫“蓉城”，你现在晓得了。',
   },
   {
     id: 'ad', name: '征婚启事',

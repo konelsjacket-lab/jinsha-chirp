@@ -40,6 +40,7 @@ export default {
   props: [],
   npcs: [],
   triggers: [
+    area(TRIGGER.c1_jinsha, 13, 1, 16, 3),
     area(TRIGGER.jinbo1, 4, 3, 6, 4),
   ],
   zones: [

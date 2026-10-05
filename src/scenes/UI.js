@@ -76,9 +76,13 @@ export default class UI extends Phaser.Scene {
   }
 
   setObjective(text) {
+    // 一行放不下就均匀折成两三行，免得最后一行只剩一个字
+    this.objText.setWordWrapWidth(null);
     this.objText.setText(text ? `目标：${text}` : '');
     this.objBg.clear();
     if (!text) return;
+    const full = this.objText.width, lines = Math.ceil(full / 420);
+    if (lines > 1) this.objText.setWordWrapWidth(Math.ceil(full / lines) + 24, true);
     const b = this.objText.getBounds();
     this.objBg.fillStyle(COLORS.panel, 0.8).fillRoundedRect(b.x - 12, b.y - 8, b.width + 24, b.height + 16, 8);
   }

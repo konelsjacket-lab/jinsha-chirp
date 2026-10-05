@@ -91,6 +91,15 @@ export const ENEMIES = {
       { name: '自摸', type: 'heal', ratio: 0.2, weight: 1 },
     ],
   },
+  monkey_gang: {
+    name: '水猴子群', lv: 4, hp: 64, atk: 11, def: 4, spd: 9, exp: 22,
+    sprite: 'enemy_watermonkey', scale: 1.1,
+    intro: '江里一下子冒出来好几只水猴子，七手八脚地扑了上来！',
+    moves: [
+      { name: '泼水', type: 'damage', power: 1.0, weight: 3 },
+      { name: '拖下水', type: 'damage', power: 1.4, weight: 2 },
+    ],
+  },
   monkey_boss: {
     name: '水猴子头头', lv: 5, hp: 95, atk: 14, def: 7, spd: 9, exp: 32,
     sprite: 'enemy_watermonkey', tint: 0x9fc9b8, scale: 1.2,

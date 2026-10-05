@@ -63,6 +63,8 @@ export default {
     at(P.maoda_lake, 18, 16),
     at(P.xiuyan, 18, 17),
     at(NPC.maoda, 12, 22),
+    at(NPC.zaozao, 24, 9),
+    at(NPC.mama_gate, 3, 13),
   ],
   triggers: [
     area(PT.p_ginkgo, 18, 11, 22, 12),

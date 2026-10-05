@@ -42,6 +42,7 @@ export default {
   ],
   npcs: [
     at(NPC.owl, 13, 10),
+    at(NPC.furong_c, 3, 16),
   ],
   triggers: [
     area(TRIGGER.wuhou_wall, 10, 6, 17, 6),

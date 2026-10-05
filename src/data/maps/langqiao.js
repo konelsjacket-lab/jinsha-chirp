@@ -38,8 +38,13 @@ export default {
     { key: 'lm_langqiao', x: 8, y: 7, w: 5, h: 6, solid: false, name: '安顺廊桥' },
     { key: 'lm_wangjiang', x: 23, y: 13, w: 3, h: 2, solid: true, name: '望江楼' },
   ],
-  npcs: [],
-  triggers: [],
+  npcs: [
+    at(NPC.zhupopo, 21, 15),
+    at(NPC.furong_b, 5, 7),
+  ],
+  triggers: [
+    area(TRIGGER.c1_bridge, 9, 9, 11, 11),
+  ],
   zones: [
     { id: 'south', bg: 'bg_south', x0: 0, y0: 0, x1: 29, y1: 17, lv: [3, 4], table: [['watermonkey', 2], ['chili', 1]] },
   ],

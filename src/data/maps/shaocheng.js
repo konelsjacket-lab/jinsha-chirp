@@ -44,8 +44,10 @@ export default {
   npcs: [
     at(NPC.hoopoe, 12, 9),
     at(NPC.hongzhong, 28, 3),
+    at(NPC.furong_a, 17, 17),
   ],
   triggers: [
+    area(TRIGGER.c1_lost, 26, 9, 29, 12),
     area(TRIGGER.hotpot, 8, 9, 9, 10),
   ],
   zones: [

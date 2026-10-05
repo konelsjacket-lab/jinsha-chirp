@@ -32,6 +32,7 @@ export const IMAGES = [
 
   // 地标：宽 = 占地格数×32，高 = 占地高度×32 再多一截（屋顶伸到上面）
   img('npc_mama', 32), img('npc_myna', 32), img('npc_pigeon', 32), img('npc_xiuyan', 32), img('portrait_mama', 96),
+  img('npc_zhupopo', 32), img('npc_furong', 32),
   img('lm_nest', 96, 160),
   img('lm_heming', 224, 160), img('lm_baolu', 64, 128), img('lm_kuanzhai', 128, 128),
   img('lm_altar', 192, 192), img('lm_hejiang', 96, 112), img('lm_langqiao', 160, 192),
