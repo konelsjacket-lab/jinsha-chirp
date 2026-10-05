@@ -395,7 +395,8 @@ export const NPCS = [
     script: s => {
       const f = s.flags;
       if (!f.rhino_beaten) return say('', '山道被浓浓的云雾封住了。', '好像……还不是上山的时候。');
-      if (!f.ch1_end) return [
+      // 旧存档可能已经有 ch1_end 但还没让噪噪入队，所以按 zaozao_party 判断
+      if (!f.zaozao_party) return [
         { cg: 'cg_qingcheng_gate', box: 'top' },
         ...say('', '浓雾散开了一条小路，石阶一直通向山里。', '远远地，好像有什么白色的东西在林间游动……'),
         ...say('噪噪', '等一哈！等一哈！！'),
@@ -406,9 +407,9 @@ export const NPCS = [
         ...say('白果:happy', '……好嘛。那你莫拖后腿哈。'),
         ...say('噪噪', '哪个拖后腿！我带了三斤瓜子！'),
         { flag: 'zaozao_party' },
+        { if: 'ch1_end', else: [{ card: { title: '第一章 · 金沙之光　完', sub: '噪噪加入了队伍！' } }] },
         { flag: 'ch1_end' },
         { save: true },
-        { card: { title: '第一章 · 金沙之光　完', sub: '噪噪加入了队伍！' } },
         { cg: null },
         { warp: { map: 'qingcheng', x: 19, y: 53 } },
       ];
