@@ -1,6 +1,10 @@
-# 美术需求（给 GPT）
+# 美术规格（技术说明）
 
-把图片按**下表的文件名和尺寸**放进 `assets/img/`，刷新游戏就会自动替换掉占位图，不用改代码。
+> **要找给 GPT 的提示词，看 [`ART_PROMPTS.md`](ART_PROMPTS.md)**，那里按优先级分好了批次，可以直接复制。
+> 推荐流程是：GPT 出大图 → 按名字放进 `assets/raw/` → Claude 处理成下面这些最终尺寸，放进 `assets/img/`。
+> 下面是游戏最终读取的文件规格，自己手动处理图片时再看就行。
+
+最终的图片按**下表的文件名和尺寸**放进 `assets/img/`，刷新游戏就会自动替换掉占位图，不用改代码。
 缺哪张都没关系，缺的会继续用占位图。
 
 ## 整体风格
@@ -79,3 +83,8 @@
 ## 可以直接丢给 GPT 的提示词模板
 
 > 16-bit pixel art sprite, transparent background, {尺寸} px, cute chibi style, {角色描述}, facing {方向}, limited palette, clean outlines, no text
+
+## 规划中（代码下一步支持）
+
+- **头像表情**：`portrait_<角色>_<表情>.png`，比如 `portrait_baiguo_happy.png`。剧情里会写成 `白果:happy`
+- **剧情 CG**：`cg_*.png`，960×540，剧情走到对应的地方全屏显示
