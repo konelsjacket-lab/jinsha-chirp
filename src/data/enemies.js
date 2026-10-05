@@ -59,6 +59,16 @@ export const ENEMIES = {
     ],
   },
   // ---- 第一章支线 ----
+  maoda_p: {
+    name: '麻老大', lv: 1, hp: 26, atk: 6, def: 2, spd: 6, exp: 10,
+    sprite: 'enemy_sparrow', tint: 0xd8a070, scale: 1.25,
+    intro: '麻老大把胸脯一挺：“小老头，今天让你晓得哪个是老大！”',
+    moves: [
+      { name: '猛啄', type: 'damage', power: 1.0, weight: 3 },
+      { name: '“小老头！”', type: 'debuff', stat: 'atk', mult: 0.8, turns: 2, weight: 1,
+        text: '白果被喊得心头冒火，反而发挥失常，攻击下降了！' },
+    ],
+  },
   maoda: {
     name: '麻老大', lv: 3, hp: 58, atk: 11, def: 5, spd: 9, exp: 20,
     sprite: 'enemy_sparrow', tint: 0xd8a070, scale: 1.25,

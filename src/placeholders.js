@@ -441,6 +441,21 @@ const qingchengBg = (c, w) => {
   for (let i = 0; i < 6; i++) ell(c, (i * 197) % w, 120 + (i * 61) % 180, 220, 40, 'rgba(232,238,240,0.35)');
 };
 
+// ---------- 序章新角色（占位） ----------
+function mama(c) { // 白果妈妈：和白果一样的白头鹎，后脑勺白毛更大，围一条小红围巾
+  bulbulFront(c, 0, false);
+  ell(c, 16, 5.5, 5.5, 3.2, '#fff');
+  rect(c, 9.5, 15.5, 13, 2.2, '#c8504a'); rect(c, 18, 16.5, 2.5, 5, '#c8504a');
+}
+const myna = c => { simpleBird(c, { body: '#1d1d24', belly: '#2a2a33', head: '#141418', wing: '#2a2a33', beak: '#f2c14e' }); ell(c, 13, 18, 2.5, 1.5, '#f4f4f4'); rect(c, 2, 26, 6, 3, '#6b4a2b'); };
+const pigeon = c => { simpleBird(c, { body: '#8a94a0', belly: '#a8b0ba', head: '#7a8490', wing: '#6a7480', beak: '#d0a0a0' }); ell(c, 21, 16, 3, 1.5, '#7fa88a'); };
+const xiuyan = c => { c.save(); c.translate(6, 8); c.scale(0.7, 0.7); simpleBird(c, { body: '#9cc84a', belly: '#e8e070', head: '#a8d050', wing: '#7fae3a' }); circ(c, 24, 11, 2.2, '#fff'); circ(c, 24.3, 11, 1, '#111'); c.restore(); };
+const nestTree = (c, w, h) => {
+  rect(c, w * 0.42, h * 0.45, w * 0.16, h * 0.55, '#6b4a2b');
+  circ(c, w * 0.5, h * 0.35, w * 0.42, '#d9b23a'); circ(c, w * 0.3, h * 0.42, w * 0.22, '#e8c450'); circ(c, w * 0.7, h * 0.4, w * 0.22, '#c99a25');
+  ell(c, w * 0.5, h * 0.5, w * 0.14, h * 0.06, '#7a5a3a'); ell(c, w * 0.5, h * 0.48, w * 0.1, h * 0.04, '#a07a50');
+};
+
 // ---------- 地标占位：一座带名字的小建筑。真图到了就替换 ----------
 function landmark(label, { roof = '#3e4852', wall = '#8b6a4a', accent = '#f2c14e', kind = 'house' } = {}) {
   return (c, w, h) => {
@@ -531,6 +546,12 @@ export const PAINTERS = {
   portrait_xiaoqing: (c, w) => { rect(c, 0, 0, w, w, '#1d3329'); unit(c, w, xiaoqing); },
   portrait_baishe: (c, w) => { rect(c, 0, 0, w, w, '#2a3036'); unit(c, w, baishe); },
   portrait_axi: (c, w) => { rect(c, 0, 0, w, w, '#3b2a10'); unit(c, w, axi); },
+  npc_mama: (c, w) => unit(c, w, mama),
+  npc_myna: (c, w) => unit(c, w, myna),
+  npc_pigeon: (c, w) => unit(c, w, pigeon),
+  npc_xiuyan: (c, w) => unit(c, w, xiuyan),
+  portrait_mama: (c, w) => { rect(c, 0, 0, w, w, '#3a2a2a'); unit(c, w, mama); },
+  lm_nest: nestTree,
   lm_heming: landmark('鹤鸣茶社', { wall: '#9a7b55' }),
   lm_baolu: landmark('保路纪念碑', { kind: 'stele' }),
   lm_kuanzhai: landmark('宽窄巷子', { kind: 'arch', wall: '#6b5040' }),

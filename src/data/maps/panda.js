@@ -34,7 +34,7 @@ export default {
     "TTTTTTTTTTTTT==TTTTTTTTTTTTT",
   ],
   exits: [
-    { x0: 13, y0: 19, x1: 14, y1: 19, to: 'park', tx: 24, ty: 1 },
+    { x0: 13, y0: 19, x1: 14, y1: 19, to: 'park', tx: 20, ty: 1 },
   ],
   props: [
     { key: 'lm_panda', x: 10, y: 15, w: 8, h: 3, solid: false, name: '熊猫基地大门' },

@@ -90,12 +90,13 @@ export const NPCS = [
         ...say('喜鹊大妈', '哎呀凤凰诶！条件多好的！我先帮你回个“考虑一下”哈！'),
         { flag: 'ad_reply' },
       ];
-      if (f.ad_posted) return say('喜鹊大妈', '莫急，好姻缘都是等来的。你那张启事我贴在最显眼的位置了！');
+      if (f.ad_posted || f.p_magpie) return say('喜鹊大妈', '莫急，好姻缘都是等来的。你那张启事我贴在最显眼的位置了！');
       return [
         ...say('', '人民公园的相亲角。树上、绳子上挂满了征婚启事，好多老鸟在帮自家娃娃张罗。'),
         ...say('喜鹊大妈',
           '哎哟，这个小娃娃长得好乖！年纪轻轻的，咋个头发就白了？',
           '没得关系！少白头说明心思细！来来来，大妈帮你写一张，保证有人看上！'),
+        { flag: 'p_magpie' },
         {
           choice: '要让喜鹊大妈帮你写征婚启事吗？',
           who: '喜鹊大妈',
@@ -116,41 +117,12 @@ export const NPCS = [
     },
   },
   {
-    id: 'maoda', name: '麻老大', x: 49, y: 25, sprite: 'npc_maoda',
-    script: s => {
-      const f = s.flags;
-      if (f.maoda_beaten) return f.ch2_end
-        ? say('麻老大', '……太阳出来了哈。', '我、我又没说谢谢你！我是说今天天气好！')
-        : say('麻老大', '哼，算你厉害。', '……以后哪个敢喊你小老头，报我麻老大的名字。只有我能喊。');
-      return [
-        ...say('麻老大',
-          '哟哟哟，这不是那个小老头吗？',
-          '年纪轻轻就白了头，是不是天天熬夜刷手机？'),
-        ...say('白果:stubborn', '我这是天生的！'),
-        ...say('麻老大', '天生的小老头！兄弟们，笑他！'),
-        ...say('', '旁边树上的麻雀们：叽叽叽叽叽叽！'),
-        { flag: 'maoda_met' },
-        {
-          choice: '麻老大把胸脯挺得老高。',
-          options: [
-            { label: '跟它打一架', then: [
-              { battle: 'maoda', lv: 3, win: [
-                ...say('麻老大',
-                  '哎哟哎哟……停停停！',
-                  '算……算你厉害。小老头……不是，白……白果。',
-                  '这几块面包屑……不是，这个糖油果子，给你，不打不相识。'),
-                { give: 'tangyou', n: 2 },
-                { flag: 'maoda_beaten' },
-              ] },
-            ] },
-            { label: '算了，懒得理它', then: [
-              ...say('白果', '巧克力～巧克力～（假装没听到）'),
-              ...say('麻老大', '你！你唱啥子唱！'),
-            ] },
-          ],
-        },
-      ];
-    },
+    id: 'maoda', name: '麻老大', sprite: 'npc_maoda',
+    // 序章在湖边打过一架（prologue.js 的 p_lake），之后就是嘴硬的对头
+    when: s => s.flags.intro_done,
+    script: s => (s.flags.ch2_end
+      ? say('麻老大', '……太阳出来了哈。', '我、我又没说谢谢你！我是说今天天气好！')
+      : say('麻老大', '哼，小老头，又出去耍啊？', '……路上莫被水猴子拖下河了。我是说，被拖下去了我好笑你。')),
   },
   {
     id: 'hoopoe', name: '戴胜师傅', x: 40, y: 11, sprite: 'npc_hoopoe',
@@ -395,8 +367,8 @@ export const NPCS = [
     script: s => {
       const f = s.flags;
       if (!f.rhino_beaten) return say('', '山道被浓浓的云雾封住了。', '好像……还不是上山的时候。');
-      // 旧存档可能已经有 ch1_end 但还没让噪噪入队，所以按 zaozao_party 判断
-      if (!f.zaozao_party) return [
+      // 第一章结尾（第 4 步会按新大纲重写：噪噪正式入队的场景）
+      if (!f.ch1_end) return [
         { cg: 'cg_qingcheng_gate', box: 'top' },
         ...say('', '浓雾散开了一条小路，石阶一直通向山里。', '远远地，好像有什么白色的东西在林间游动……'),
         ...say('噪噪', '等一哈！等一哈！！'),
@@ -407,7 +379,7 @@ export const NPCS = [
         ...say('白果:happy', '……好嘛。那你莫拖后腿哈。'),
         ...say('噪噪', '哪个拖后腿！我带了三斤瓜子！'),
         { flag: 'zaozao_party' },
-        { if: 'ch1_end', else: [{ card: { title: '第一章 · 金沙之光　完', sub: '噪噪加入了队伍！' } }] },
+        { card: { title: '第一章 · 金沙之光　完', sub: '噪噪加入了队伍！' } },
         { flag: 'ch1_end' },
         { save: true },
         { cg: null },

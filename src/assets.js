@@ -31,7 +31,9 @@ export const IMAGES = [
   img('ui_next', 16, 16, { optional: true }), img('ui_button', 64, 64, { optional: true }),
 
   // 地标：宽 = 占地格数×32，高 = 占地高度×32 再多一截（屋顶伸到上面）
-  img('lm_heming', 192, 160), img('lm_baolu', 64, 128), img('lm_kuanzhai', 128, 128),
+  img('npc_mama', 32), img('npc_myna', 32), img('npc_pigeon', 32), img('npc_xiuyan', 32), img('portrait_mama', 96),
+  img('lm_nest', 96, 160),
+  img('lm_heming', 224, 160), img('lm_baolu', 64, 128), img('lm_kuanzhai', 128, 128),
   img('lm_altar', 192, 192), img('lm_hejiang', 96, 112), img('lm_langqiao', 160, 192),
   img('lm_wangjiang', 96, 128), img('lm_wuhou', 256, 96), img('lm_caotang', 160, 160), img('lm_panda', 256, 112),
 

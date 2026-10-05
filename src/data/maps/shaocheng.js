@@ -34,7 +34,7 @@ export default {
     "TTTTTTTTTTTTTTSSTTTTTTTTTTTTTTTT",
   ],
   exits: [
-    { x0: 31, y0: 10, x1: 31, y1: 11, to: 'park', tx: 1, ty: 10 },
+    { x0: 31, y0: 10, x1: 31, y1: 11, to: 'park', tx: 1, ty: 11 },
     { x0: 0, y0: 10, x1: 0, y1: 11, to: 'qc_road', tx: 28, ty: 7 },
     { x0: 14, y0: 19, x1: 15, y1: 19, to: 'jinsha_out', tx: 14, ty: 1 },
   ],

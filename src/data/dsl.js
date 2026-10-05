@@ -7,6 +7,7 @@
 //   { inc: 'xxx', n: 1 }                    计数（存在 flags 里）
 //   { give: 'tangyou', n: 2 }               获得道具      { take: 'hongzhong', n: 1 }  交出道具
 //   { learn: 'shine' }                      学会技能
+//   { codex: 'gaiwan' }                     解锁一页成都见闻录（内容在 codex.js）
 //   { stat: { maxHp: 6, def: 3 } }          永久提升属性
 //   { heal: true }   { save: true }         回满 / 存档
 //   { battle: 'rhino', lv: 5, bg, noFlee, win: [...], lose: [...], flee: [...] }

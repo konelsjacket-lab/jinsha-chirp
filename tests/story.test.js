@@ -9,11 +9,14 @@ import { ENEMIES } from '../src/data/enemies.js';
 import { CHARACTERS } from '../src/data/characters.js';
 import { INTRO, EPILOGUE_CH2, lose, objective } from '../src/data/story.js';
 import { QUESTS } from '../src/data/quests.js';
+import { CODEX_BY_ID } from '../src/data/codex.js';
 import { isSolid } from '../src/data/map.js';
 import { newState } from '../src/state.js';
 
 const STAGES = [
   {},
+  { p_wake: 1, zaozao_party: 1 },
+  { p_wake: 1, zaozao_party: 1, p_tea: 1, p_magpie: 1, p_monument: 1, maoda_p: 1 },
   { intro_done: 1 },
   { intro_done: 1, met_sunbird: 1, mj_quest: 1, fish_quest: 1, maoda_met: 1 },
   { intro_done: 1, met_sunbird: 1, rhino_beaten: 1, mj_got: 1, ad_posted: 1, hoopoe_gift: 1, got_jinnang: 1 },
@@ -40,6 +43,7 @@ function check(st, where) {
   if (st.give) assert.ok(ITEMS[st.give], `没有这个道具 ${ctx}`);
   if (st.take) assert.ok(ITEMS[st.take], `没有这个道具 ${ctx}`);
   if (st.learn) assert.ok(SKILLS[st.learn], `没有这个技能 ${ctx}`);
+  if (st.codex) assert.ok(CODEX_BY_ID[st.codex], `没有这页见闻录 ${ctx}`);
   if (st.battle) assert.ok(ENEMIES[st.battle], `没有这个怪 ${ctx}`);
   if (st.warp) {
     const m = MAPS[st.warp.map];
@@ -64,6 +68,7 @@ test('所有 NPC 和奇遇在每个剧情阶段展开都没问题', () => {
         walk(n.script(s), check, `${m.id}/${n.id}`);
       }
       for (const t of m.triggers) walk(t.script(s), check, `${m.id}/trigger:${t.id}`);
+      for (const p of m.props || []) if (p.script) walk(p.script(s), check, `${m.id}/prop:${p.key}`);
       if (m.onEnter) walk(m.onEnter(s), check, `${m.id}/onEnter`);
       assert.equal(typeof objective(s), 'string');
       for (const q of QUESTS) { const st = q.status(s); if (st === 'active') assert.ok(q.hint(s)); }

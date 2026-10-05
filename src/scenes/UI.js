@@ -7,6 +7,7 @@ import { ITEMS } from '../data/items.js';
 import { saveState } from '../state.js';
 import { QUESTS } from '../data/quests.js';
 import { MAPS } from '../data/maps/index.js';
+import { CODEX } from '../data/codex.js';
 import { useItem, expToNext } from '../systems/battle.js';
 import { sfx } from '../systems/audio.js';
 
@@ -189,12 +190,13 @@ export default class UI extends Phaser.Scene {
     while (true) {
       this.drawStatus();
       const i = await new Menu(this, {
-        x: 560, y: 110, w: 200, items: [{ label: '道具' }, { label: '任务' }, { label: '地图' }, { label: '存档' }, { label: '返回' }],
+        x: 560, y: 110, w: 200, items: [{ label: '道具' }, { label: '任务' }, { label: '见闻录' }, { label: '地图' }, { label: '存档' }, { label: '返回' }],
       }).open();
       if (i === 0) await this.itemMenu();
       else if (i === 1) await this.questMenu();
-      else if (i === 2) await this.routeMap();
-      else if (i === 3) this.toast(saveState(this.state) ? '已存档' : '存档失败（浏览器不让存）');
+      else if (i === 2) await this.codexMenu();
+      else if (i === 3) await this.routeMap();
+      else if (i === 4) this.toast(saveState(this.state) ? '已存档' : '存档失败（浏览器不让存）');
       else break;
     }
     this.statusRoot && this.statusRoot.destroy();
@@ -221,6 +223,26 @@ export default class UI extends Phaser.Scene {
     r.add(txt(this, 206, 250, lines.join('\n'), {
       fontSize: '18px', lineSpacing: 12, wordWrap: { width: 310, useAdvancedWrap: true },
     }));
+  }
+
+  // 成都见闻录：左边是解锁了的条目，右边显示内容
+  async codexMenu() {
+    const got = CODEX.filter(c => this.state.flags[`codex_${c.id}`]);
+    if (!got.length) { this.toast('见闻录还是空的。到处走走、听大家讲讲吧'); return; }
+    if (this.statusRoot) this.statusRoot.setVisible(false);
+    const r = this.add.container(0, 0).setDepth(1140);
+    r.add(panel(this, 330, 70, 600, 420, { alpha: 1 }));
+    const title = txt(this, 354, 90, '', { fontSize: '24px', color: '#f2c14e' });
+    const body = txt(this, 354, 132, '', { fontSize: '24px', lineSpacing: 8, wordWrap: { width: 550, useAdvancedWrap: true } });
+    const count = txt(this, 906, 470, `${got.length} / ${CODEX.length}`, { fontSize: '12px', color: '#a8a290' }).setOrigin(1, 1);
+    r.add([title, body, count]);
+    await new Menu(this, {
+      x: 30, y: 70, w: 290, title: '成都见闻录', itemH: 30,
+      items: got.map(c => ({ label: c.title.length > 9 ? `${c.title.slice(0, 8)}…` : c.title })),
+      onHover: k => { title.setText(got[k].title); body.setText(got[k].text); },
+    }).open();
+    r.destroy();
+    if (this.statusRoot) this.statusRoot.setVisible(true);
   }
 
   // 路线图：去过的地方显示名字，没去过的是“？？？”，当前所在的地方闪金光

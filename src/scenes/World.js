@@ -4,6 +4,7 @@ import { MAPS, migrateOldChengdu } from '../data/maps/index.js';
 import { INTRO, lose, objective } from '../data/story.js';
 import { chatter } from '../data/companion.js';
 import { ITEMS } from '../data/items.js';
+import { CODEX_BY_ID } from '../data/codex.js';
 import { SKILLS } from '../data/skills.js';
 import { zoneAt, rollEncounter } from '../data/encounters.js';
 import { addItem, saveState } from '../state.js';
@@ -125,7 +126,7 @@ export default class World extends Phaser.Scene {
     const pending = this.registry.get('pendingScript');
     this.registry.set('pendingScript', null);
     if (pending && pending.length) return this.runScript(pending);
-    if (this.map.id === 'park' && !this.state.flags.intro_done) return this.runScript(INTRO);
+    if (this.map.id === 'park' && !this.state.flags.p_wake && !this.state.flags.intro_done) return this.runScript(INTRO);
     if (this.map.onEnter) {
       const steps = this.map.onEnter(this.state);
       if (steps && steps.length) this.runScript(steps);
@@ -287,9 +288,11 @@ export default class World extends Phaser.Scene {
     const px = this.player.x + dx * 20, py = this.player.y + 6 + dy * 20;
     let best = null, bd = range;
     for (const z of [...this.npcBodies.getChildren(), ...this.propBodies.getChildren()]) {
-      const hw = z.width / 2, hh = z.height / 2;
+      // NPC 按中心点算；地标很大，按到边缘的距离算
+      const big = z.width > 28 || z.height > 28;
+      const hw = big ? z.width / 2 : 0, hh = big ? z.height / 2 : 0;
       const cx = Phaser.Math.Clamp(px, z.x - hw, z.x + hw), cy = Phaser.Math.Clamp(py, z.y - hh, z.y + hh);
-      const d = Phaser.Math.Distance.Between(px, py, cx, cy) + (z.width > 28 ? 4 : 0);
+      const d = Phaser.Math.Distance.Between(px, py, cx, cy) + (big ? 4 : 0);
       if (d < bd) { bd = d; best = z; }
     }
     return best;
@@ -372,6 +375,12 @@ export default class World extends Phaser.Scene {
         s.flags[st.flag] = true;
       } else if (st.inc) {
         s.flags[st.inc] = (s.flags[st.inc] || 0) + (st.n || 1);
+      } else if (st.codex) {
+        if (!s.flags[`codex_${st.codex}`]) {
+          s.flags[`codex_${st.codex}`] = true;
+          sfx(this, 'sfx_confirm');
+          this.ui.toast(`见闻录新增：《${CODEX_BY_ID[st.codex].title}》`);
+        }
       } else if (st.unflag) {
         delete s.flags[st.unflag];
       } else if (st.give) {

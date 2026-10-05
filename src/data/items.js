@@ -38,6 +38,10 @@ export const ITEMS = {
     name: '鱼竿', key: true,
     desc: '鱼郎的竹鱼竿，上面还挂着水猴子的毛。',
   },
+  yinxing_ye: {
+    name: '银杏叶', key: true,
+    desc: '妈妈给的，老银杏今年掉的第一片叶子。“白果落在哪里，就在哪里长成一棵树。”',
+  },
   jinbo: {
     name: '金箔碎片', key: true,
     desc: '金沙太阳神鸟金箔掉下来的碎片，微微发烫。交给太阳神鸟。',
