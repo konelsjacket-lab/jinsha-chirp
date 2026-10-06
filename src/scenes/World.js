@@ -172,6 +172,35 @@ export default class World extends Phaser.Scene {
       zone.npc = n;
       zone.sprite = spr;
     }
+    this.refreshSparkles();
+  }
+
+  // 奇遇的提示：还没触发、现在能触发的奇遇，在范围中间放一颗一闪一闪的星光。触发过就消失
+  refreshSparkles() {
+    if (!this.textures.exists('sparkle')) {
+      const g = this.make.graphics({ x: 0, y: 0 }, false);
+      // 32×32：一圈淡淡的金色光晕 + 四角星
+      g.fillStyle(0xf2c14e, 0.18); g.fillCircle(16, 16, 15);
+      g.fillStyle(0xf2c14e, 0.25); g.fillCircle(16, 16, 9);
+      g.fillStyle(0xfff3c4, 1);
+      g.fillTriangle(16, 2, 19, 16, 13, 16); g.fillTriangle(16, 30, 19, 16, 13, 16);
+      g.fillTriangle(2, 16, 16, 13, 16, 19); g.fillTriangle(30, 16, 16, 13, 16, 19);
+      g.fillStyle(0xffffff, 1); g.fillCircle(16, 16, 4);
+      g.generateTexture('sparkle', 32, 32);
+      g.destroy();
+    }
+    for (const sp of this.sparkles || []) sp.destroy();
+    this.sparkles = [];
+    const s = this.state;
+    for (const t of this.map.triggers || []) {
+      if (t.once === false || s.flags[`trig_${t.id}`]) continue;
+      if (t.when && !t.when(s)) continue;
+      const x = ((t.x0 + t.x1 + 1) / 2) * TILE, y = ((t.y0 + t.y1 + 1) / 2) * TILE;
+      const sp = this.add.image(x, y, 'sparkle').setDepth(y + 1).setAlpha(0.9).setBlendMode(Phaser.BlendModes.ADD);
+      this.tweens.add({ targets: sp, scale: { from: 0.8, to: 1.5 }, alpha: { from: 0.45, to: 1 }, angle: 45,
+        duration: 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut', delay: Math.random() * 600 });
+      this.sparkles.push(sp);
+    }
   }
 
   refreshAtmosphere() {
