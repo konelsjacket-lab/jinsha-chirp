@@ -240,11 +240,16 @@ export default class UI extends Phaser.Scene {
     const body = txt(this, 354, 132, '', { fontSize: '24px', lineSpacing: 8, wordWrap: { width: 550, useAdvancedWrap: true } });
     const count = txt(this, 906, 470, `${got.length} / ${CODEX.length}`, { fontSize: '12px', color: '#a8a290' }).setOrigin(1, 1);
     r.add([title, body, count]);
-    await new Menu(this, {
-      x: 30, y: 70, w: 290, title: '成都见闻录', itemH: 30,
+    // 点条目只是查看（stay），不会关掉；条目多了可以滚动。右下角“返回”给手机用
+    const menu = new Menu(this, {
+      x: 30, y: 70, w: 290, title: '成都见闻录', itemH: 30, visible: 12, stay: true, depth: 1150,
       items: got.map(c => ({ label: c.title.length > 9 ? `${c.title.slice(0, 8)}…` : c.title })),
       onHover: k => { title.setText(got[k].title); body.setText(got[k].text); },
-    }).open();
+    });
+    const back = txt(this, 354, 452, '返回', { fontSize: '24px', color: '#f2c14e' })
+      .setInteractive({ useHandCursor: true }).on('pointerdown', () => menu.done(-1));
+    r.add(back);
+    await menu.open();
     r.destroy();
     if (this.statusRoot) this.statusRoot.setVisible(true);
   }

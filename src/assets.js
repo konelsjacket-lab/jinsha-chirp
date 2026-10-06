@@ -3,6 +3,7 @@
 //   - 文件不存在 → 图片用 placeholders.js 里现画的占位图，音频静音
 // 所以美术和音乐只要按这里的文件名和尺寸放进 assets/ 就会自动生效。
 import { PAINTERS } from './placeholders.js';
+import { SPRITE, BIG_SPRITE } from './config.js';
 
 const img = (key, w, h = w, extra = {}) => ({ key, file: `assets/img/${key}.png`, w, h, pixel: true, ...extra });
 
@@ -11,10 +12,10 @@ export const IMAGES = [
   // 启动时由 Boot 拼成最终的 'tiles' 图块集
   img('tiles_ph', 13 * 32, 32),
   ...Array.from({ length: 13 }, (_, i) => img(`tile_${String(i + 1).padStart(2, '0')}`, 128, 128, { optional: true })),
-  { key: 'player', file: 'assets/img/player.png', type: 'sheet', frameW: 32, frameH: 32, cols: 3, rows: 4, pixel: true },
+  { key: 'player', file: 'assets/img/player.png', type: 'sheet', frameW: SPRITE, frameH: SPRITE, cols: 3, rows: 4, pixel: true },
 
-  img('npc_zaozao', 32), img('npc_turtle', 32), img('npc_hoopoe', 32), img('npc_cuckoo', 32),
-  img('npc_panda', 32), img('npc_gate', 32), img('npc_sunbird', 64), img('npc_rhino', 64),
+  img('npc_zaozao', SPRITE), img('npc_turtle', SPRITE), img('npc_hoopoe', SPRITE), img('npc_cuckoo', SPRITE),
+  img('npc_panda', SPRITE), img('npc_gate', SPRITE), img('npc_sunbird', BIG_SPRITE), img('npc_rhino', BIG_SPRITE),
 
   img('portrait_baiguo', 96), img('portrait_zaozao', 96), img('portrait_sunbird', 96), img('portrait_rhino', 96),
   // 表情头像：没有图就不加载占位，对话里自动退回默认头像
@@ -22,8 +23,8 @@ export const IMAGES = [
   img('portrait_turtle', 96), img('portrait_hoopoe', 96), img('portrait_cuckoo', 96), img('portrait_panda', 96),
 
   // 第一章支线、第二章的新角色
-  ...['magpie', 'maoda', 'owl', 'kingfisher', 'monkey', 'hongzhong', 'boar', 'crane', 'xiaoqing', 'axi'].map(k => img(`npc_${k}`, 32)),
-  img('npc_ginkgo', 64), img('npc_baishe', 64),
+  ...['magpie', 'maoda', 'owl', 'kingfisher', 'monkey', 'hongzhong', 'boar', 'crane', 'xiaoqing', 'axi'].map(k => img(`npc_${k}`, SPRITE)),
+  img('npc_ginkgo', BIG_SPRITE), img('npc_baishe', BIG_SPRITE),
   ...['magpie', 'maoda', 'owl', 'kingfisher', 'boar', 'ginkgo', 'crane', 'xiaoqing', 'baishe', 'axi'].map(k => img(`portrait_${k}`, 96)),
 
   // 界面：对话框/菜单边框（九宫格）、选择光标、“继续”箭头、手机按钮。没有就用代码画的
@@ -31,8 +32,8 @@ export const IMAGES = [
   img('ui_next', 16, 16, { optional: true }), img('ui_button', 64, 64, { optional: true }),
 
   // 地标：宽 = 占地格数×32，高 = 占地高度×32 再多一截（屋顶伸到上面）
-  img('npc_mama', 32), img('npc_myna', 32), img('npc_pigeon', 32), img('npc_xiuyan', 32), img('portrait_mama', 96),
-  img('npc_zhupopo', 32), img('npc_furong', 32), img('npc_huangli', 32),
+  img('npc_mama', SPRITE), img('npc_myna', SPRITE), img('npc_pigeon', SPRITE), img('npc_xiuyan', SPRITE), img('portrait_mama', 96),
+  img('npc_zhupopo', SPRITE), img('npc_furong', SPRITE), img('npc_huangli', SPRITE),
   ...['zhupopo', 'furong', 'myna'].map(k => img(`portrait_${k}`, 96, 96, { optional: true })),
   // 装饰小物件（地图里写 deco: true）：没有图就不显示
   img('prop_teatable', 64, 64, { optional: true }), img('prop_mahjong', 64, 64, { optional: true }),
@@ -80,7 +81,7 @@ export function makePlaceholder(scene, a) {
     let i = 0;
     for (let r = 0; r < a.rows; r++) {
       for (let col = 0; col < a.cols; col++) {
-        ctx.save(); ctx.translate(col * a.frameW, r * a.frameH);
+        ctx.save(); ctx.translate(col * a.frameW, r * a.frameH); ctx.scale(a.frameW / 32, a.frameH / 32);
         paint(ctx, col, r);
         ctx.restore();
         tex.add(i++, 0, col * a.frameW, r * a.frameH, a.frameW, a.frameH);

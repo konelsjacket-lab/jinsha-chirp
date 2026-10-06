@@ -1,4 +1,4 @@
-import { TILE, WORLD_ZOOM, PLAYER_SPEED, ENCOUNTER_RATE, ENCOUNTER_GRACE } from '../config.js';
+import { TILE, SPRITE, WORLD_ZOOM, PLAYER_SPEED, ENCOUNTER_RATE, ENCOUNTER_GRACE } from '../config.js';
 import { indexGrid, solidIndices, mapW, mapH, TALL_GRASS, tileIndexAt, placeAt } from '../data/map.js';
 import { MAPS, migrateOldChengdu } from '../data/maps/index.js';
 import { INTRO, lose, objective } from '../data/story.js';
@@ -47,8 +47,10 @@ export default class World extends Phaser.Scene {
     // 白果
     this.makeAnims();
     const { x, y } = s.pos;
+    // 白果的贴图（SPRITE 见方）比格子大：脚底对齐格子底边，碰撞框只是脚下一小块
     this.player = this.physics.add.sprite(x * TILE + 16, y * TILE + 16, 'player', 0);
-    this.player.body.setSize(16, 12).setOffset(8, 18);
+    this.player.setOrigin(0.5, 1 - 16 / SPRITE);
+    this.player.body.setSize(16, 12).setOffset(SPRITE / 2 - 8, SPRITE - 14);
     this.player.setFrame(ROW[this.facing] * 3);
     this.player.setCollideWorldBounds(true);
     this.physics.add.collider(this.player, this.layer);
