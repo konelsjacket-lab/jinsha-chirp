@@ -376,8 +376,16 @@ export default class UI extends Phaser.Scene {
       : this.add.circle(860, 320, 30, 0xffffff, 0.15).setStrokeStyle(2, 0xffffff, 0.5).setInteractive();
     txt(this, 860, 320, '菜单', { fontSize: '15px' }).setOrigin(0.5);
 
-    btnA.on('pointerdown', () => { if (!this.busy) this.game.events.emit('action'); });
-    btnMenu.on('pointerdown', () => { if (!this.busy) this.game.events.emit('menu'); });
+    // 菜单开着的时候：“互动”= 确认，“菜单”= 返回（像手柄一样）。对话框开着的时候点哪里都翻页，按钮不另外处理
+    const key = code => this.input.keyboard.emit('keydown', { code, key: code });
+    btnA.on('pointerdown', () => {
+      if (!this.busy) this.game.events.emit('action');
+      else if (!this.dialog.root.visible) key('Enter');
+    });
+    btnMenu.on('pointerdown', () => {
+      if (!this.busy) this.game.events.emit('menu');
+      else if (!this.dialog.root.visible) key('Escape');
+    });
 
     let joyId = null;
     const reset = () => {
