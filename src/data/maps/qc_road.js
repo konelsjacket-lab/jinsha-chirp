@@ -1,6 +1,7 @@
 // 青城山道：通往青城山的山路
 // 地形是字符画（图例见 ../map.js）。exits：走到这片格子就切到另一张图（tx, ty 是对面的落脚点）；props：地标大图。
 import { NPC, TRIGGER } from '../npcs.js';
+import { deco } from '../deco.js';
 import { at, area, CHENGDU_MOOD } from './helpers.js';
 
 export default {
@@ -32,7 +33,11 @@ export default {
   exits: [
     { x0: 29, y0: 7, x1: 29, y1: 8, to: 'shaocheng', tx: 1, ty: 10 },
   ],
-  props: [],
+  props: [
+    deco('prop_beidou', 15, 5, 2, 2),
+    deco('prop_bamboo', 20, 9, 2, 3),
+    deco('prop_stonetable', 10, 10, 2, 2),
+  ],
   npcs: [
     at(NPC.gate, 1, 7),
   ],

@@ -2,6 +2,7 @@
 // 地形是字符画（图例见 ../map.js）。exits：走到这片格子就切到另一张图（tx, ty 是对面的落脚点）；props：地标大图。
 import { NPC, TRIGGER } from '../npcs.js';
 import { FUN_NPC, FUN_TRIGGER } from '../fun.js';
+import { deco } from '../deco.js';
 import { at, area, CHENGDU_MOOD } from './helpers.js';
 
 export default {
@@ -41,6 +42,9 @@ export default {
   props: [
     { key: 'prop_stonelamp', x: 12, y: 5, w: 1, h: 2, deco: true },
     { key: 'prop_stonelamp', x: 17, y: 5, w: 1, h: 2, deco: true },
+    deco('prop_goldmask', 10, 15, 2, 2),
+    deco('prop_tongliren', 18, 15, 1, 2),
+    deco('prop_flowerbed', 2, 6, 2, 2),
   ],
   npcs: [],
   triggers: [

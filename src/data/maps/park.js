@@ -5,6 +5,7 @@ import { NPC, TRIGGER } from '../npcs.js';
 import { PROLOGUE_NPCS as P, PROLOGUE_TRIGGERS as PT, MONUMENT } from '../prologue.js';
 import { say } from '../dsl.js';
 import { FUN_NPC, FUN_TRIGGER } from '../fun.js';
+import { deco } from '../deco.js';
 import { at, area, CHENGDU_MOOD } from './helpers.js';
 
 // 序章没结束之前，三个出口都出不去
@@ -56,6 +57,17 @@ export default {
     { key: 'lm_nest', x: 29, y: 3, w: 3, h: 3, solid: true, name: '老银杏', script: () => say('', '公园里最老的一棵银杏。白果的窝就在上面。') },
     { key: 'prop_mahjong', x: 2, y: 8, w: 2, h: 2, deco: true },
     { key: 'prop_teatable', x: 10, y: 8, w: 2, h: 2, deco: true },
+    deco('prop_changzuihu', 6, 9, 2, 2),
+    deco('prop_bike', 1, 13, 2, 1),
+    deco('prop_birdcage', 13, 20, 1, 2),
+    deco('prop_stonetable', 31, 12, 2, 2),
+    deco('prop_bench', 23, 13, 2, 1),
+    deco('prop_flowerbed', 11, 13, 2, 2),
+    deco('prop_leaves', 23, 2, 2, 1),
+    deco('prop_leaves', 3, 12, 2, 1),
+    deco('prop_leaves', 28, 12, 2, 1),
+    deco('prop_bench', 4, 21, 2, 1),
+    deco('prop_flowerbed', 22, 20, 2, 2),
   ],
   npcs: [
     at(P.mama, 30, 7),

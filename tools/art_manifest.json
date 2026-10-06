@@ -125,6 +125,27 @@
     { "src": "cg_caotang_wind.webp", "size": "480x270", "colors": 64 },
     { "src": "cg_maoda_rescue.webp", "size": "480x270", "colors": 64 },
     { "src": "cg_guicheng.webp", "size": "480x270", "colors": 64 },
-    { "src": "cg_mama_farewell.webp", "size": "480x270", "colors": 64 }
+    { "src": "cg_mama_farewell.webp", "size": "480x270", "colors": 64 },
+    { "src": "prop_apples.webp", "size": "64x32", "colors": 24, "fit": true, "transparent": true, "pad": 1.02 },
+    { "src": "prop_bamboo.webp", "size": "64x96", "colors": 24, "fit": true, "transparent": true, "pad": 1.02 },
+    { "src": "prop_beidou.webp", "size": "64x64", "colors": 24, "fit": true, "transparent": true, "pad": 1.02 },
+    { "src": "prop_bench.webp", "size": "64x32", "colors": 24, "fit": true, "transparent": true, "pad": 1.02 },
+    { "src": "prop_bianlian.webp", "size": "64x64", "colors": 24, "fit": true, "transparent": true, "pad": 1.02 },
+    { "src": "prop_bike.webp", "size": "64x32", "colors": 24, "fit": true, "transparent": true, "pad": 1.02 },
+    { "src": "prop_birdcage.webp", "size": "32x64", "colors": 24, "fit": true, "transparent": true, "pad": 1.02 },
+    { "src": "prop_chaimen.webp", "size": "64x64", "colors": 24, "fit": true, "transparent": true, "pad": 1.02 },
+    { "src": "prop_changzuihu.webp", "size": "64x64", "colors": 24, "fit": true, "transparent": true, "pad": 1.02 },
+    { "src": "prop_flowerbed.webp", "size": "64x64", "colors": 24, "fit": true, "transparent": true, "pad": 1.02 },
+    { "src": "prop_goldmask.webp", "size": "64x64", "colors": 24, "fit": true, "transparent": true, "pad": 1.02 },
+    { "src": "prop_leaves.webp", "size": "64x32", "colors": 24, "fit": true, "transparent": true, "pad": 1.02 },
+    { "src": "prop_lion.webp", "size": "32x48", "colors": 24, "fit": true, "transparent": true, "pad": 1.02 },
+    { "src": "prop_lotus.webp", "size": "64x32", "colors": 24, "fit": true, "transparent": true, "pad": 1.02 },
+    { "src": "prop_shujin.webp", "size": "64x64", "colors": 24, "fit": true, "transparent": true, "pad": 1.02 },
+    { "src": "prop_snackcart.webp", "size": "64x32", "colors": 24, "fit": true, "transparent": true, "pad": 1.02 },
+    { "src": "prop_stele.webp", "size": "64x96", "colors": 24, "fit": true, "transparent": true, "pad": 1.02 },
+    { "src": "prop_stonetable.webp", "size": "64x64", "colors": 24, "fit": true, "transparent": true, "pad": 1.02 },
+    { "src": "prop_tongliren.webp", "size": "32x64", "colors": 24, "fit": true, "transparent": true, "pad": 1.02 },
+    { "src": "prop_well.webp", "size": "64x64", "colors": 24, "fit": true, "transparent": true, "pad": 1.02 },
+    { "src": "prop_zhubian.webp", "size": "64x64", "colors": 24, "fit": true, "transparent": true, "pad": 1.02 }
   ]
 }

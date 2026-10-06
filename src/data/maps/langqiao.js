@@ -2,6 +2,7 @@
 // 地形是字符画（图例见 ../map.js）。exits：走到这片格子就切到另一张图（tx, ty 是对面的落脚点）；props：地标大图。
 import { NPC, TRIGGER } from '../npcs.js';
 import { FUN_NPC, FUN_TRIGGER, WANGJIANG } from '../fun.js';
+import { deco } from '../deco.js';
 import { at, area, CHENGDU_MOOD } from './helpers.js';
 
 export default {
@@ -41,6 +42,10 @@ export default {
     { key: 'prop_boat', x: 3, y: 10, w: 2, h: 1, deco: true },
     { key: 'prop_furong', x: 2, y: 5, w: 2, h: 3, deco: true },
     { key: 'prop_lantern', x: 13, y: 7, w: 1, h: 2, deco: true },
+    deco('prop_zhubian', 5, 15, 2, 2),
+    deco('prop_bamboo', 25, 6, 2, 3),
+    deco('prop_bench', 3, 7, 2, 1),
+    deco('prop_lotus', 20, 15, 2, 1),
   ],
   npcs: [
     at(NPC.zhupopo, 21, 15),

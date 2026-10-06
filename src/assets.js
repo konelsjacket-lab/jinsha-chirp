@@ -39,6 +39,9 @@ export const IMAGES = [
   img('prop_teatable', 64, 64, { optional: true }), img('prop_mahjong', 64, 64, { optional: true }),
   img('prop_lantern', 32, 64, { optional: true }), img('prop_stonelamp', 32, 64, { optional: true }),
   img('prop_furong', 64, 96, { optional: true }), img('prop_boat', 64, 32, { optional: true }),
+  // 第四批：更多装饰（docs/美术提示词_第四批.txt）
+  ...[['apples', 64, 32], ['bamboo', 64, 96], ['beidou', 64, 64], ['bench', 64, 32], ['bianlian', 64, 64], ['bike', 64, 32], ['birdcage', 32, 64], ['chaimen', 64, 64], ['changzuihu', 64, 64], ['flowerbed', 64, 64], ['goldmask', 64, 64], ['leaves', 64, 32], ['lion', 32, 48], ['lotus', 64, 32], ['shujin', 64, 64], ['snackcart', 64, 32], ['stele', 64, 96], ['stonetable', 64, 64], ['tongliren', 32, 64], ['well', 64, 64], ['zhubian', 64, 64]]
+    .map(([k, w, h]) => img(`prop_${k}`, w, h, { optional: true })),
   img('lm_nest', 96, 160),
   img('lm_heming', 224, 160), img('lm_baolu', 64, 128), img('lm_kuanzhai', 128, 128),
   img('lm_altar', 192, 192), img('lm_hejiang', 96, 112), img('lm_langqiao', 160, 192),

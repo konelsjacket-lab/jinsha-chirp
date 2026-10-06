@@ -58,11 +58,19 @@ export default class World extends Phaser.Scene {
     // 地标大图（鹤鸣茶社、祭坛……）：图片底边对齐占地范围的底边；solid 的占地范围挡路，能被调查
     // deco：装饰小物件（茶桌、灯笼……），不挡路，没有图就不显示
     this.propBodies = this.physics.add.staticGroup();
+    this.inspectZones = [];
     for (const p of this.map.props || []) {
       if (p.deco && !this.textures.exists(p.key)) continue;
       const left = p.x * TILE, bottom = (p.y + p.h) * TILE;
       const img = this.add.image(left + (p.w * TILE) / 2, bottom, p.key).setOrigin(0.5, 1);
       img.setDepth(p.solid || p.deco ? bottom : p.over ? 99990 : 1);
+      // 能调查的装饰物件：不挡路，但走到旁边按互动能看
+      if (p.deco && p.script) {
+        const zone = this.add.zone(left + (p.w * TILE) / 2, p.y * TILE + (p.h * TILE) / 2, p.w * TILE, p.h * TILE);
+        zone.npc = { name: p.name, script: p.script };
+        zone.sprite = img;
+        this.inspectZones.push(zone);
+      }
       if (p.solid) {
         const zone = this.add.zone(left + (p.w * TILE) / 2, p.y * TILE + (p.h * TILE) / 2, p.w * TILE, p.h * TILE);
         this.propBodies.add(zone);
@@ -291,7 +299,7 @@ export default class World extends Phaser.Scene {
     const [dx, dy] = DIRS[this.facing];
     const px = this.player.x + dx * 20, py = this.player.y + 6 + dy * 20;
     let best = null, bd = range;
-    for (const z of [...this.npcBodies.getChildren(), ...this.propBodies.getChildren()]) {
+    for (const z of [...this.npcBodies.getChildren(), ...this.propBodies.getChildren(), ...this.inspectZones]) {
       // NPC 按中心点算；地标很大，按到边缘的距离算
       const big = z.width > 28 || z.height > 28;
       const hw = big ? z.width / 2 : 0, hh = big ? z.height / 2 : 0;
