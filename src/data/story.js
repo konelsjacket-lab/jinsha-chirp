@@ -20,7 +20,7 @@ export function lose(s) {
   const after = [{ heal: true }, ...line, { save: true }];
   // 在成都打输了：被抬回人民公园的窝里；在青城山：拖回山脚
   if (s.map === 'qingcheng') return [{ fx: 'fadeOut' }, { teleport: 'start' }, { fx: 'fadeIn' }, ...after];
-  return [{ warp: { map: 'park', x: 28, y: 9 }, then: after }];
+  return [{ warp: { map: 'park', x: 56, y: 18 }, then: after }];
 }
 
 export function objective(s) {

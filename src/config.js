@@ -1,13 +1,13 @@
 export const TILE = 32;
 // 地图小人的贴图边长：比格子大一圈，看得清楚。大角色（太阳神鸟、石犀……）是 BIG_SPRITE
-export const SPRITE = 48;
-export const BIG_SPRITE = 96;
+export const SPRITE = 64;
+export const BIG_SPRITE = 128;
 export const GAME_W = 960;
 export const GAME_H = 540;
 export const WORLD_ZOOM = 1.5;
-export const PLAYER_SPEED = 110;
+export const PLAYER_SPEED = 160;
 // 每在高草丛里走一格，触发遇怪的概率
-export const ENCOUNTER_RATE = 0.09;
+export const ENCOUNTER_RATE = 0.045;
 // 战斗结束后，这么多格内不会再遇怪
 export const ENCOUNTER_GRACE = 4;
 export const SAVE_KEY = 'jinsha-chirp-save-v1';

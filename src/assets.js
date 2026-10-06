@@ -31,21 +31,21 @@ export const IMAGES = [
   img('ui_panel', 48, 48, { optional: true }), img('ui_cursor', 16, 16, { optional: true }),
   img('ui_next', 16, 16, { optional: true }), img('ui_button', 64, 64, { optional: true }),
 
-  // 地标：宽 = 占地格数×32，高 = 占地高度×32 再多一截（屋顶伸到上面）
+  // 地标：宽 = 占地格数×32，高 = 占地高度×32 再多一截（屋顶伸到上面）。地图放大一倍以后，地标和摆件都是原来的两倍大
   img('npc_mama', SPRITE), img('npc_myna', SPRITE), img('npc_pigeon', SPRITE), img('npc_xiuyan', SPRITE), img('portrait_mama', 96),
   img('npc_zhupopo', SPRITE), img('npc_furong', SPRITE), img('npc_huangli', SPRITE),
   ...['zhupopo', 'furong', 'myna'].map(k => img(`portrait_${k}`, 96, 96, { optional: true })),
   // 装饰小物件（地图里写 deco: true）：没有图就不显示
-  img('prop_teatable', 64, 64, { optional: true }), img('prop_mahjong', 64, 64, { optional: true }),
-  img('prop_lantern', 32, 64, { optional: true }), img('prop_stonelamp', 32, 64, { optional: true }),
-  img('prop_furong', 64, 96, { optional: true }), img('prop_boat', 64, 32, { optional: true }),
+  img('prop_teatable', 128, 128, { optional: true }), img('prop_mahjong', 128, 128, { optional: true }),
+  img('prop_lantern', 64, 128, { optional: true }), img('prop_stonelamp', 64, 128, { optional: true }),
+  img('prop_furong', 128, 192, { optional: true }), img('prop_boat', 128, 64, { optional: true }),
   // 第四批：更多装饰（docs/美术提示词_第四批.txt）
-  ...[['apples', 64, 32], ['bamboo', 64, 96], ['beidou', 64, 64], ['bench', 64, 32], ['bianlian', 64, 64], ['bike', 64, 32], ['birdcage', 32, 64], ['chaimen', 64, 64], ['changzuihu', 64, 64], ['flowerbed', 64, 64], ['goldmask', 64, 64], ['leaves', 64, 32], ['lion', 32, 48], ['lotus', 64, 32], ['shujin', 64, 64], ['snackcart', 64, 32], ['stele', 64, 96], ['stonetable', 64, 64], ['tongliren', 32, 64], ['well', 64, 64], ['zhubian', 64, 64]]
+  ...[['apples', 128, 64], ['bamboo', 128, 192], ['beidou', 128, 128], ['bench', 128, 64], ['bianlian', 128, 128], ['bike', 128, 64], ['birdcage', 64, 128], ['chaimen', 128, 128], ['changzuihu', 128, 128], ['flowerbed', 128, 128], ['goldmask', 128, 128], ['leaves', 128, 64], ['lion', 64, 96], ['lotus', 128, 64], ['shujin', 128, 128], ['snackcart', 128, 64], ['stele', 128, 192], ['stonetable', 128, 128], ['tongliren', 64, 128], ['well', 128, 128], ['zhubian', 128, 128]]
     .map(([k, w, h]) => img(`prop_${k}`, w, h, { optional: true })),
-  img('lm_nest', 96, 160),
-  img('lm_heming', 224, 160), img('lm_baolu', 64, 128), img('lm_kuanzhai', 128, 128),
-  img('lm_altar', 192, 192), img('lm_hejiang', 96, 112), img('lm_langqiao', 160, 192),
-  img('lm_wangjiang', 96, 128), img('lm_wuhou', 256, 96), img('lm_caotang', 160, 160), img('lm_panda', 256, 112),
+  img('lm_nest', 192, 320),
+  img('lm_heming', 448, 320), img('lm_baolu', 128, 256), img('lm_kuanzhai', 256, 256),
+  img('lm_altar', 384, 384), img('lm_hejiang', 192, 224), img('lm_langqiao', 320, 384),
+  img('lm_wangjiang', 192, 256), img('lm_wuhou', 512, 192), img('lm_caotang', 320, 320), img('lm_panda', 512, 224),
 
   img('battle_player', 128),
   img('enemy_sparrow', 128), img('enemy_mosquito', 128), img('enemy_mahjong', 128), img('enemy_chili', 128),

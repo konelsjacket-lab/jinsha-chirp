@@ -241,7 +241,7 @@ export const NPCS = [
         ...say('白蛇', '去吧。……替我跟成都的太阳问个好。'),
         { flag: 'axi_found' },
         { save: true },
-        { warp: { map: 'jinsha_altar', x: 17, y: 8 } },
+        { warp: { map: 'jinsha_altar', x: 34, y: 16 } },
       ];
     },
   },
@@ -253,7 +253,7 @@ export const TRIGGERS = [
     script: () => [{
       choice: '下山回成都吗？',
       options: [
-        { label: '回成都', then: [{ warp: { map: 'qc_road', x: 3, y: 7 } }] },
+        { label: '回成都', then: [{ warp: { map: 'qc_road', x: 6, y: 14 } }] },
         { label: '继续爬山', then: [{ teleport: { x: 19, y: 53 } }] },
       ],
     }],
